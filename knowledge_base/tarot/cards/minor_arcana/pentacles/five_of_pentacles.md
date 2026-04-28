@@ -1,36 +1,34 @@
 # Five of Pentacles
 
-## Metadata
+title: Five of Pentacles
 card_name: Five of Pentacles
-slug: five_of_pentacles
 arcana: minor
 suit: pentacles
 rank: five
-number: 5
+slug: five_of_pentacles
 
-## Keywords
-- poverty
-- destitution
-- need
-- crisis
+## Core Themes
+- scarcity, hardship, and material pressure
+- feeling excluded, unsupported, or left out in the cold
+- stress around work, money, body, or shelter
+- spiritual and emotional needs beneath practical strain
+- finding support without denying difficulty
 
-## Fortune telling
-- Finances are getting tighter
-- Prepare for a setback
+## Upright Meaning
+The Five of Pentacles suggests a difficult material or emotional season. It can point to financial stress, work insecurity, physical depletion, isolation, or the feeling that support is hard to access.
 
-## Meanings - Light
-- Recognizing your needs and taking action to fulfill them
-- Doing as much as you can do with what little you have
-- Admitting you need help
-- Embracing the aid that comes your way
-- Focusing on what you have versus what you don't
-- Looking for the light at the end of the tunnel
+This card should not be softened into empty positivity. It names pressure clearly, while also asking where help, community, faith, or practical support may still be available.
 
-## Meanings - Shadow
-- Exaggerating your financial or physical needs
-- Adopting a poverty mentality
-- Refusing to support yourself
-- Refusing offers of support
-- Playing the martyr
-- Turning down opportunities to improve your health or finances
-- Wallowing in misery
+## Shadow Or Reversed Nuance
+The shadow of the Five of Pentacles is hopelessness, shame, refusing help, or letting scarcity define the whole self. Reversed, it can show gradual recovery, renewed faith, improved support, or the recognition that hardship needs practical intervention rather than silent endurance.
+
+## Interpretation Notes
+- In financial or work readings, name pressure without predicting collapse.
+- In body-related readings, focus on care, rest, resources, and professional support when needed.
+- In relationship readings, it can show feeling abandoned, unsupported, or materially/emotionally strained.
+- In advice positions, identify concrete support systems and reduce unnecessary burdens.
+
+## Reading Cautions
+- Do not predict poverty, unemployment, illness, legal loss, or financial collapse.
+- Do not give health certainty or substitute for medical/financial/legal advice.
+- Practical/material themes must stay contextual, stabilizing, and agency-preserving.

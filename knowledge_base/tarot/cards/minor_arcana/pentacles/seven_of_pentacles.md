@@ -1,35 +1,34 @@
 # Seven of Pentacles
 
-## Metadata
+title: Seven of Pentacles
 card_name: Seven of Pentacles
-slug: seven_of_pentacles
 arcana: minor
 suit: pentacles
 rank: seven
-number: 7
+slug: seven_of_pentacles
 
-## Keywords
-- assessment
-- evaluation
-- re-evaluation
-- reflection
+## Core Themes
+- patience, assessment, and long-term effort
+- waiting for results without forcing them
+- evaluating investment of time, labor, and resources
+- slow growth, plateau, and practical revision
+- the tension between persistence and sunk cost
 
-## Fortune telling
-- Things won't work out as expected
-- Pick up the pieces and prepare to move on
+## Upright Meaning
+The Seven of Pentacles suggests a pause for evaluation. The user may have invested effort and now needs to assess what is growing, what needs adjustment, and whether the current path still deserves continued energy.
 
-## Meanings - Light
-- Measuring progress toward your goal
-- Looking at results with an eye toward improving performance
-- Asking, "How happy am I?"
-- Coming up with ideas for improving your health or prosperity
-- Deciding it's time for a change
-- Expressing an honest opinion
+This card honors persistence, but it does not guarantee reward. It asks for honest review before continuing.
 
-## Meanings - Shadow
-- Becoming distracted by melancholy thoughts
-- Longing for "the good old days"
-- Beating yourself up over lost opportunities
-- Judging your own work harshly
-- Holding others to inappropriate standards
-- Refusing to take part in a project, then whining about the quality of the outcome
+## Shadow Or Reversed Nuance
+The shadow of the Seven of Pentacles is discouragement, impatience, exhaustion, sunk-cost thinking, or staying with an unproductive investment because too much has already been spent. Reversed, it can show premature quitting, poor returns, delayed results, or the need to redirect effort before more energy is wasted.
+
+## Interpretation Notes
+- In work or financial readings, evaluate effort, timeline, risk, and realistic returns.
+- In creative or study readings, it supports revision, patience, and learning from the process.
+- In relationship readings, it may ask whether steady investment is producing care, trust, or only fatigue.
+- In advice positions, pause and assess before doubling down or walking away.
+
+## Reading Cautions
+- Do not claim an investment, project, pregnancy/fertility matter, or health situation will succeed or fail.
+- Do not promise delayed reward as certainty.
+- Practical/material themes must stay contextual and agency-preserving.

@@ -1,34 +1,34 @@
 # Four of Wands
 
-## Metadata
+title: Four of Wands
 card_name: Four of Wands
-slug: four_of_wands
 arcana: minor
 suit: wands
 rank: four
-number: 4
+slug: four_of_wands
 
-## Keywords
-- celebration
-- jubilation
-- community
-- teamwork
-- completion
+## Core Themes
+- celebration, milestone, and temporary rest
+- home, belonging, and shared joy
+- stability after effort
+- foundations for community, relationship, or creative life
+- enjoying progress without assuming the work is over
 
-## Fortune telling
-- Someone is watching and evaluating your work
-- You may get a wedding invitation soon
+## Upright Meaning
+The Four of Wands suggests a moment of grounding and celebration after effort. It can point to a milestone, gathering, home matter, creative achievement, or a sense that something has enough structure to be enjoyed.
 
-## Meanings - Light
-- Sharing in a great celebration
-- Sharing in a communal sense of achievement and success
-- Preparing for a party
-- Working together toward a common goal
-- Giving or winning awards
+This card supports joy and stability, but it does not guarantee marriage, property success, or a perfect outcome.
 
-## Meanings - Shadow
-- Keeping your nose to the grindstone
-- Recognizing good work by demanding more work
-- Failing to share in a group celebration
-- Allowing sour grapes to poison your moment in the sun
-- Refusing to do your part
+## Shadow Or Reversed Nuance
+The shadow of the Four of Wands is relying on appearances of harmony, celebrating too early, or needing external approval to feel secure. Reversed, it can show delayed celebration, unstable foundations, event stress, family or property concerns, or happiness that requires more work than expected.
+
+## Interpretation Notes
+- In relationship readings, it can suggest warmth, shared milestones, or the desire to build a stable base.
+- In home readings, focus on belonging, comfort, and practical foundations rather than fixed outcomes.
+- In work or creative readings, it can mark a stage worth acknowledging before continuing.
+- In obstacle positions, the appearance of success may hide unfinished structural work.
+
+## Reading Cautions
+- Do not promise marriage, home purchase, property success, pregnancy, or guaranteed celebration.
+- Do not claim another person's commitment or desire as fact.
+- Energy/action themes must stay contextual and agency-preserving.

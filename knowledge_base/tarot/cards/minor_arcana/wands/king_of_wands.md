@@ -1,31 +1,34 @@
 # King of Wands
 
-## Metadata
+title: King of Wands
 card_name: King of Wands
-slug: king_of_wands
 arcana: minor
 suit: wands
 rank: king
-number: 14
+slug: king_of_wands
 
-## Keywords
-- creativity
-- ingenuity
-- achievement
-- direction
+## Core Themes
+- vision, leadership, and entrepreneurial fire
+- courage, responsibility, and initiative
+- inspiring others toward action
+- confident direction and creative authority
+- the risk of dominance, impatience, or ego-driven force
 
-## Fortune telling
-- This card represents an older man with a commanding, charismatic personality, likely born between November 13th and December 12th, who prefers to give directions and have them followed
+## Upright Meaning
+The King of Wands suggests mature creative leadership. It can point to vision, responsibility, and the ability to motivate action without losing sight of the larger purpose.
 
-## Meanings - Light
-- Putting old things together in new and exciting ways
-- Coming up with unexpected solutions
-- Using your experience to solve puzzles and problems
-- Doing what you set out to do
-- Directing the efforts of others
+As a stance, this card asks the user to lead from conviction while respecting the autonomy and pace of others.
 
-## Meanings - Shadow
-- Using your creativity to get out of honest work
-- Investing great energy in avoiding responsibility
-- Boasting about achievements without putting your expertise to practical use
-- Lording it over others
+## Shadow Or Reversed Nuance
+The shadow of the King of Wands is authoritarian energy, impatience, dogmatism, arrogance, or using inspiration as pressure. Reversed, it can show controlling leadership, inflated certainty, reckless ambition, or resistance to feedback.
+
+## Interpretation Notes
+- In advice positions, clarify the vision and lead by example.
+- In relationship readings, examine power, passion, generosity, and whether leadership leaves room for mutuality.
+- In work readings, it supports strategy, entrepreneurship, negotiation, and responsible initiative.
+- In obstacle positions, confidence may have hardened into control.
+
+## Reading Cautions
+- A court card may describe a role, quality, or dynamic, not only a literal person.
+- Do not claim someone will rescue, dominate, deceive, or provide financial help as fact.
+- If a real person interpretation is possible, keep it tentative and context-based.

@@ -1,34 +1,34 @@
 # Ace of Pentacles
 
-## Metadata
+title: Ace of Pentacles
 card_name: Ace of Pentacles
-slug: ace_of_pentacles
 arcana: minor
 suit: pentacles
 rank: ace
-number: 1
+slug: ace_of_pentacles
 
-## Keywords
-- health
-- wealth
-- practicality
-- receiving
+## Core Themes
+- practical beginnings and material opportunity
+- resources, work, body, and tangible reality
+- seed of stability, value, or security
+- grounded effort that can become real over time
+- receiving or recognizing a usable resource
 
-## Fortune telling
-- Your health will improve
-- The check you're looking for really is in the mail
+## Upright Meaning
+The Ace of Pentacles suggests the beginning of something tangible: a practical opportunity, resource, project, habit, body-based reset, or material foundation. It points to potential that can become real if it is handled with care.
 
-## Meanings - Light
-- Outlining a plan for achieving prosperity
-- Becoming aware of opportunities to improve income or health
-- Realizing you have everything you need
-- Appreciating everything the Universe has given you
-- Receiving the perfect gift at the perfect time
+This card is encouraging, but it is still a seed. It does not guarantee money, success, or security; it asks what needs to be planted, protected, and developed.
 
-## Meanings - Shadow
-- Indulging in relentless consumerism
-- Wanting more, no matter how much you have
-- Obsessing on your account balance
-- Suffering from hypochondria
-- Consuming blessings without expressing gratitude
-- Taking what you want without concern for the needs of others
+## Shadow Or Reversed Nuance
+The shadow of the Ace of Pentacles is misplaced trust in material promise, rushed investment, poor planning, or treating comfort as certainty. Reversed, it can show delayed resources, unstable footing, missed opportunity, underpayment, or a project that needs stronger practical support before it can grow.
+
+## Interpretation Notes
+- In work or financial readings, focus on foundations, planning, documents, and realistic resource management.
+- In body-related readings, keep the meaning symbolic: grounding, care, capacity, and physical reality.
+- In relationship readings, it can suggest reliability, sensuality, or practical support, not guaranteed commitment.
+- In obstacle positions, the opportunity may need more structure before it is safe to rely on.
+
+## Reading Cautions
+- Do not promise money, inheritance, promotion, property success, or financial recovery.
+- Do not give health certainty or body-related predictions.
+- Practical/material themes must stay contextual and agency-preserving.

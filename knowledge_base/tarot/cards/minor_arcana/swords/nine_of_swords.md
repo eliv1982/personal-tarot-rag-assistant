@@ -1,36 +1,34 @@
 # Nine of Swords
 
-## Metadata
+title: Nine of Swords
 card_name: Nine of Swords
-slug: nine_of_swords
 arcana: minor
 suit: swords
 rank: nine
-number: 9
+slug: nine_of_swords
 
-## Keywords
-- remorse
-- worry
-- distraught
-- conclusion
+## Core Themes
+- anxiety, nightmares, and mental anguish
+- guilt, fear, and sleepless rumination
+- imagined worst cases and real emotional pain
+- distress that needs compassion and grounding
+- learning that thoughts are signals, not verdicts
 
-## Fortune telling
-- If you take the action you're considering now, you'll be sorry in the future
+## Upright Meaning
+The Nine of Swords suggests acute mental or emotional distress. The user may be worried, ashamed, grieving, unable to sleep, or caught in thoughts that make the situation feel darker than it may be in daylight.
 
-## Meanings - Light
-- Refusing to worry about what you cannot control
-- Rejecting anxiety
-- Judging your own performance with kindness and gentleness
-- Using meditation to quiet a troubled mind
-- Confronting nightmares and fears
-- Drawing a conclusion and putting an issue out of your mind
+This card does not dismiss the pain. It asks the user to treat distress as something deserving care, support, and reality-checking, not as proof that the worst outcome is certain.
 
-## Meanings - Shadow
-- Torturing yourself with regrets
-- Second-guessing your every move
-- Beating yourself up for your mistakes
-- Depression
-- Obsessing on errors and overlooked details
-- Refusing to handle stress in healthy ways
-- Ruining your ability to appreciate the present by dwelling on the past
-- Debating irreversible decisions
+## Shadow Or Reversed Nuance
+The shadow of the Nine of Swords is spiraling, self-blame, catastrophizing, isolation, or mistaking fear for evidence. Reversed, it can show easing anxiety, hope returning, support becoming available, or the need to seek help if distress remains heavy.
+
+## Interpretation Notes
+- In advice positions, ground the body, check facts, and reduce isolation.
+- In relationship readings, separate fear, guilt, and projection from observable behavior.
+- In conflict readings, do not let imagined consequences replace direct evidence.
+- If distress feels severe or unsafe, encourage trusted real-world and professional support.
+
+## Reading Cautions
+- Do not predict illness, surgery, death, suicide, betrayal, punishment, or disaster.
+- Do not treat mental/emotional pain as proof of external reality.
+- Painful themes must stay stabilizing, compassionate, and agency-preserving.

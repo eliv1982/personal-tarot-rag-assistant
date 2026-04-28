@@ -1,37 +1,34 @@
 # Eight of Pentacles
 
-## Metadata
+title: Eight of Pentacles
 card_name: Eight of Pentacles
-slug: eight_of_pentacles
 arcana: minor
 suit: pentacles
 rank: eight
-number: 8
+slug: eight_of_pentacles
 
-## Keywords
-- effort
-- work diligence
-- skill
+## Core Themes
+- craft, training, and disciplined practice
+- apprenticeship, repetition, and skill development
+- meaningful work and attention to quality
+- learning how to handle resources wisely
+- steady improvement through focused effort
 
-## Fortune telling
-- Stop over-analyzing, researching, and outlining
-- Buckle down and get the work done
+## Upright Meaning
+The Eight of Pentacles suggests devotion to craft. It can point to work, study, training, practice, technical learning, or a period of improving skills through repetition.
 
-## Meanings - Light
-- Doing your best
-- Bringing enthusiasm and zeal to your work
-- Making an effort to be the best you can be
-- Finding the work that is right for you
-- Taking care of the small details
-- Becoming a finely skilled craftsperson
-- Building something with your hands
-- Making a handmade gift
+This card values effort and competence. It supports growth through practice, but it does not guarantee money, promotion, or job security.
 
-## Meanings - Shadow
-- Working yourself to death
-- Doing a half-hearted or sloppy job
-- Continuing in a job you hate
-- Buying thoughtless gifts
-- Producing work with shoddy craftsmanship
-- Rushing through your work
-- Rejecting opportunities to learn more about your craft
+## Shadow Or Reversed Nuance
+The shadow of the Eight of Pentacles is perfectionism, burnout, mechanical labor, cutting corners, poor quality, or work that no longer connects to meaning. Reversed, it can show lack of focus, underdeveloped skill, unethical shortcuts, dissatisfaction at work, or the need to rebuild discipline.
+
+## Interpretation Notes
+- In work readings, focus on skills, process, standards, and sustainable routines.
+- In study readings, it supports learning through practice rather than quick mastery.
+- In financial readings, it can point to earning capacity and money habits, not guaranteed income.
+- In obstacle positions, quality, patience, or ethics may need attention.
+
+## Reading Cautions
+- Do not promise employment, promotion, income, exam success, or career change as fact.
+- Do not accuse someone of fraud, cheating, or incompetence as fact.
+- Practical/material themes must stay contextual and agency-preserving.

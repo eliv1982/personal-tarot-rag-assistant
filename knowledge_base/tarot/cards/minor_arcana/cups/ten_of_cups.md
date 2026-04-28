@@ -1,32 +1,34 @@
 # Ten of Cups
 
-## Metadata
+title: Ten of Cups
 card_name: Ten of Cups
-slug: ten_of_cups
 arcana: minor
 suit: cups
 rank: ten
-number: 10
+slug: ten_of_cups
 
-## Keywords
-- joy
-- fulfillment
-- overwhelming emotion
-- giddiness
+## Core Themes
+- emotional harmony, belonging, and shared happiness
+- family, chosen family, community, and trust
+- relational fulfillment and mutual care
+- peace after emotional effort
+- the ideal of a safe and loving emotional home
 
-## Fortune telling
-- Marriage and family are in the cards
-- Expect a friendship to blossom into a romance
+## Upright Meaning
+The Ten of Cups suggests a vision of emotional harmony and shared well-being. It can point to family happiness, supportive community, a loving partnership, or a sense of belonging that feels deeply nourishing.
 
-## Meanings - Light
-- Having more than you ever dreamed
-- Being deeply thankful for all you've been given
-- Recognizing the Hand of God in the gifts the Universe brings your way
-- Experiencing transcendent joy
-- Achieving domestic bliss
+This card is about the emotional ideal of togetherness. It should be read as a possible direction or value in the situation, not as a guarantee of perfect family life, marriage, or permanent happiness.
 
-## Meanings - Shadow
-- Comparing your achievements or relationships to unrealistic fantasy standards
-- Experiencing emotions so intense they blunt your ability to cope with reality
-- Feeling overwhelmed
-- Envying the achievements and happiness of others
+## Shadow Or Reversed Nuance
+The shadow of the Ten of Cups is idealizing harmony, hiding conflict to preserve an image, or expecting relationships to meet every emotional need. Reversed, it can show family tension, disappointment in belonging, strained friendships, or the need to redefine what emotional fulfillment really means.
+
+## Interpretation Notes
+- In relationship readings, focus on shared values, safety, belonging, and mutual care.
+- In family readings, it may highlight harmony, conflict repair, or the pressure of an ideal family image.
+- In advice positions, ask what kind of emotional home the user wants to build.
+- In obstacle positions, the ideal of happiness may be obscuring real needs or conflicts.
+
+## Reading Cautions
+- Do not promise marriage, reconciliation, pregnancy, perfect family harmony, or lasting happiness as fact.
+- Do not claim that another person wants the same future with certainty.
+- Relationship themes must stay contextual, reflective, and grounded in the full spread.

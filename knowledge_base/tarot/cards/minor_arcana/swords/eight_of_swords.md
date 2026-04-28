@@ -1,38 +1,34 @@
 # Eight of Swords
 
-## Metadata
+title: Eight of Swords
 card_name: Eight of Swords
-slug: eight_of_swords
 arcana: minor
 suit: swords
 rank: eight
-number: 8
+slug: eight_of_swords
 
-## Keywords
-- restriction
-- limitation
-- confinement
-- helplessness
+## Core Themes
+- restriction, fear, and mental entrapment
+- feeling blocked, watched, or unable to move
+- self-limiting beliefs and external constraints
+- paralysis caused by overthinking
+- finding agency inside a narrow situation
 
-## Fortune telling
-- Get over playing the victim
-- Once you realize you are your own biggest obstacle, nothing can hold you back
+## Upright Meaning
+The Eight of Swords suggests feeling trapped or restricted. The user may be caught in fear, confusion, pressure, or a story that makes every option seem impossible.
 
-## Meanings - Light
-- Honoring limits
-- Respecting the rules
-- Deciding to go on a diet for your health's sake
-- Recognizing you cannot always be in control
-- Identifying obstacles to further progress
-- Refusing to think about unhealthy or unethical options
-- Asking for assistance
+This card does not blame the user for their limits. It asks which restrictions are real, which are internalized, and where even a small amount of agency can be recovered.
 
-## Meanings - Shadow
-- Feeling trapped
-- Being lost in a maze of rules and regulations
-- Giving in to despair
-- Playing the victim
-- Allowing others to dictate what you can and cannot do
-- Being rendered helpless
-- Having very few options
-- Failing to look for a way out
+## Shadow Or Reversed Nuance
+The shadow of the Eight of Swords is learned helplessness, denial of agency, fear-driven passivity, or accepting a narrow frame as the whole truth. Reversed, it can show loosening constraints, seeing a way out, reclaiming voice, or recognizing that a feared limitation is not absolute.
+
+## Interpretation Notes
+- In advice positions, separate facts from fear and identify one concrete option.
+- In relationship readings, it can point to feeling silenced, constrained, or afraid to speak honestly.
+- In work or life-pressure readings, it may show systems, expectations, or mental loops that need careful untangling.
+- If real safety concerns are present, prioritize practical support over symbolic interpretation.
+
+## Reading Cautions
+- Do not predict imprisonment, accident, illness, death, or disaster.
+- Do not claim another person is controlling, attacking, or trapping the user as fact.
+- Painful themes must stay contextual, stabilizing, and agency-preserving.

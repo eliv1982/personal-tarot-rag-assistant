@@ -1,34 +1,34 @@
 # Three of Swords
 
-## Metadata
+title: Three of Swords
 card_name: Three of Swords
-slug: three_of_swords
 arcana: minor
 suit: swords
 rank: three
-number: 3
+slug: three_of_swords
 
-## Keywords
-- variance
-- difference
-- dissatisfaction
-- heartache
-- rejection
+## Core Themes
+- heartbreak, grief, and painful truth
+- rupture, separation, and emotional weather
+- sharp words or insight that hurts
+- necessary release or difficult clarity
+- sorrow that needs care, not dramatization
 
-## Fortune telling
-- Breakups and infidelity abound
-- What hurts now, though, will turn out to be good for you later on
+## Upright Meaning
+The Three of Swords suggests real emotional pain. It can point to grief, disappointment, separation, conflict, a hard conversation, or the moment when a truth can no longer be avoided.
 
-## Meanings - Light
-- Being brave enough to see things as they really are
-- Exercising your critical eye
-- Being your own best critic
-- Acknowledging that things don't always turn out as planned
-- Moving past heartbreak to embrace a painful truth
+This card should not be softened into vague positivity. It names hurt clearly, while helping the user stay grounded and avoid turning pain into certainty about everything or everyone.
 
-## Meanings - Shadow
-- Wallowing in despair
-- Allowing yourself to be completely crushed by the thoughts, words, or deeds of another
-- Judging yourself too harshly
-- Holding yourself to an unrealistic standard of excellence
-- Wearing your heart on your sleeve while carrying a chip on your shoulder
+## Shadow Or Reversed Nuance
+The shadow of the Three of Swords is fixation on hurt, rejection sensitivity, bitterness, or treating a wound as proof that healing is impossible. Reversed, it can show pain beginning to ease, lingering sorrow, emotional recovery, or difficulty releasing an old wound.
+
+## Interpretation Notes
+- In relationship readings, focus on hurt, rupture, communication, and grief rather than deterministic breakup or betrayal claims.
+- In advice positions, allow the pain to be real while choosing a stabilizing next step.
+- In conflict readings, examine what truth has been avoided and how it can be handled with care.
+- In body-related readings, keep meanings symbolic and encourage qualified support where relevant.
+
+## Reading Cautions
+- Do not predict illness, surgery, injury, death, miscarriage, divorce, or breakup.
+- Do not claim betrayal, rejection, or another person's motives as fact.
+- Painful themes must stay contextual, gentle, and agency-preserving.

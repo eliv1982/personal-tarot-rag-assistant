@@ -1,35 +1,34 @@
 # Six of Swords
 
-## Metadata
+title: Six of Swords
 card_name: Six of Swords
-slug: six_of_swords
 arcana: minor
 suit: swords
 rank: six
-number: 6
+slug: six_of_swords
 
-## Keywords
-- adaptation
-- adjustments
-- science
-- travel
+## Core Themes
+- transition, distance, and moving away from stress
+- calmer thinking after conflict
+- leaving a difficult pattern or environment
+- passage, recovery, and gradual perspective
+- taking lessons forward without carrying every wound
 
-## Fortune telling
-- You'll soon go on a long journey over water
-- Actions have unexpected consequences, so be prepared
+## Upright Meaning
+The Six of Swords suggests movement toward calmer ground. It can describe emotional distance, a change of perspective, a practical transition, or the slow process of leaving a stressful situation behind.
 
-## Meanings - Light
-- Making the best of a bad situation
-- Recovering from defeat
-- Resetting expectations
-- Making allowances for unexpected circumstances
-- Helping others who find themselves in dire circumstances
-- Changing the way you see the world
-- Broadening your perspective through study or travel
+This card is about passage, not instant relief. The difficulty may not be erased, but the user may be moving toward more clarity and space.
 
-## Meanings - Shadow
-- Refusing to accept that things have changed
-- Playing the victim
-- Rejecting the idea that your actions have consequences
-- Applying scientific criteria to matters of faith, or confusing faith with science
-- Believing the whole world should be like your small corner of it
+## Shadow Or Reversed Nuance
+The shadow of the Six of Swords is avoidance, emotional exile, or assuming distance alone will heal what needs to be understood. Reversed, it can show delays, difficulty moving on, returning to old stress, cancelled plans, or feeling stuck in a mental loop.
+
+## Interpretation Notes
+- In advice positions, choose the path that reduces harm and supports clearer thinking.
+- In relationship readings, it can point to distance, cooling down, or leaving a pattern, not guaranteed separation.
+- In travel or relocation readings, keep the meaning symbolic unless supported by real context.
+- In obstacle positions, the user may be resisting a necessary transition.
+
+## Reading Cautions
+- Do not predict travel, separation, death, legal outcomes, or rescue as fact.
+- Do not claim that another person will leave or return with certainty.
+- Painful themes must stay contextual, stabilizing, and agency-preserving.

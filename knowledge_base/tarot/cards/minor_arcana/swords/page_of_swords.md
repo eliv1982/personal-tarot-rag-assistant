@@ -1,35 +1,34 @@
 # Page of Swords
 
-## Metadata
+title: Page of Swords
 card_name: Page of Swords
-slug: page_of_swords
 arcana: minor
 suit: swords
 rank: page
-number: 11
+slug: page_of_swords
 
-## Keywords
-- student
-- apprentice
-- scholarship
-- information
+## Core Themes
+- curiosity, alertness, and mental agility
+- messages, documents, and important information
+- direct communication and constructive critique
+- vigilance, analysis, and quick perception
+- the early development of discernment
 
-## Fortune telling
-- This card represents a young man or woman with an airy, intellectual demeanor, likely born a Capricorn, Aquarius, or Pisces, who wants to learn something new from you or have a discussion with you
+## Upright Meaning
+The Page of Swords suggests a need to think clearly, ask questions, and pay attention to information. It can point to a message, document, conversation, or mental challenge that requires alertness.
 
-## Meanings - Light
-- Pursuing a course of study
-- Asking good questions
-- Investing time in study and practice
-- Doing research
-- Making a habit of learning new things
-- Starting an investigation
-- Outlining what you need to know
-- Finding a mentor or teacher
+As a court card, it may describe a stance of curiosity, honesty, and readiness to learn through observation.
 
-## Meanings - Shadow
-- Pretending to knowledge or sophistication you do not possess
-- Cheating on an exam
-- Feigning interest as a way of gaining favor
-- Considering only the evidence that supports conclusions you've already drawn
-- Rejecting the wise counsel of experienced teachers
+## Shadow Or Reversed Nuance
+The shadow of the Page of Swords is gossip, suspicion, harsh words, over-analysis, or collecting information without wisdom. Reversed, it can show miscommunication, premature judgment, defensive speech, or anxiety around what is being said.
+
+## Interpretation Notes
+- In advice positions, ask better questions and check facts before acting.
+- In relationship readings, focus on communication style, not accusations.
+- In practical readings, read documents carefully and avoid rushed conclusions.
+- In obstacle positions, words may be sharp, incomplete, or poorly timed.
+
+## Reading Cautions
+- A court card may describe a role, quality, or dynamic, not only a literal person.
+- Do not claim spying, betrayal, legal trouble, or hostile intent as fact.
+- If a real person interpretation is possible, keep it tentative and context-based.

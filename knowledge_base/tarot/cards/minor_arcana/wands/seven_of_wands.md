@@ -1,33 +1,34 @@
 # Seven of Wands
 
-## Metadata
+title: Seven of Wands
 card_name: Seven of Wands
-slug: seven_of_wands
 arcana: minor
 suit: wands
 rank: seven
-number: 7
+slug: seven_of_wands
 
-## Keywords
-- bravery
-- resolve
-- determination
+## Core Themes
+- defending a position, courage, and pressure
+- boundaries under challenge
+- persistence, assertion, and resilience
+- competition after gaining ground
+- knowing when to stand firm and when to conserve energy
 
-## Fortune telling
-- Don't be surprised by a personal attack
-- Prepare to defend yourself or someone you love
+## Upright Meaning
+The Seven of Wands suggests pressure that asks for courage and clarity. The user may need to defend a boundary, position, creative direction, or hard-won progress.
 
-## Meanings - Light
-- Refusing to be silenced through fear or intimidation
-- Continuing a fight against all odds
-- Being fierce
-- Defending yourself against physical and emotional attacks
-- Refusing to put up with abuse
-- Clinging to your values despite all pressure to abandon them
+This card supports standing firm, but not every challenge needs to become a battle. It asks what is truly worth defending.
 
-## Meanings - Shadow
-- Having a chip on your shoulder
-- Taking unnecessary risks as a means of proving your fearlessness
-- Looking for an opportunity to take offense
-- Responding to constructive criticism with defensiveness
-- Refusing to stand up for yourself and your beliefs
+## Shadow Or Reversed Nuance
+The shadow of the Seven of Wands is defensiveness, isolation, constant combativeness, or seeing every difference as opposition. Reversed, it can show vulnerability, avoidance of confrontation, loss of confidence, choosing not to fight, or the wisdom of stepping back from an unwinnable contest.
+
+## Interpretation Notes
+- In work readings, examine competition, boundaries, visibility, and whether the user has enough support.
+- In relationship readings, it can point to defensiveness or the need to express boundaries clearly.
+- In advice positions, stand up for what matters while choosing battles carefully.
+- In obstacle positions, fear or over-defensiveness may be shaping the response.
+
+## Reading Cautions
+- Do not promise victory, career success, or successful defense.
+- Do not claim another person is attacking, angry, or acting against the user as fact.
+- Energy/action themes must stay contextual and agency-preserving.

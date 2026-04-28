@@ -1,39 +1,34 @@
 # Queen of Swords
 
-## Metadata
+title: Queen of Swords
 card_name: Queen of Swords
-slug: queen_of_swords
 arcana: minor
 suit: swords
 rank: queen
-number: 13
+slug: queen_of_swords
 
-## Keywords
-- grace
-- skill
-- wit
-- charm
-- aptitude
+## Core Themes
+- discernment, independence, and clear boundaries
+- intelligence, honesty, and precise speech
+- objectivity shaped by lived experience
+- emotional clarity without sentimentality
+- separating truth from projection
 
-## Fortune telling
-- This card represents a woman with an artistic, intellectual nature, likely born between September 12th and October 12th, who uses clever, positive communication to sway others to her point of view
+## Upright Meaning
+The Queen of Swords suggests clear perception and mature discernment. She can point to the ability to name the truth, set boundaries, and make decisions without being overwhelmed by emotion.
 
-## Meanings - Light
-- Exercising tact or using diplomacy
-- Defusing a tense situation
-- Knowing what to say and how to say it
-- Making others feel comfortable and confident
-- Bringing out the best in everyone
-- Having a way with words
-- Telling jokes
-- Possessing a knack for music, math, art, or science
+As a court card, this may be a quality the user needs: honest language, independence, and the courage to see clearly.
 
-## Meanings - Shadow
-- Knowing exactly what to say to destroy another person
-- Withholding critical information
-- Using a barbed tongue to upset others
-- Employing sarcasm
-- Mimicking others unkindly
-- Making light of the less fortunate
-- Being disrespectful
-- Failing to use the talent you've been given
+## Shadow Or Reversed Nuance
+The shadow of the Queen of Swords is coldness, bitterness, harsh judgment, sarcasm, or using intelligence as a weapon. Reversed, it can show distorted facts, defensive speech, unresolved grief, or boundaries that have become walls.
+
+## Interpretation Notes
+- In advice positions, tell the truth cleanly and protect necessary boundaries.
+- In relationship readings, focus on communication, respect, and whether emotional distance is protective or avoidant.
+- In work or decision readings, it supports analysis, documentation, and impartial judgment.
+- In obstacle positions, intellect may be cutting off compassion.
+
+## Reading Cautions
+- A court card may describe a role, quality, or dynamic, not only a literal person.
+- Do not label someone as cruel, vengeful, or untrustworthy as a fact.
+- If a real person interpretation is possible, keep it tentative and context-based.

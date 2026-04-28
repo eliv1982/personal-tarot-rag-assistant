@@ -1,35 +1,34 @@
 # Page of Pentacles
 
-## Metadata
+title: Page of Pentacles
 card_name: Page of Pentacles
-slug: page_of_pentacles
 arcana: minor
 suit: pentacles
 rank: page
-number: 11
+slug: page_of_pentacles
 
-## Keywords
-- practicality
-- prosperity
-- learning
-- growth
-- adolescence
+## Core Themes
+- study, practice, and practical beginnings
+- patience, discipline, and skill-building
+- documents, details, and useful information
+- material learning and grounded opportunity
+- slow growth through consistent effort
 
-## Fortune telling
-- This card represents a young man or woman with an earthy, practical demeanor, likely born an Aries, Taurus, or Gemini, who playfully encourages you to take financial or sexual risks
+## Upright Meaning
+The Page of Pentacles suggests a practical beginning. It can point to study, paperwork, training, a modest opportunity, or the first stage of building something tangible.
 
-## Meanings - Light
-- Learning the value of a dollar
-- Starting a savings plan
-- Taking the first steps toward getting out of debt
-- Learning new physical tasks
-- Discovering your sexuality
-- Launching a diet, a weight-lifting program, or a health-related effort
-- Learning by doing
+As a court card, it may describe the stance of a careful learner: attentive, grounded, curious, and willing to develop skill over time.
 
-## Meanings - Shadow
-- Trying to appear healthier or wealthier than you really are
-- Spending money carelessly
-- Living strictly for today, with no thought of tomorrow
-- Possessing immature attitudes toward sex and sexuality
-- Using wealth or beauty as an excuse for not having to learn and grow
+## Shadow Or Reversed Nuance
+The shadow of the Page of Pentacles is procrastination, narrow thinking, missed details, superficial knowledge, or getting stuck in bureaucracy. Reversed, it can show disorganization, resistance to learning, careless handling of documents, or anxiety around money and competence.
+
+## Interpretation Notes
+- In advice positions, study the details and take one practical step.
+- In work or financial readings, check documents, plans, and assumptions carefully.
+- In relationship readings, it can suggest reliability developing slowly rather than dramatic emotional display.
+- In obstacle positions, a lack of preparation may be slowing progress.
+
+## Reading Cautions
+- A court card may describe a role, quality, or dynamic, not only a literal person.
+- Do not predict financial outcomes, school outcomes, illness, or pregnancy-related events.
+- If a real person interpretation is possible, keep it tentative and context-based.

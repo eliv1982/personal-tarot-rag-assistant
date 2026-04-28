@@ -1,36 +1,34 @@
 # Six of Pentacles
 
-## Metadata
+title: Six of Pentacles
 card_name: Six of Pentacles
-slug: six_of_pentacles
 arcana: minor
 suit: pentacles
 rank: six
-number: 6
+slug: six_of_pentacles
 
-## Keywords
-- charity
-- fairness
-- cooperation
-- sharing
+## Core Themes
+- generosity, reciprocity, and material exchange
+- giving, receiving, debt, and support
+- fairness in resource distribution
+- mentorship, charity, and practical help
+- power dynamics around need and assistance
 
-## Fortune telling
-- When you need help, ask for it
-- Remember, though: what you receive may be limited by what you've given to others in the past
+## Upright Meaning
+The Six of Pentacles suggests exchange of resources: help offered, help received, repayment, mentorship, fair compensation, or redistribution. It asks how giving and receiving are balanced.
 
-## Meanings - Light
-- Giving time, money, or effort to a charity
-- Taking part in a group effort
-- Lending your resources to others without expecting anything in return
-- Making sure everyone is treated equally
-- Working together toward a common goal
-- Redistributing wealth, time, or attention
-- Tithing
-- Sharing credit for your success
+This card can be supportive, but it is not a guarantee of money or repayment. It highlights the ethics and dynamics of practical support.
 
-## Meanings - Shadow
-- Making a loan as a means of gaining control over someone
-- Using charitable acts to draw attention to yourself
-- Dividing work or resources unfairly
-- Failing to do your part in a group effort
-- Ignoring obligations and commitments
+## Shadow Or Reversed Nuance
+The shadow of the Six of Pentacles is unequal exchange, conditional generosity, dependency, unpaid debts, resentment, or support used as control. Reversed, it can show blocked help, unfair terms, financial imbalance, or the need to examine who benefits from the arrangement.
+
+## Interpretation Notes
+- In financial readings, examine agreements, expectations, repayment, and power dynamics.
+- In work readings, it can point to compensation, mentorship, shared resources, or fairness.
+- In relationship readings, look at whether practical and emotional support are mutual.
+- In advice positions, give responsibly and receive without shame, but clarify terms.
+
+## Reading Cautions
+- Do not promise loans, repayment, promotion, gifts, or financial help.
+- Do not claim theft, fraud, or unethical behavior as fact.
+- Practical/material themes must stay contextual and agency-preserving.

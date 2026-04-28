@@ -1,32 +1,34 @@
 # Three of Cups
 
-## Metadata
+title: Three of Cups
 card_name: Three of Cups
-slug: three_of_cups
 arcana: minor
 suit: cups
 rank: three
-number: 3
+slug: three_of_cups
 
-## Keywords
-- celebration
-- expression
-- community
-- friendliness
+## Core Themes
+- celebration, friendship, and shared joy
+- emotional support through community
+- creative enjoyment and social connection
+- gratitude, reunion, and mutual encouragement
+- the pleasure of belonging
 
-## Fortune telling
-- Unconventional romance is coming your way: a love affair with someone you've always dismissed
+## Upright Meaning
+The Three of Cups suggests shared happiness and emotional nourishment through others. It can point to friendship, celebration, creative collaboration, reunion, or a moment when joy becomes stronger because it is shared.
 
-## Meanings - Light
-- Celebrating your feelings or connections with others
-- Expressing joy through song, dance, or physical affection
-- Working together with others who share your feelings
-- Performing acts of service as a way of saying, "I love you"
-- Embracing unconventional romantic arrangements
+This card supports connection and pleasure, but it should not be treated as a literal guarantee of weddings, pregnancy, recovery, or any specific event.
 
-## Meanings - Shadow
-- Mistaking giddiness for true affection
-- Being dominated by manic emotions
-- Expecting everyone to always feel the same way you do
-- Demanding unreasonable support from friends or family
-- Partying to a dangerous or unhealthy extent
+## Shadow Or Reversed Nuance
+The shadow of the Three of Cups is overindulgence, social pressure, exclusion, emotional messiness, or pleasure used to avoid a harder truth. Reversed, it can show cancelled plans, disappointment in a group, loneliness in social settings, or celebration that has become strained.
+
+## Interpretation Notes
+- In relationship readings, this card can highlight friendship, support networks, or shared emotional context.
+- In creative readings, it supports collaboration, audience, play, and celebration of early results.
+- In obstacle positions, look for excess, comparison, gossip, or group dynamics that complicate intimacy.
+- If the question concerns a celebration, keep the reading open rather than predictive.
+
+## Reading Cautions
+- Do not predict pregnancy, marriage, health recovery, betrayal, or cancelled events as facts.
+- Do not turn social or romantic ambiguity into accusation.
+- Relationship themes must stay contextual and reflective.

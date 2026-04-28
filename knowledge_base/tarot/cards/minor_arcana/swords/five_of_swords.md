@@ -1,37 +1,34 @@
 # Five of Swords
 
-## Metadata
+title: Five of Swords
 card_name: Five of Swords
-slug: five_of_swords
 arcana: minor
 suit: swords
 rank: five
-number: 5
+slug: five_of_swords
 
-## Keywords
-- selfishness
-- hostility
-- irrationality
-- self-preservation
+## Core Themes
+- conflict, ego, and the cost of winning
+- harsh words, humiliation, and damaged trust
+- manipulation, self-protection, and power struggles
+- victory that may not feel worth it
+- choosing integrity over escalation
 
-## Fortune telling
-- Someone is stealing from you, financially or romantically
-- Be wary of friends who talk behind your back
+## Upright Meaning
+The Five of Swords suggests a painful conflict where winning may cost more than it gives. It can describe tension, pride, verbal harm, resentment, or a situation where people are acting from defensiveness rather than wisdom.
 
-## Meanings - Light
-- Acting in your own best interest
-- Choosing to stand up for yourself
-- Not backing down from disagreement and discord
-- Taking a stand
-- Refusing to go along with an unethical plan
-- Knowing when to bend the rules
+This card preserves the reality of conflict without assuming who is guilty. It asks what the current strategy is costing the user's peace, dignity, or relationships.
 
-## Meanings - Shadow
-- Taking advantage of others
-- Intimidating others
-- Acting in an unethical manner
-- Picking fights
-- Using words to goad others into violence and irrationality
-- Ignoring rules you've agreed to abide by
-- Looking out for yourself while allowing harm to come to others
-- Gloating over victory
+## Shadow Or Reversed Nuance
+The shadow of the Five of Swords is revenge, cruelty, humiliation, gossip, self-sabotage, or needing to win at any cost. Reversed, it can show the chance to step away from conflict, repair damage, stop feeding accusations, or recognize a pattern that has become destructive.
+
+## Interpretation Notes
+- In conflict readings, focus on behavior, consequences, and de-escalation rather than assigning hidden motives.
+- In relationship readings, it can show hurtful dynamics, contempt, or an argument where no one feels truly heard.
+- In advice positions, ask whether this is a battle worth continuing.
+- In obstacle positions, pride or suspicion may be distorting judgment.
+
+## Reading Cautions
+- Do not claim betrayal, sabotage, attack, gossip, theft, or hidden hostility as fact.
+- Do not predict legal punishment, defeat, death, or disaster.
+- Painful themes must stay contextual, stabilizing, and agency-preserving.

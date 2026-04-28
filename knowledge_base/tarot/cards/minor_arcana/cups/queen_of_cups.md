@@ -1,33 +1,34 @@
 # Queen of Cups
 
-## Metadata
+title: Queen of Cups
 card_name: Queen of Cups
-slug: queen_of_cups
 arcana: minor
 suit: cups
 rank: queen
-number: 13
+slug: queen_of_cups
 
-## Keywords
-- insightfulness
-- spirituality
-- compassion
-- empathy
-- instinct
+## Core Themes
+- emotional wisdom, empathy, and receptivity
+- intuition, dreams, and inner listening
+- care, compassion, and emotional containment
+- creative imagination and subtle perception
+- the need for healthy emotional boundaries
 
-## Fortune telling
-- This card represents a woman with an emotional, deeply spiritual nature, likely born between June 11th and July 11th, who uses emotional and spiritual appeals to sway others to her point of view
+## Upright Meaning
+The Queen of Cups suggests mature emotional presence. She points to compassion, intuition, deep listening, and the ability to hold feelings without immediately acting on them.
 
-## Meanings - Light
-- Allowing yourself to be moved by the plight of others
-- Feeling strong emotions
-- Possessing unusual sympathy or empathy
-- Trusting your feelings to guide you
-- Calling on psychic abilities
-- Achieving unity with Spirit
+As a court card, this may be a quality the user needs: emotional attunement, gentle support, and the courage to take inner experience seriously.
 
-## Meanings - Shadow
-- Becoming so caught up in matters of Spirit, you become detached from the world
-- Allowing empathy to disable you (instead of inspire action)
-- Using psychic abilities to wield covert influence
-- Wallowing in emotionalism, sentiment, or self-pity
+## Shadow Or Reversed Nuance
+The shadow of the Queen of Cups is emotional over-identification, porous boundaries, moodiness, self-sacrifice, or confusing intuition with projection. Reversed, it can show emotional overwhelm, dependency patterns, withdrawal, or unclear judgment caused by strong feelings.
+
+## Interpretation Notes
+- In advice positions, listen inwardly but stay grounded in observable reality.
+- In relationship readings, focus on care, empathy, emotional safety, and boundaries.
+- In creative or spiritual readings, it supports imagination and symbolic insight.
+- In obstacle positions, it may point to emotional flooding or giving too much away.
+
+## Reading Cautions
+- A court card may describe a role, quality, or dynamic, not only a literal person.
+- Do not diagnose emotional instability, dependency, addiction, or mental health conditions.
+- If a real person interpretation is possible, keep it tentative and context-based.

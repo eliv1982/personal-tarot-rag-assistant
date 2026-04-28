@@ -1,33 +1,34 @@
 # Five of Wands
 
-## Metadata
+title: Five of Wands
 card_name: Five of Wands
-slug: five_of_wands
 arcana: minor
 suit: wands
 rank: five
-number: 5
+slug: five_of_wands
 
-## Keywords
-- confrontation
-- disruption
-- distinction
-- objection
-- strife
+## Core Themes
+- competition, friction, and active challenge
+- conflicting energies, priorities, or egos
+- practice through struggle
+- irritation, rivalry, and productive tension
+- learning how to direct heat without escalation
 
-## Fortune telling
-- Prepare for a fight with your best friend
-- Remember: once you let words loose, you can't take them back
+## Upright Meaning
+The Five of Wands suggests a field of active tension. The user may be dealing with competition, disagreement, too many urgent demands, or the need to assert themselves among other strong energies.
 
-## Meanings - Light
-- Calmly expressing a dissenting opinion
-- Allowing someone to use his or her own methods to get a job done
-- Opening the floor for discussion or debate
-- Comparing progress made so far to standards set earlier
+This card does not automatically mean harmful conflict. It can show practice, challenge, and growth through friction when the energy is handled well.
 
-## Meanings - Shadow
-- Berating others for their ridiculous opinions
-- Picking fights
-- Offering destructive criticism
-- Baiting people with barbed remarks
-- Disrupting progress with an endless stream of pointless objections
+## Shadow Or Reversed Nuance
+The shadow of the Five of Wands is needless fighting, ego battles, disorganized effort, stress, provocation, or turning minor friction into a larger conflict. Reversed, it can show conflict easing, avoidance of necessary confrontation, hidden competition, or unhealthy tactics that need to be named calmly.
+
+## Interpretation Notes
+- In work readings, focus on priorities, competition, teamwork, and how energy is being managed.
+- In relationship readings, it can show tension, mixed needs, or rivalry without proving attraction, betrayal, or hostile intent.
+- In advice positions, choose the conflict worth engaging and avoid wasting energy on noise.
+- In obstacle positions, too many competing fires may be scattering momentum.
+
+## Reading Cautions
+- Do not predict legal battles, violence, betrayal, or a guaranteed win.
+- Do not claim aggression or intent from another person as fact.
+- Energy/action themes must stay contextual, stabilizing, and agency-preserving.

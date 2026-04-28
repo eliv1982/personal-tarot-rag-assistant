@@ -1,35 +1,34 @@
 # Six of Cups
 
-## Metadata
+title: Six of Cups
 card_name: Six of Cups
-slug: six_of_cups
 arcana: minor
 suit: cups
 rank: six
-number: 6
+slug: six_of_cups
 
-## Keywords
-- charity
-- sharing
-- sacrifice
-- cooperation
-- fairness
+## Core Themes
+- memory, nostalgia, and emotional roots
+- the past returning as feeling, lesson, or contact
+- innocence, tenderness, and familiar bonds
+- childhood patterns and old attachments
+- integrating the past without living inside it
 
-## Fortune telling
-- A stingy spirit is strangling your enjoyment of life
-- Loosen up and think of others for once, why don't you?
+## Upright Meaning
+The Six of Cups suggests a return to memory, familiarity, or emotional history. It can describe old friends, family themes, childhood memories, past love, or a feeling that belongs to an earlier chapter of life.
 
-## Meanings - Light
-- Donating your time and talents to others
-- Taking satisfaction in knowing how your efforts will aid others
-- Creating a "win-win" scenario
-- Giving even when you know repayment is not possible
-- Being motivated to do a good deed
+This card is tender, but it is not automatically a sign that the past should be restored. It asks what the past is teaching the present.
 
-## Meanings - Shadow
-- Linking your sense of self-worth to the appraisals of others
-- Striving to appear more needy than you really are
-- Taking undeserved or unmerited charity
-- Bragging about your charitable efforts
-- Profiteering in times of distress
-- Refusing to share a burden
+## Shadow Or Reversed Nuance
+The shadow of the Six of Cups is idealizing the past, clinging to old attachments, or letting memory distort current reality. Reversed, it can show painful memories, outdated beliefs, delayed growth, or the need to release an old emotional pattern.
+
+## Interpretation Notes
+- In relationship readings, it may point to nostalgia, old bonds, or a familiar dynamic, not guaranteed return.
+- In advice positions, honor what was meaningful while choosing from the present.
+- In family readings, it can highlight inherited patterns, tenderness, or unfinished emotional history.
+- In obstacle positions, the past may be comforting but limiting.
+
+## Reading Cautions
+- Do not claim that an ex, friend, or family member will return as fact.
+- Do not turn nostalgia into proof of another person's feelings.
+- Relationship themes must stay contextual and reflective.

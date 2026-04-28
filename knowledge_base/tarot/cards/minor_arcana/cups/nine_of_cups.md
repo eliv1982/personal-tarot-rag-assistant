@@ -1,35 +1,34 @@
 # Nine of Cups
 
-## Metadata
+title: Nine of Cups
 card_name: Nine of Cups
-slug: nine_of_cups
 arcana: minor
 suit: cups
 rank: nine
-number: 9
+slug: nine_of_cups
 
-## Keywords
-- satisfaction
-- sensuality
-- luxury
-- pleasure
+## Core Themes
+- satisfaction, pleasure, and emotional fulfillment
+- gratitude, comfort, and earned enjoyment
+- desire becoming visible
+- self-contentment and emotional reward
+- the difference between fulfillment and indulgence
 
-## Fortune telling
-- Whatever you want, you'll get it
+## Upright Meaning
+The Nine of Cups suggests contentment and emotional satisfaction. It can point to pleasure, gratitude, a personal milestone, or the feeling of having something meaningful enough to enjoy.
 
-## Meanings - Light
-- Being delighted with your own achievements
-- Recognizing your own talents and abilities
-- Reveling in the good things life has to offer
-- Indulging yourself
-- Relaxing and unwinding
-- Having everything you need in order to feel complete
+This card is often encouraging, but it should be read as a signal of fulfillment or desire, not a guarantee that every wish will come true.
 
-## Meanings - Shadow
-- Being smug
-- Satisfying yourself at the expense of others
-- Being selfish
-- Over-indulging
-- Avoiding work that needs to be done
-- Claiming achievements or skills you do not possess
-- Never being satisfied, no matter how much you have
+## Shadow Or Reversed Nuance
+The shadow of the Nine of Cups is complacency, self-absorption, excess, shallow gratification, or chasing pleasure to avoid emptiness. Reversed, it can show disappointment, unrealistic desire, lack of satisfaction, or the need to ask whether a wish is truly nourishing.
+
+## Interpretation Notes
+- In advice positions, receive what is good without losing perspective.
+- In relationship readings, it can suggest emotional satisfaction, but not guaranteed commitment or marriage.
+- In obstacle positions, pleasure may be masking unmet needs or lack of empathy.
+- In personal readings, ask whether the desired outcome would actually satisfy the heart.
+
+## Reading Cautions
+- Do not promise wish fulfillment, marriage, wealth, recovery, or romantic success as fact.
+- Do not use emotional desire as proof that something is meant to happen.
+- Relationship themes must stay contextual and reflective.

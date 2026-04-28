@@ -1,33 +1,34 @@
 # Seven of Cups
 
-## Metadata
+title: Seven of Cups
 card_name: Seven of Cups
-slug: seven_of_cups
 arcana: minor
 suit: cups
 rank: seven
-number: 7
+slug: seven_of_cups
 
-## Keywords
-- imagination
-- dreams
-- illusions
-- goals
+## Core Themes
+- fantasy, longing, and emotional projection
+- many choices, unclear priorities, and temptation
+- imagination, dreams, and symbolic vision
+- confusion between desire and reality
+- the need to choose with discernment
 
-## Fortune telling
-- You're being fed a line
-- Rather than be dazzled by fancy words and promises, demand something real
+## Upright Meaning
+The Seven of Cups suggests emotional complexity and too many imagined possibilities. The user may be facing several options, fantasies, hopes, fears, or tempting paths that are difficult to sort.
 
-## Meanings - Light
-- Motivating yourself with images of future success
-- Using visualization to encourage progress
-- Taking an imaginative or creative approach to problem solving
-- Making dreams come true
-- Gleaning insight from personal visions
+This card values imagination, but asks for grounding. Feelings may be vivid without being reliable evidence of what is actually happening.
 
-## Meanings - Shadow
-- Obsessing on imaginary fears or uncertain consequences
-- Giving in to emotional or political terrorism
-- Spending more time dreaming than working
-- Failing to envision the possible repercussions of your choices
-- Being controlled by fear
+## Shadow Or Reversed Nuance
+The shadow of the Seven of Cups is illusion, avoidance, wishful thinking, scattered desire, or being seduced by an image rather than reality. Reversed, it can show the fog beginning to clear, a more realistic choice, or the need to stop postponing a decision.
+
+## Interpretation Notes
+- In advice positions, narrow the options and check what is real, possible, and aligned.
+- In relationship readings, separate longing, fantasy, and projection from observable behavior.
+- In creative readings, this card can be rich with imagery and inspiration if grounded in action.
+- In obstacle positions, emotional imagination may be making the situation harder to read.
+
+## Reading Cautions
+- Do not treat dreams, fantasies, or intense feelings as proof of external reality.
+- Do not claim another person's feelings, betrayal, or intentions as fact.
+- Relationship themes must stay contextual and reflective.

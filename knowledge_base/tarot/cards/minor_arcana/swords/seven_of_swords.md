@@ -1,33 +1,34 @@
 # Seven of Swords
 
-## Metadata
+title: Seven of Swords
 card_name: Seven of Swords
-slug: seven_of_swords
 arcana: minor
 suit: swords
 rank: seven
-number: 7
+slug: seven_of_swords
 
-## Keywords
-- dishonesty
-- presumption
-- sneakiness
-- assumptions
+## Core Themes
+- strategy, secrecy, and indirect action
+- self-protection, avoidance, and tactical thinking
+- information gaps and careful communication
+- acting alone or outside the obvious path
+- the difference between discretion and dishonesty
 
-## Fortune telling
-- Don't assume people around you are worthy of your trust
-- Ask for an accounting of where people have been, and what they've been doing
+## Upright Meaning
+The Seven of Swords suggests that something is not fully straightforward. It can describe strategy, privacy, avoidance, incomplete information, or a need to move carefully rather than openly.
 
-## Meanings - Light
-- Refusing to do something dishonest, even when there's no chance of ever being caught
-- Handling a difficult situation with finesse
-- Pointing out assumptions
-- Acting ethically in public and in private
-- Living a life that is beyond reproach
+This card can raise questions about trust, but it should not be treated as proof of betrayal or theft. It asks what is being withheld, avoided, or handled indirectly.
 
-## Meanings - Shadow
-- Stealing or lying
-- Doing whatever you can get away with, simply because you can
-- Looking for a way around consequences
-- Justifying wicked behavior by focusing on the wickedness of others
-- Failing to examine your own motives and prejudices
+## Shadow Or Reversed Nuance
+The shadow of the Seven of Swords is deception, evasion, self-sabotage, unethical tactics, or trying to escape consequences. Reversed, it can show truth emerging, a need for accountability, accepting constructive criticism, or abandoning a strategy that no longer works.
+
+## Interpretation Notes
+- In relationship readings, focus on communication gaps, avoidance, privacy, and trust without making accusations.
+- In work or legal-adjacent readings, document facts and seek qualified advice if the stakes are real.
+- In advice positions, be strategic, but do not abandon integrity.
+- In obstacle positions, hidden assumptions or indirect behavior may be clouding the issue.
+
+## Reading Cautions
+- Do not claim theft, betrayal, deception, sabotage, or hidden hostility as fact.
+- Do not predict legal outcomes or criminal events.
+- Painful themes must stay contextual, stabilizing, and agency-preserving.

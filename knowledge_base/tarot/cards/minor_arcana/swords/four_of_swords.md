@@ -1,32 +1,34 @@
 # Four of Swords
 
-## Metadata
+title: Four of Swords
 card_name: Four of Swords
-slug: four_of_swords
 arcana: minor
 suit: swords
 rank: four
-number: 4
+slug: four_of_swords
 
-## Keywords
-- meditation
-- contemplation
-- perspective
-- mindset
+## Core Themes
+- rest, recovery, and mental stillness
+- retreat after conflict or strain
+- pause, meditation, and regrouping
+- reducing stimulation to regain clarity
+- the wisdom of not acting while depleted
 
-## Fortune telling
-- Don't make any decision now
-- Wait, and you'll be glad you did
+## Upright Meaning
+The Four of Swords suggests a necessary pause. After stress, conflict, or mental overload, the user may need rest, quiet, distance, or time to recover before making the next decision.
 
-## Meanings - Light
-- Thinking over your plans before putting them into action
-- Pausing to meditate or clear your mind
-- Taking time to understand someone or something before criticizing it
-- Resting
-- Occupying your thoughts with a healthy distraction
+This card is not passive resignation. It is strategic restoration.
 
-## Meanings - Shadow
-- Failing to think things through
-- Mistaking procrastination for thoughtfulness
-- Adopting a point of view and refusing to reconsider your conclusions, even when presented with refuting evidence
-- Allowing chaos and whimsy to dominate your thoughts
+## Shadow Or Reversed Nuance
+The shadow of the Four of Swords is withdrawal that becomes avoidance, isolation, or postponing action indefinitely. Reversed, it can show re-entry after rest, renewed activity, unfinished recovery, or pressure to act before the mind and body are ready.
+
+## Interpretation Notes
+- In advice positions, rest, reflect, and reduce unnecessary input.
+- In conflict readings, step back before words or choices become reactive.
+- In work readings, it can point to burnout prevention and a need to regroup.
+- In body-related readings, keep the meaning symbolic and encourage real-world care when needed.
+
+## Reading Cautions
+- Do not predict hospitalization, illness, isolation, detention, or recovery as fact.
+- Do not replace medical or mental-health support with tarot interpretation.
+- Painful themes must stay contextual, stabilizing, and agency-preserving.

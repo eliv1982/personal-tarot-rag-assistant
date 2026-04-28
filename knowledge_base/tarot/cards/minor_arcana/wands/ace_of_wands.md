@@ -1,38 +1,34 @@
 # Ace of Wands
 
-## Metadata
+title: Ace of Wands
 card_name: Ace of Wands
-slug: ace_of_wands
 arcana: minor
 suit: wands
 rank: ace
-number: 1
+slug: ace_of_wands
 
-## Keywords
-- desire
-- inspiration
-- vision
-- creation
-- invention
+## Core Themes
+- spark, initiative, and creative ignition
+- desire, courage, and life force
+- beginning of action, growth, or inspiration
+- raw energy that needs direction
+- the first impulse to create, move, or claim a path
 
-## Fortune telling
-- Someone has the "hots" for you
-- A new job offer is coming your way
-- Walk softly, and carry a big stick
+## Upright Meaning
+The Ace of Wands suggests a surge of energy or inspiration. It can point to a new idea, project, ambition, attraction, creative impulse, or desire to begin something with courage.
 
-## Meanings - Light
-- Being inspired
-- Identifying an important goal
-- Being given the opportunity to do whatever you want to do
-- Giving or receiving direction
-- Seeing a solution
-- Creating something new
-- Being aroused, sexually or creatively
+This card is a spark, not a guarantee. It asks what the user will do with the energy now that it has appeared.
 
-## Meanings - Shadow
-- Failing to take advantage of a great opportunity
-- Being ineffectual or lazy
-- Making an inadequate effort
-- Working toward a goal, but lacking the resources or initiative to achieve success
-- Setting inappropriate goals
-- Failing to take a stand
+## Shadow Or Reversed Nuance
+The shadow of the Ace of Wands is impulsiveness, unfocused desire, premature action, or mistaking excitement for readiness. Reversed, it can show blocked initiative, delayed growth, low energy, false starts, frustration, or a spark that needs better conditions before it can catch.
+
+## Interpretation Notes
+- In creative or work readings, this card supports starting, experimenting, and giving an idea shape.
+- In relationship readings, it may indicate attraction or chemistry, not a guaranteed sexual or romantic outcome.
+- In body-related readings, keep the meaning symbolic: vitality, momentum, energy, and capacity.
+- In obstacle positions, the issue may be scattered fire or trying to force growth too soon.
+
+## Reading Cautions
+- Do not claim pregnancy, fertility, potency, sexual outcome, or physical condition as fact.
+- Do not promise success in a new project or career move.
+- Energy/action themes must stay contextual and agency-preserving.

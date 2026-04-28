@@ -1,38 +1,34 @@
 # Nine of Wands
 
-## Metadata
+title: Nine of Wands
 card_name: Nine of Wands
-slug: nine_of_wands
 arcana: minor
 suit: wands
 rank: nine
-number: 9
+slug: nine_of_wands
 
-## Keywords
-- toughness
-- persistence
-- stamina
-- loyalty
-- release
+## Core Themes
+- endurance, vigilance, and defensive strength
+- boundaries after past strain
+- resilience, preparation, and guarded courage
+- protecting what remains important
+- the tension between wisdom and hypervigilance
 
-## Fortune telling
-- Don't relax yet; there's more to come
-- The test you're facing now is happening for one reason: to show you who your real friends are
+## Upright Meaning
+The Nine of Wands suggests resilience after strain. The user may be tired, guarded, or bracing for one more challenge, but there is still strength available.
 
-## Meanings - Light
-- Sticking with it for the duration
-- Fulfilling your promises and obligations
-- Bearing up under incredible duress
-- Dragging yourself across the finish line
-- Picking yourself up by your own bootstraps
-- Refusing to quit
-- Going as far as you can go and being satisfied with your performance
+This card honors perseverance while asking whether the current defensive posture is still useful or has become exhausting.
 
-## Meanings - Shadow
-- Making yourself a martyr
-- Abandoning your post
-- Giving up at the first sign of opposition
-- Being prevented from fulfilling an obligation
-- Failing to be dependable
-- Refusing to let something go that needs to be released
-- Beating a dead horse
+## Shadow Or Reversed Nuance
+The shadow of the Nine of Wands is suspicion, burnout, rigidity, fear of being hurt again, or defending a position that no longer needs defense. Reversed, it can show depleted energy, poor preparation, vulnerability, lowered resilience, or the need to seek support instead of enduring alone.
+
+## Interpretation Notes
+- In advice positions, prepare carefully, protect boundaries, and conserve energy.
+- In work readings, it can show resilience under pressure, but also risk of burnout.
+- In relationship readings, it may point to guardedness shaped by previous wounds.
+- In obstacle positions, the user may be fighting old battles in a new situation.
+
+## Reading Cautions
+- Do not give health certainty, immunity claims, or predictions about injury/recovery.
+- Do not claim another person is undermining, attacking, or preparing conflict as fact.
+- Energy/action themes must stay contextual and agency-preserving.

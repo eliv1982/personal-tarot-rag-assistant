@@ -1,38 +1,34 @@
 # Knight of Pentacles
 
-## Metadata
+title: Knight of Pentacles
 card_name: Knight of Pentacles
-slug: knight_of_pentacles
 arcana: minor
 suit: pentacles
 rank: knight
-number: 12
+slug: knight_of_pentacles
 
-## Keywords
-- caution
-- focus
-- realism
-- invention
+## Core Themes
+- steady progress, reliability, and patience
+- practical responsibility and long-term effort
+- service, planning, and consistency
+- material stability and careful development
+- the tension between caution and stagnation
 
-## Fortune telling
-- A stingy person may chide you for spending money
-- Be prepared to defend an economic or sexual decision
+## Upright Meaning
+The Knight of Pentacles suggests slow, steady movement. It can describe a practical plan, careful work, responsible follow-through, or a situation that improves through consistency rather than speed.
 
-## Meanings - Light
-- Spending money wisely
-- Saving for a rainy day
-- Paying close attention to physical or financial details
-- Knowing where every dollar goes
-- Having safe sex
-- Preferring facts to "good feelings"
-- Finding creative ways to "make do" with resources on hand
-- Completing a new invention
+As a role or stance, this card asks the user to be dependable, methodical, and realistic about time and effort.
 
-## Meanings - Shadow
-- Throwing caution to the four winds
-- Spending without regard for consequence
-- Spending on luxury when necessities are lacking
-- Escaping stress by spending money
-- Obsessing on tiny physical or financial details
-- Perpetually chasing after some new bauble
-- Copying another's work and claiming it as your own
+## Shadow Or Reversed Nuance
+The shadow of the Knight of Pentacles is stagnation, rigidity, boredom, over-caution, or measuring worth only through productivity. Reversed, it can show delays, apathy, poor planning, money stress, or refusal to take a reasonable risk.
+
+## Interpretation Notes
+- In advice positions, commit to the process and make progress measurable.
+- In work or financial readings, it favors planning, patience, and sustainable routines.
+- In relationship readings, it can indicate steadiness or a need to discuss practical reliability.
+- In obstacle positions, caution may have become inertia.
+
+## Reading Cautions
+- A court card may describe a role, quality, or dynamic, not only a literal person.
+- Do not promise income, promotion, property success, or stable romance as fact.
+- If a real person interpretation is possible, keep it tentative and context-based.

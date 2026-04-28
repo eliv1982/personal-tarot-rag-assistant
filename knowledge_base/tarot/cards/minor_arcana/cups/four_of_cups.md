@@ -1,35 +1,34 @@
 # Four of Cups
 
-## Metadata
+title: Four of Cups
 card_name: Four of Cups
-slug: four_of_cups
 arcana: minor
 suit: cups
 rank: four
-number: 4
+slug: four_of_cups
 
-## Keywords
-- boredom
-- listlessness
-- lethargy
-- stability
-- ingratitude
+## Core Themes
+- emotional withdrawal and dissatisfaction
+- contemplation, boredom, and inner re-evaluation
+- missed invitations or muted response
+- apathy, fatigue, and the need to reconnect
+- noticing what is available without forcing gratitude
 
-## Fortune telling
-- A lover is getting restless
-- Find out what he or she needs, or new opportunities may lure your partner away
+## Upright Meaning
+The Four of Cups suggests a period of emotional distance or dissatisfaction. The user may be tired, closed off, disappointed, or unsure why available options do not feel meaningful.
 
-## Meanings - Light
-- Maintaining your emotional stability
-- Refusing to give in to overwhelming emotions
-- Appreciating what you have and refusing to take it for granted
-- Seeing the value of long-term commitments
+This card often asks for honest reflection: is withdrawal protecting something important, or is it preventing the user from receiving support?
 
-## Meanings - Shadow
-- Being bored
-- Daydreaming at the expense of your work
-- Refusing to be engaged by opportunity
-- Taking people and relationships for granted
-- Ignoring romantic or spiritual opportunities
-- Spurning inspiration
-- Feeling everything should stay "just like it is"
+## Shadow Or Reversed Nuance
+The shadow of the Four of Cups is stagnation, self-pity, emotional numbness, or refusing help because it does not arrive in the expected form. Reversed, it can show renewed interest, willingness to reconnect, or the first movement out of isolation. It can also show deeper apathy if the user remains closed.
+
+## Interpretation Notes
+- In advice positions, pause before reacting, but stay open to what is being offered.
+- In relationship readings, it may point to emotional distance, unmet needs, or the need for clearer communication.
+- In obstacle positions, dissatisfaction may be obscuring real possibilities.
+- If low mood is intense or persistent, encourage grounded support rather than treating tarot as diagnosis.
+
+## Reading Cautions
+- Do not diagnose depression or emotional conditions.
+- Do not claim that someone has lost interest as fact.
+- Relationship themes must stay contextual and reflective.

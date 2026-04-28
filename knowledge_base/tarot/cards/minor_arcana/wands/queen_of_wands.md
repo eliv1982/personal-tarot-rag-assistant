@@ -1,31 +1,34 @@
 # Queen of Wands
 
-## Metadata
+title: Queen of Wands
 card_name: Queen of Wands
-slug: queen_of_wands
 arcana: minor
 suit: wands
 rank: queen
-number: 13
+slug: queen_of_wands
 
-## Keywords
-- attention
-- attraction
-- unification
-- collaboration
+## Core Themes
+- confidence, warmth, and creative leadership
+- charisma, independence, and visibility
+- generosity, courage, and social vitality
+- balancing personal ambition with loyalty and care
+- owning desire without needing to dominate
 
-## Fortune telling
-- This card represents a woman with an attractive, appealing personality, likely born between March 11th and April 20th, who wants to charm you into doing things her way
+## Upright Meaning
+The Queen of Wands suggests magnetic confidence and creative self-possession. She points to the ability to lead with warmth, inspire others, and act from a strong inner fire.
 
-## Meanings - Light
-- Paying close attention
-- Helping others focus on the issue at hand
-- Getting everyone to work together
-- Identifying common ground
-- Bringing people together, despite their differences
-- Using reverse psychology
+As a court card, this may be a stance the user needs: visible, courageous, generous, and unapologetically alive.
 
-## Meanings - Shadow
-- Being distracted, or using your charms or skills to distract others from the goal
-- Calling attention to yourself with negative or unhealthy behaviors
-- Disrupting group activities as a means of feeding your own ego
+## Shadow Or Reversed Nuance
+The shadow of the Queen of Wands is competitiveness, jealousy, control, performative confidence, or using charisma to overpower. Reversed, it can show insecurity behind confidence, burnout from overextension, social tension, or a need to reclaim one's fire without forcing others to follow.
+
+## Interpretation Notes
+- In advice positions, step into visibility and act with warm confidence.
+- In relationship readings, focus on attraction, independence, mutual respect, and power balance.
+- In work readings, it can suggest leadership, entrepreneurship, public presence, or creative influence.
+- In obstacle positions, charisma may become dominance or comparison.
+
+## Reading Cautions
+- A court card may describe a role, quality, or dynamic, not only a literal person.
+- Do not make gender-essentialist, appearance-based, or sexuality-based claims.
+- If a real person interpretation is possible, keep it tentative and context-based.
