@@ -1,5 +1,5 @@
 """
-Domain-agnostic knowledge configuration for reusable legal RAG core.
+Domain-agnostic knowledge configuration for reusable RAG core.
 
 Core-level config should not hardcode vertical-specific legal sources.
 Vertical/demo projects must provide their own knowledge entries.
@@ -14,10 +14,12 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 TAROT_KNOWLEDGE_ROOT = PROJECT_ROOT / "knowledge_base" / "tarot"
 
 
-def _iter_markdown_files(base_dir: Path, pattern: str) -> list[Path]:
+def _iter_markdown_files(base_dir: Path, pattern: str, recursive: bool = True) -> list[Path]:
     if not base_dir.exists():
         return []
-    return sorted(base_dir.rglob(pattern))
+    if recursive:
+        return sorted(base_dir.rglob(pattern))
+    return sorted(base_dir.glob(pattern))
 
 
 def _source_type_from_relative_path(relative_path: str) -> str:
@@ -48,13 +50,13 @@ def default_knowledge_entries() -> List[KnowledgeEntry]:
     """
     Neutral default for core starter kit.
 
-    Returns tarot knowledge entries for the current vertical.
+    Returns knowledge entries for the current project vertical.
     """
     files: list[Path] = []
-    files.extend(_iter_markdown_files(TAROT_KNOWLEDGE_ROOT / "cards", "*.md"))
-    files.extend(_iter_markdown_files(TAROT_KNOWLEDGE_ROOT / "spreads", "*.md"))
-    files.extend(_iter_markdown_files(TAROT_KNOWLEDGE_ROOT / "style", "*.md"))
-    files.extend(_iter_markdown_files(TAROT_KNOWLEDGE_ROOT / "safety", "*.md"))
+    files.extend(_iter_markdown_files(TAROT_KNOWLEDGE_ROOT / "cards", "*.md", recursive=True))
+    files.extend(_iter_markdown_files(TAROT_KNOWLEDGE_ROOT / "spreads", "*.md", recursive=False))
+    files.extend(_iter_markdown_files(TAROT_KNOWLEDGE_ROOT / "style", "*.md", recursive=False))
+    files.extend(_iter_markdown_files(TAROT_KNOWLEDGE_ROOT / "safety", "*.md", recursive=False))
 
     entries: list[KnowledgeEntry] = []
     for file_path in files:
