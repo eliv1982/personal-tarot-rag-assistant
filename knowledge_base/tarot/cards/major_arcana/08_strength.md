@@ -1,33 +1,33 @@
 # Strength
 
-## Metadata
 card_name: Strength
-slug: strength
 arcana: major
-suit: 
-rank: 
-number: 8
+suit: none
+rank: 8
+slug: strength
 
-## Keywords
-- discipline
-- boldness
-- self-discipline
-- power
-- vitality
+## Core Themes
+- inner strength, patience, and courage
+- gentle power and emotional self-command
+- compassion toward instinctive or reactive parts of the self
+- resilience, trust, and steady confidence
+- transforming force into care
 
-## Fortune telling
-- Your self-control will be tested
-- A woman will seek to change her partner or lover
-- You are a strong, capable person
+## Upright Meaning
+Strength suggests quiet courage rather than brute force. It points to the ability to meet fear, anger, desire, or pressure with patience and self-respect.
 
-## Meanings - Light
-- Imposing restrictions on yourself for your own benefit
-- Bringing your passions under the control of reason
-- Resisting impulses that work against your best interests
-- Taking bold action
+This card often asks the user to work with intense feelings instead of suppressing or obeying them. Real strength here is calm, embodied, and compassionate.
 
-## Meanings - Shadow
-- Indulging weakness, even when you know it will damage your health and happiness
-- Languishing in addiction
-- Allowing your instincts to tame and conquer you
-- Failing to take a stand when necessary
+## Shadow Or Reversed Nuance
+The shadow of Strength is burnout, loss of confidence, reactive behavior, shame around instinct, or trying to dominate what needs understanding. Reversed, it can show exhaustion, fear, self-doubt, or difficulty trusting one's own resilience.
+
+## Interpretation Notes
+- In advice positions, respond with patience, restraint, and self-trust.
+- In obstacle positions, notice where fear, impulse, or shame is driving behavior.
+- In relationship readings, it can point to tenderness, restraint, and the need to avoid power struggles.
+- It supports grounded courage, not denial of vulnerability.
+
+## Reading Cautions
+- Do not interpret health references as diagnosis or prognosis.
+- Do not tell the user to endure unsafe dynamics in the name of strength.
+- Sensitive themes should be framed as capacity, support, and self-care.

@@ -1,34 +1,35 @@
 # The Magician
 
-## Metadata
 card_name: The Magician
-slug: the_magician
 arcana: major
-suit: 
-rank: 
-number: 1
+suit: none
+rank: 1
+slug: the_magician
 
-## Keywords
-- capability
-- empowerment
-- activity
+## Core Themes
+- focused will and practical skill
+- initiative, agency, and self-direction
+- turning ideas into action
+- learning, adaptation, and experimentation
+- communication, technique, and resourcefulness
 
-## Fortune telling
-- A powerful man may play a role in your day
-- Your current situation must be seen as one element of a much larger plan
+## Upright Meaning
+The Magician points to the ability to act with intention. It suggests that the user may already have useful tools, knowledge, or resources, but needs to focus them clearly.
 
-## Meanings - Light
-- Taking appropriate action
-- Receiving guidance from a higher power
-- Becoming a channel of divine will
-- Expressing masculine energy in appropriate and constructive ways
-- Being yourself in every way
+This card is about applied capability: learning by doing, shaping circumstances through skill, and taking the first concrete steps toward a goal.
 
-## Meanings - Shadow
-- Inflating your own ego
-- Abusing talents
-- Manipulating or deceiving others
-- Being too aggressive
-- Using cheap illusions to dazzle others
-- Refusing to invest the time and effort needed to master your craft
-- Taking shortcuts
+## Shadow Or Reversed Nuance
+The shadow of The Magician is manipulation, empty performance, wasted talent, overconfidence, or using skill without integrity. Reversed, it can show blocked creativity, poor planning, self-doubt, or pretending to know more than one does.
+
+It may also describe scattered effort: having tools available but not using them well.
+
+## Interpretation Notes
+- In advice positions, The Magician favors clarity, practice, and deliberate action.
+- In obstacle positions, it may point to misused influence, lack of preparation, or self-deception.
+- In career or creative readings, it emphasizes craft, communication, and turning potential into something visible.
+- In personal readings, it can ask: what can you actually do with what is already in your hands?
+
+## Reading Cautions
+- Do not frame The Magician as supernatural control over outcomes.
+- Do not claim someone is deceiving or manipulating the user as a fact.
+- Medical or technical associations should be symbolic unless the user provides real-world context.

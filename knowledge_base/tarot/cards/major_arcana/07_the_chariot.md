@@ -1,34 +1,33 @@
 # The Chariot
 
-## Metadata
 card_name: The Chariot
-slug: the_chariot
 arcana: major
-suit: 
-rank: 
-number: 7
+suit: none
+rank: 7
+slug: the_chariot
 
-## Keywords
-- advancement
-- victory
-- triumph
-- success
+## Core Themes
+- direction, discipline, and forward motion
+- willpower, focus, and self-command
+- balancing conflicting forces
+- progress through effort and coordination
+- movement, travel, and momentum
 
-## Fortune telling
-- Victory is a certainty
-- Move ahead with all plans
-- Beware the jealousy of others
+## Upright Meaning
+The Chariot suggests progress through focus. It points to a situation where energy must be directed rather than scattered. The user may need to hold opposing impulses together and keep moving with purpose.
 
-## Meanings - Light
-- Breaking through barriers
-- Moving forward with confidence and authority
-- Reaching the pinnacle of success
-- Basking in the glory of achievement
-- Guiding an effort to total victory
-- Establishing yourself as a worthy leader
+This card is not only about victory; it is about steering. Progress depends on discipline, alignment, and knowing where the energy is going.
 
-## Meanings - Shadow
-- Resting on laurels
-- Riding roughshod over the feelings or expectations of others
-- Focusing more on past successes than future opportunities
-- Failing to rein in impulsive behavior
+## Shadow Or Reversed Nuance
+The shadow of The Chariot is force without sensitivity, rushing, losing control, or trying to dominate a situation that needs balance. Reversed, it may show scattered effort, blocked movement, conflict between desires, or pressure that makes direction unclear.
+
+## Interpretation Notes
+- In advice positions, clarify the goal and choose disciplined action.
+- In obstacle positions, look for haste, control issues, or competing drives.
+- In practical readings, it can point to movement, travel, vehicles, logistics, or the need to coordinate many parts.
+- If the spread is mixed, ask what needs to be brought into alignment before progress is possible.
+
+## Reading Cautions
+- Do not promise victory or guaranteed success.
+- Do not predict accidents, travel outcomes, or conflict as facts.
+- Avoid glorifying control when the reading calls for balance.

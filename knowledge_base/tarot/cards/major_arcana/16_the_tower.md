@@ -1,37 +1,33 @@
 # The Tower
 
-## Metadata
 card_name: The Tower
-slug: the_tower
 arcana: major
-suit: 
-rank: 
-number: 16
+suit: none
+rank: 16
+slug: the_tower
 
-## Keywords
-- demolition
-- upheaval
-- deconstruction
-- disaster
-- destruction
+## Core Themes
+- disruption, revelation, and structural collapse
+- sudden truth, shock, and awakening
+- breakdown of false stability
+- crisis that exposes what cannot continue
+- liberation through the fall of an old structure
 
-## Fortune telling
-- Impending disaster
-- Cancel plans and reverse decisions
-- Someone wants to take you down a notch or two
-- Don't hold back; say what you really mean
+## Upright Meaning
+The Tower suggests that something unstable may be exposed. It can describe a disruptive realization, a breakdown of assumptions, or a moment when an old structure no longer holds.
 
-## Meanings - Light
-- Breaking out of old, confining habits and mindsets
-- Clearing the way for new growth
-- Dispelling the influence of an inflated ego
-- Getting back to basics
-- Stripping away harmful illusions
-- Receiving sudden insight
+The card is not only destruction. It can clear space for truth and rebuilding, especially when the user has been clinging to a false or restrictive arrangement.
 
-## Meanings - Shadow
-- Clinging to traditions that repress growth
-- Engaging in willful blindness
-- Rejecting evidence that change is needed
-- Ignoring guidance from a higher power
-- Maliciously engaging in destructive behavior
+## Shadow Or Reversed Nuance
+The shadow of The Tower is clinging to a collapsing structure, ignoring warning signs, or escalating chaos through denial. Reversed, it may show a crisis that is already passing, a disruption that can be managed, or fear of change that prolongs instability.
+
+## Interpretation Notes
+- In advice positions, face the truth and identify what cannot be maintained honestly.
+- In obstacle positions, denial or fear of disruption may be worsening the situation.
+- In relationship readings, it can show a shake-up, revelation, or need to rebuild trust and structure.
+- In outcome positions, frame it as possible disruption or revelation, not inevitable disaster.
+
+## Reading Cautions
+- Do not predict accidents, disasters, financial collapse, imprisonment, or sudden ruin.
+- Keep crisis language stabilizing and practical.
+- If the user appears unsafe or overwhelmed, encourage real-world support.

@@ -1,35 +1,33 @@
 # The World
 
-## Metadata
 card_name: The World
-slug: the_world
 arcana: major
-suit: 
-rank: 
-number: 21
+suit: none
+rank: 21
+slug: the_world
 
-## Keywords
-- wholeness
-- integration
-- totality
-- completeness
-- fullness
+## Core Themes
+- completion, integration, and wholeness
+- fulfillment after a long process
+- perspective, maturity, and synthesis
+- closing a cycle and preparing for the next
+- belonging to a larger pattern
 
-## Fortune telling
-- Winning the lottery
-- Getting your heart's desire
-- Having everything you ever imagined having
+## Upright Meaning
+The World suggests completion and integration. A process may be reaching a meaningful close, or the user may be able to see how many parts of the journey fit together.
 
-## Meanings - Light
-- Having it all
-- Knowing and loving yourself as completely as possible
-- Seeing the interconnection of all things and people
-- Enhancing your perspective
-- Living life to its fullest
-- Understanding the meaning of life
+This card is not only an ending; it is the maturity that comes from having lived through a whole cycle. It supports perspective, gratitude, and readiness for the next stage.
 
-## Meanings - Shadow
-- Allowing greed and envy to prevent you from enjoying what you do possess
-- Failing to see the larger design in ordinary events
-- Believing that everything that exists can be touched, counted, or measured
-- Failing to see the divine reflected in those around you
+## Shadow Or Reversed Nuance
+The shadow of The World is incompletion, perfectionism, difficulty receiving fulfillment, or being unable to recognize what has already been achieved. Reversed, it can show a cycle that is nearly complete but still needs integration, closure, or one final adjustment.
+
+## Interpretation Notes
+- In advice positions, integrate the lesson and complete what remains unfinished.
+- In obstacle positions, look for loose ends, lack of closure, or inability to acknowledge progress.
+- In relationship readings, it can point to completion, maturity, or the need to understand the whole pattern.
+- In outcome positions, frame it as possible completion or integration, not guaranteed total success.
+
+## Reading Cautions
+- Do not promise total fulfillment, wealth, winning, or perfect closure.
+- Do not flatten the card into a simple happy ending.
+- Completion can include grief, release, and preparation for a new cycle.

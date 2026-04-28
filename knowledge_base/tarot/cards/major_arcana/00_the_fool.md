@@ -1,39 +1,35 @@
 # The Fool
 
-## Metadata
 card_name: The Fool
-slug: the_fool
 arcana: major
-suit: 
-rank: 
-number: 0
+suit: none
+rank: 0
+slug: the_fool
 
-## Keywords
-- freedom
-- faith
-- inexperience
-- innocence
+## Core Themes
+- beginnings, openness, and fresh possibility
+- trust, curiosity, and creative risk
+- freedom from old assumptions
+- innocence, inexperience, and improvisation
+- stepping into the unknown before the whole path is visible
 
-## Fortune telling
-- Watch for new projects and new beginnings
-- Prepare to take something on faith
-- Something new comes your way; go for it
+## Upright Meaning
+The Fool suggests a threshold moment: something new is opening, but it may not yet be fully defined. This card can describe a fresh start, a change of direction, a willingness to experiment, or the need to meet life with curiosity rather than over-control.
 
-## Meanings - Light
-- Freeing yourself from limitation
-- Expressing joy and youthful vigor
-- Being open-minded
-- Taking a leap of faith
-- Attuning yourself to your instincts
-- Being eager or curious
-- Exploring your potential
-- Embracing innovation and change
+In a reading, The Fool often asks the user to notice where they are being invited to begin again. It supports openness, play, and trust in learning through experience, while still staying aware of real-world limits.
 
-## Meanings - Shadow
-- Being gullible and naive
-- Taking unnecessary risks
-- Failing to be serious when required
-- Being silly or distracted
-- Lacking experience
-- Failing to honor well-established traditions and limits
-- Behaving inappropriately
+## Shadow Or Reversed Nuance
+The shadow of The Fool is impulsiveness, naivety, avoidance of consequences, or risk without reflection. It can also show fear of the unknown, clinging to old methods, or refusing to move because the path is not guaranteed.
+
+Reversed, this card may point to hesitation, scattered energy, poor timing, or a need to pause before leaping.
+
+## Interpretation Notes
+- Read this card as potential, not proof that a new path will succeed automatically.
+- In advice positions, it often favors openness, experimentation, and beginner's mind.
+- In obstacle positions, it may show carelessness, lack of planning, or fear of uncertainty.
+- In relationship readings, it can highlight novelty, freedom, uncertainty, or questions about commitment.
+
+## Reading Cautions
+- Do not treat The Fool as permission for reckless action.
+- Do not claim that another person is unreliable, unfaithful, or immature as a fact.
+- Sensitive themes should be framed as uncertainty, risk, or relational dynamics, not predictions.

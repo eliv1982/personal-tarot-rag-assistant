@@ -1,35 +1,33 @@
 # The Lovers
 
-## Metadata
 card_name: The Lovers
-slug: the_lovers
 arcana: major
-suit: 
-rank: 
-number: 6
+suit: none
+rank: 6
+slug: the_lovers
 
-## Keywords
-- love
-- passion
-- unity
-- choice
+## Core Themes
+- choice, union, attraction, and alignment
+- relationship, desire, and mutual recognition
+- values-based decisions
+- integration of different needs or impulses
+- the test of choosing with honesty
 
-## Fortune telling
-- A new personal or professional relationship blossoms
-- Sexual opportunities abound
-- Unexpectedly, a friend becomes a lover
+## Upright Meaning
+The Lovers points to a meaningful choice or connection. It can describe romantic attraction, partnership, intimacy, or an important decision that should be made in alignment with values.
 
-## Meanings - Light
-- Being in love
-- Showing your love to others
-- Expressing passion or romantic feelings
-- Aligning yourself with groups or like-minded others
-- Bringing people together
-- Making well-informed decisions
+The card asks whether the user's choices reflect who they are becoming, not only what they want in the moment.
 
-## Meanings - Shadow
-- Debilitating passion
-- Allowing an unhealthy desire for love to motivate destructive behavior
-- Disrupting unity
-- Working against the best interests of those who care about you
-- Ill-informed decisions
+## Shadow Or Reversed Nuance
+The shadow of The Lovers is misalignment, avoidance of choice, divided desire, unhealthy attachment, or decisions made from impulse rather than integrity. Reversed, it may show relational tension, incompatibility, fear of commitment, or a need to clarify values before choosing.
+
+## Interpretation Notes
+- In relationship readings, focus on mutuality, communication, values, and choice.
+- In non-romantic readings, this card can indicate a crossroads or the need to integrate competing priorities.
+- In obstacle positions, attraction may be clouding judgment, or a decision is being delayed.
+- It can illuminate emotional stakes without guaranteeing a relationship outcome.
+
+## Reading Cautions
+- Do not claim that a person loves, betrays, or desires the user as a fact.
+- Do not frame relationship outcomes as fixed.
+- Sensitive relationship themes should be handled as dynamics, choices, and communication patterns.

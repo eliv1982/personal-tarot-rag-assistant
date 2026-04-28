@@ -1,34 +1,33 @@
 # The Hermit
 
-## Metadata
 card_name: The Hermit
-slug: the_hermit
 arcana: major
-suit: 
-rank: 
-number: 9
+suit: none
+rank: 9
+slug: the_hermit
 
-## Keywords
-- solitude
-- experience
-- stillness
-- withdrawal
+## Core Themes
+- solitude, reflection, and inner guidance
+- wisdom gained through experience
+- withdrawal for perspective
+- patient study and careful discernment
+- the search for a deeper truth
 
-## Fortune telling
-- A period of loneliness begins
-- One partner in a relationship departs
-- A search for love or money proves fruitless
+## Upright Meaning
+The Hermit suggests stepping back to listen more carefully. It can point to a need for quiet, study, retreat, or wise counsel. The answer may not come from more noise, but from reflection and patient attention.
 
-## Meanings - Light
-- Becoming or seeking out a guru
-- Going on a retreat
-- Recharging spiritual or creative batteries
-- Lighting the way for those with less experience
-- Stepping back to gain perspective
+This card supports thoughtful distance when the user needs to understand what is truly theirs to do.
 
-## Meanings - Shadow
-- Being a loner
-- Fearing contact with others
-- Becoming a know-it-all
-- Inflating claims of expertise
-- Hiding your skills and talents out of fear of unworthiness
+## Shadow Or Reversed Nuance
+The shadow of The Hermit is isolation, refusal of help, self-absorption, or using withdrawal to avoid life. Reversed, it can show loneliness, rejected wisdom, mistrust of guidance, or being cut off from supportive connection.
+
+## Interpretation Notes
+- In advice positions, pause, reflect, study, or seek a reliable mentor.
+- In obstacle positions, isolation or refusal to listen may be part of the issue.
+- In relationship readings, distinguish healthy space from emotional withdrawal.
+- This card favors depth over speed.
+
+## Reading Cautions
+- Do not predict loneliness, separation, or abandonment as facts.
+- Do not romanticize isolation if the user appears distressed or unsupported.
+- Encourage grounded support when the situation feels acute or unsafe.

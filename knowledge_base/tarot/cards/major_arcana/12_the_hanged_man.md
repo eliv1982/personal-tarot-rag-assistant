@@ -1,35 +1,33 @@
 # The Hanged Man
 
-## Metadata
 card_name: The Hanged Man
-slug: the_hanged_man
 arcana: major
-suit: 
-rank: 
-number: 12
+suit: none
+rank: 12
+slug: the_hanged_man
 
-## Keywords
-- enlightenment
-- sacrifice
-- perspective
-- suspension
-- reversals
+## Core Themes
+- pause, surrender, and changed perspective
+- waiting, suspension, and liminal space
+- release of control
+- sacrifice, patience, and reframing
+- insight gained by seeing from another angle
 
-## Fortune telling
-- A traitor is revealed
-- One of your friends is working against you
-- Change your ways or suffer the consequences
+## Upright Meaning
+The Hanged Man suggests a pause that can become meaningful if the user stops fighting it. The situation may not move by force; it may require surrender, patience, or a new perspective.
 
-## Meanings - Light
-- Seeing growth opportunities in unpleasant events
-- Experiencing a dramatic change in personal perspective
-- Making the best of an unforeseen change in your life or work
-- Suspending disbelief
-- Making sacrifices
+This card asks what needs to be released so the situation can be seen more clearly.
 
-## Meanings - Shadow
-- Being untrue to yourself and your values
-- Refusing to make sacrifices when appropriate
-- Refusing to adapt to new situations
-- Blaming others
-- Profiting at the expense of others
+## Shadow Or Reversed Nuance
+The shadow of The Hanged Man is martyrdom, passivity, avoidance, self-betrayal, or sacrificing too much for too little. Reversed, it can show resistance to necessary change, wasted waiting, or refusal to see from another perspective.
+
+## Interpretation Notes
+- In advice positions, pause, reframe, and question old assumptions.
+- In obstacle positions, the user may be stuck between surrender and avoidance.
+- In relationship readings, look at sacrifice, imbalance, and whether waiting is helping or harming.
+- This card can show meaningful delay, but not permanent helplessness.
+
+## Reading Cautions
+- Do not tell the user to tolerate harm or neglect as a spiritual lesson.
+- Do not claim betrayal or hidden opposition as fact.
+- Keep sacrifice voluntary, bounded, and agency-preserving.

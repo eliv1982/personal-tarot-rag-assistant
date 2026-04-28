@@ -1,35 +1,33 @@
 # The Moon
 
-## Metadata
 card_name: The Moon
-slug: the_moon
 arcana: major
-suit: 
-rank: 
-number: 18
+suit: none
+rank: 18
+slug: the_moon
 
-## Keywords
-- mystery
-- fantasy
-- imagination
-- dreams
-- uncertainty
+## Core Themes
+- uncertainty, dreams, and emotional depth
+- illusion, projection, and partial visibility
+- instinct, memory, and the unconscious
+- fear, ambiguity, and shifting perception
+- the need to move carefully when clarity is low
 
-## Fortune telling
-- Watch for problems at the end of the month
-- Someone you know needs to howl at the moon more often
-- Someone is about to change his or her mind about an important decision
+## Upright Meaning
+The Moon points to a situation where not everything can be seen clearly. Emotions, fears, dreams, memories, or assumptions may be shaping the user's perception.
 
-## Meanings - Light
-- Enjoying healthy fantasies and daydreams
-- Using your imagination
-- Practicing magic or celebrating the magic of everyday life
-- Attuning yourself to the cycles of nature
-- Embracing the unknown
+This card asks for patience and careful discernment. It does not mean the user is wrong; it means the signal is mixed, symbolic, or incomplete.
 
-## Meanings - Shadow
-- Becoming unable to separate fantasy from reality
-- Suffering from delusions
-- Losing your appreciation for the fantastic or magical
-- Adopting a ruthlessly logical mindset
-- Failing to appreciate life's mysteries
+## Shadow Or Reversed Nuance
+The shadow of The Moon is confusion, fantasy, avoidance, deception, or being overwhelmed by fear. Reversed, it can suggest that fog is beginning to lift, but it may also show lingering anxiety, hidden motives, or difficulty trusting perception.
+
+## Interpretation Notes
+- In advice positions, slow down, verify facts, and listen to emotional signals without treating them as proof.
+- In obstacle positions, projection, secrecy, or unclear communication may be central.
+- In relationship readings, focus on uncertainty, emotional climate, and trust rather than claiming hidden actions.
+- This card often asks the user to wait until more light is available.
+
+## Reading Cautions
+- Do not claim deception, betrayal, hidden enemies, illness, or another person's motives as facts.
+- Do not turn anxiety into prediction.
+- Sensitive themes should be framed as fears, ambiguity, or a need for grounding and verification.

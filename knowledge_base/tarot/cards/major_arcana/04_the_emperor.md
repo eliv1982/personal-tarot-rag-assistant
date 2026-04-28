@@ -1,35 +1,33 @@
 # The Emperor
 
-## Metadata
 card_name: The Emperor
-slug: the_emperor
 arcana: major
-suit: 
-rank: 
-number: 4
+suit: none
+rank: 4
+slug: the_emperor
 
-## Keywords
-- authority
-- regulation
-- direction
-- structure
+## Core Themes
+- structure, authority, and responsibility
+- boundaries, order, and practical control
+- leadership, discipline, and stability
+- turning intention into durable form
+- the tension between protection and domination
 
-## Fortune telling
-- A father figure arrives
-- A new employer or authority figure will give you orders
-- Expect discipline or correction in the near future
+## Upright Meaning
+The Emperor points to structure and clear responsibility. It suggests the need for order, planning, boundaries, or mature leadership. This card can support practical action, organization, and the creation of a stable foundation.
 
-## Meanings - Light
-- Exercising authority
-- Defining limits
-- Directing the flow of work
-- Communicating clear guidelines
-- Being in control of yourself and others
-- Tempering aggressive masculinity with wisdom and experience
+It may also ask the user to examine their relationship with authority: where they need to lead, where they need support, and where control may be too rigid.
 
-## Meanings - Shadow
-- Micromanaging
-- Crushing the creativity of others with a rigid, iron-fisted approach
-- Insisting on getting your own way
-- Assuming a dictatorial mindset
-- Using overt force to achieve your goals and maintain order
+## Shadow Or Reversed Nuance
+The shadow of The Emperor is rigidity, domination, emotional distance, control for its own sake, or refusing to take responsibility. Reversed, it can show weak structure, rebellion without direction, fear of authority, or overbearing pressure.
+
+## Interpretation Notes
+- In advice positions, define boundaries, responsibilities, and next steps.
+- In obstacle positions, look for rigidity, control issues, or avoidance of responsibility.
+- In relationship readings, focus on power balance and emotional availability.
+- In work readings, it often points to systems, leadership, hierarchy, or long-term planning.
+
+## Reading Cautions
+- Do not claim a specific authority figure will act in a certain way.
+- Do not normalize coercion, domination, or unsafe power dynamics.
+- Avoid presenting strict control as the only path to stability.

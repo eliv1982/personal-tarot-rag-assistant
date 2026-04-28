@@ -1,34 +1,33 @@
 # The Sun
 
-## Metadata
 card_name: The Sun
-slug: the_sun
 arcana: major
-suit: 
-rank: 
-number: 19
+suit: none
+rank: 19
+slug: the_sun
 
-## Keywords
-- joy
-- brilliance
-- validation
-- attention
-- energy
+## Core Themes
+- clarity, vitality, and joy
+- confidence, visibility, and expression
+- warmth, play, and life energy
+- success through openness and conscious effort
+- seeing what was hidden in daylight
 
-## Fortune telling
-- Everything's coming up roses (or sunflowers, whatever the case may be)
-- Whatever's on your mind, go for it because you can't lose today
+## Upright Meaning
+The Sun suggests clarity and renewed energy. It can point to optimism, confidence, celebration, or a moment when the situation becomes easier to understand.
 
-## Meanings - Light
-- Seeing things clearly
-- Experiencing intense joy
-- Celebrating your own successes
-- Knowing you're good at what you do
-- Gaining recognition for your personal genius
+This card supports honesty, directness, and embodied joy. It often highlights what is life-giving and what can now be seen plainly.
 
-## Meanings - Shadow
-- Being dazzled by your own accomplishments
-- Becoming absorbed in your own self-image
-- Feeling rushed and distracted
-- Exerting yourself to the point of exhaustion
-- Overstating your abilities or misrepresenting your achievements
+## Shadow Or Reversed Nuance
+The shadow of The Sun is ego inflation, overexposure, burnout, forced positivity, or needing attention at the expense of depth. Reversed, it can show delayed confidence, partial success, lowered vitality, or joy that is present but muted.
+
+## Interpretation Notes
+- In advice positions, choose clarity, openness, and life-affirming action.
+- In obstacle positions, watch for pride, denial, or pressure to appear happy.
+- In relationship readings, it can indicate warmth and openness, but should not override other difficult cards.
+- In outcome positions, frame it as a promising direction, not a guarantee.
+
+## Reading Cautions
+- Do not promise success, health, pregnancy, or happiness as certainty.
+- Do not use positivity to dismiss grief or complexity.
+- Keep joy grounded in the actual spread context.
