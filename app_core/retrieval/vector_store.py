@@ -1,6 +1,6 @@
 """
-Модуль работы с векторным хранилищем ChromaDB.
-Загрузка нескольких источников с метаданными, нарезка по статьям (нормативка) и по смыслу (обзоры).
+Vector store module based on ChromaDB.
+Supports corpus loading, chunking, embedding, and similarity search.
 """
 
 import os
@@ -27,6 +27,7 @@ _STATUTE_BOUNDARY = re.compile(
 )
 _TITLE_RE = re.compile(r"^#\s+(.+)$", flags=re.MULTILINE)
 _METADATA_BLOCK_RE = re.compile(r"^##\s+Metadata\s*\n(.*?)(?=\n##\s+|\Z)", flags=re.MULTILINE | re.DOTALL)
+_SECTION_HEADING_RE = re.compile(r"^(#{2,3})\s+(.+?)\s*$")
 
 
 class VectorStore:
@@ -231,6 +232,31 @@ class VectorStore:
             return line[:max_len] + "…"
         return line
 
+    def _split_markdown_sections(self, text: str) -> List[Tuple[str, str]]:
+        lines = (text or "").splitlines()
+        if not lines:
+            return []
+
+        sections: List[Tuple[str, str]] = []
+        default_title = self._extract_markdown_title(text) or "Document"
+        current_title = default_title
+        current_buffer: List[str] = []
+
+        for line in lines:
+            heading_match = _SECTION_HEADING_RE.match(line.strip())
+            if heading_match:
+                if current_buffer and any(item.strip() for item in current_buffer):
+                    sections.append((current_title, "\n".join(current_buffer).strip()))
+                current_title = heading_match.group(2).strip()
+                current_buffer = [line]
+                continue
+            current_buffer.append(line)
+
+        if current_buffer and any(item.strip() for item in current_buffer):
+            sections.append((current_title, "\n".join(current_buffer).strip()))
+
+        return sections
+
     def _kind_label(self, source_kind: str) -> str:
         return {
             "law": "закон РФ",
@@ -282,6 +308,8 @@ class VectorStore:
             "source_kind": source_kind,
             "doc_type": doc_type,
             "source_path": source_path,
+            "relative_path": source_path,
+            "source_file": Path(source_path).name if source_path else "",
             "doc_title": title,
         }
         if self._is_tarot_source_kind(source_kind):
@@ -309,7 +337,12 @@ class VectorStore:
         chunk_size = self.chunk_size
         overlap = self.chunk_overlap
         kind_label = self._kind_label(source_kind)
-        prefix_template = f"[Source: {source_display} | Type: {kind_label}]\n[Section: {{heading}}]\n\n"
+        is_tarot = self._is_tarot_source_kind(source_kind)
+        if is_tarot:
+            prefix_template = ""
+        else:
+            # Keep legacy behavior with a source prefix for non-tarot corpora.
+            prefix_template = f"[Источник: {source_display} | {kind_label}]\n[Фрагмент: {{heading}}]\n\n"
         base_meta = self._build_base_metadata(
             source=source,
             source_display=source_display,
@@ -320,14 +353,24 @@ class VectorStore:
         )
 
         if doc_type == "statute":
-            sections = self._split_statute_sections(text)
+            sections_with_titles: List[Tuple[str, str]] = [
+                (self._section_heading(section), section)
+                for section in self._split_statute_sections(text)
+            ]
+        elif is_tarot:
+            sections_with_titles = self._split_markdown_sections(text)
         else:
-            sections = [text.strip()] if text.strip() else []
+            stripped_text = text.strip()
+            sections_with_titles = (
+                [(self._extract_markdown_title(text) or "Document", stripped_text)]
+                if stripped_text
+                else []
+            )
 
         out: List[Tuple[str, Dict[str, str]]] = []
-        for section in sections:
-            heading = self._section_heading(section)
-            prefix = prefix_template.format(heading=heading)
+        for section_title, section in sections_with_titles:
+            heading = section_title or self._section_heading(section)
+            prefix = prefix_template.format(heading=heading) if prefix_template else ""
             max_body_len = max(1, chunk_size - len(prefix))
             if len(section) <= chunk_size:
                 meta = {
@@ -572,8 +615,8 @@ class VectorStore:
 if __name__ == "__main__":
     import sys
 
-    if not os.getenv("OPENAI_API_KEY"):
-        print("Ошибка: установите переменную окружения OPENAI_API_KEY")
+    if not (os.getenv("LLM_API_KEY") or os.getenv("OPENAI_API_KEY")):
+        print("Ошибка: установите переменную окружения LLM_API_KEY (или OPENAI_API_KEY)")
         sys.exit(1)
 
     from app_core.config.knowledge import default_corpus_entries
@@ -582,7 +625,7 @@ if __name__ == "__main__":
     if vs.collection.count() == 0:
         vs.load_corpus(default_corpus_entries())
 
-    r = vs.search("Когда вступает в силу независимая гарантия?", top_k=4)
+    r = vs.search("What is the core message of The Fool card?", top_k=4)
     for i, doc in enumerate(r, 1):
         print(f"\n{i}. {doc['metadata'].get('source_display', '')} | {doc['text'][:180]}…")
 
