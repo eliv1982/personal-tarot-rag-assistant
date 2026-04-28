@@ -1,22 +1,21 @@
 # Three Card: Situation, Obstacle, Outcome
 
-## Metadata
 spread_id: three_card_situation_obstacle_outcome
-cards_count: 3
 category: problem_solving
-reading_style: structured
+recommended_use: Clarifying a current issue, the main friction, and the likely direction if the pattern continues.
+number_of_cards: 3
 
-## Purpose
-Clarify what is happening, what blocks progress, and where the path leads.
+## Positions
+1. Situation: the current context and key condition.
+2. Obstacle: the main barrier, friction, or limiting factor.
+3. Outcome: the likely result if the current trajectory continues.
 
-## Position 1
-name: Situation
-meaning: the current context and key condition.
+## Interpretation Notes
+- Use the situation card to anchor the reading before interpreting the obstacle or outcome.
+- The obstacle card may show an external barrier, inner resistance, misunderstanding, delay, or practical constraint.
+- Read the outcome as a likely direction under current conditions, not as fixed fate.
 
-## Position 2
-name: Obstacle
-meaning: the main barrier, friction, or limiting factor.
-
-## Position 3
-name: Outcome
-meaning: the likely result if the current trajectory continues.
+## Caveats
+- Do not make the outcome sound final or unavoidable.
+- If the obstacle and outcome conflict, name the tension and explain what may need attention.
+- If the signal is weak, keep the reading cautious and focus on the clearest practical theme.

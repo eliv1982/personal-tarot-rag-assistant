@@ -1,30 +1,24 @@
 # Five Card: Deep Reading
 
-## Metadata
 spread_id: five_card_deep_reading
-cards_count: 5
-category: deep_analysis
-reading_style: layered
+category: layered_reflection
+recommended_use: A practical mid-depth spread for understanding context, hidden influences, advice, and a likely direction.
+number_of_cards: 5
 
-## Purpose
-Build a deeper view from cause to trajectory and practical guidance.
+## Positions
+1. Past influence: an earlier event, pattern, or condition that affects the current situation.
+2. Present state: current thoughts, feelings, actions, or circumstances.
+3. Hidden influence: something overlooked, under-acknowledged, or not yet fully visible.
+4. Advice: a useful action, mindset, or adjustment.
+5. Possible result: the likely direction if the advice is considered and current patterns continue.
 
-## Position 1
-name: Root
-meaning: underlying cause, origin, or foundation of the issue.
+## Interpretation Notes
+- Read the result card through the advice card. The final card shows a possible direction, not an unavoidable outcome.
+- The hidden influence card can explain why the situation feels confusing, blocked, or more layered than it first appears.
+- Use the past and present cards to ground the reading before moving to advice or outcome.
+- If the advice and result cards conflict, name the tension and explain what choice or adjustment may matter.
 
-## Position 2
-name: Current state
-meaning: what is active now in behavior, context, or conditions.
-
-## Position 3
-name: Hidden factor
-meaning: what is not obvious but materially affects the reading.
-
-## Position 4
-name: Near future
-meaning: short-term development if current patterns stay the same.
-
-## Position 5
-name: Guidance
-meaning: the most useful action, mindset, or adjustment now.
+## Caveats
+- Do not present the result as fixed fate.
+- If the result looks difficult, describe what may be contributing to it and what the user can still influence.
+- If the hidden influence is unclear, avoid inventing specifics; frame it as an area for reflection.

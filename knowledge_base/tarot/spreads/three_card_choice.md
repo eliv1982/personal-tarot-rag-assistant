@@ -1,22 +1,21 @@
 # Three Card: Choice
 
-## Metadata
 spread_id: three_card_choice
-cards_count: 3
 category: decision_making
-reading_style: comparative
+recommended_use: Comparing two options when the user needs a practical view of each path and the factor affecting both.
+number_of_cards: 3
 
-## Purpose
-Compare two options and reveal a hidden factor that can change the decision.
+## Positions
+1. Option A: likely direction, benefits, and risks of the first path.
+2. Option B: likely direction, benefits, and risks of the second path.
+3. Hidden factor: unseen influence, assumption, or constraint affecting both options.
 
-## Position 1
-name: Option A
-meaning: likely direction, benefits, and risks of the first path.
+## Interpretation Notes
+- Read cards 1 and 2 comparatively, not as separate predictions.
+- Use card 3 to explain what may change the decision or reveal a shared constraint.
+- Focus on tradeoffs, priorities, and what each option asks from the user.
 
-## Position 2
-name: Option B
-meaning: likely direction, benefits, and risks of the second path.
-
-## Position 3
-name: Hidden factor
-meaning: unseen influence, assumption, or constraint affecting both options.
+## Caveats
+- Do not present either option as the only correct path.
+- If both options have mixed signals, name the tension clearly.
+- Preserve user agency; the spread supports decision-making but does not make the decision.
