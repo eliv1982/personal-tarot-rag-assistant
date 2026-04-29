@@ -1,5 +1,7 @@
 .venv/
+venv/
 __pycache__/
+*.pyc
 .pytest_cache/
 .env
 runtime/
@@ -9,3 +11,4 @@ runtime/
 .DS_Store
 .idea/
 .vscode/
+raw_sources/tarot/references/
