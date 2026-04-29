@@ -11,7 +11,6 @@ def _unsupported_max_tokens_use_max_completion_tokens(exc: BaseException) -> boo
     """
     Detect OpenAI 400 where the model rejects max_tokens and expects
     max_completion_tokens (newer chat completion models). We match on the error
-    
     payload text rather than model id so callers do not need per-model branches.
     """
     text = str(exc).lower()
