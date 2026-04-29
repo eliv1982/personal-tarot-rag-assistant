@@ -29,6 +29,8 @@ def index(request: Request):
             "answer": "",
             "context_docs": [],
             "error": "",
+            "technical_error": "",
+            "show_debug_context": False,
             "from_cache": None,
             "model": "",
             "cached_at": "",
@@ -42,27 +44,36 @@ def ask_get():
 
 
 @router.post("/ask", response_class=HTMLResponse)
-def ask(request: Request, question: str = Form(default="")):
+def ask(
+    request: Request,
+    question: str = Form(default=""),
+    show_debug_context: Optional[str] = Form(default=None),
+):
     answer = ""
     context_docs: List[Dict[str, Any]] = []
     error = ""
+    technical_error = ""
     from_cache = None
     model = ""
     cached_at = ""
     normalized_question = question.strip()
+    debug_enabled = bool(show_debug_context)
 
     if not normalized_question:
-        error = "Пожалуйста, введите вопрос."
+        error = "Добавь вопрос или тему расклада."
     else:
         try:
             result = _get_pipeline().query(normalized_question)
             answer = result.get("answer", "")
-            context_docs = result.get("context_docs") or []
+            if debug_enabled:
+                context_docs = result.get("context_docs") or []
             from_cache = result.get("from_cache")
             model = result.get("model", "")
             cached_at = result.get("cached_at", "")
-        except Exception as exc:
-            error = str(exc)
+        except Exception as exc:  # noqa: BLE001 - route-level safe message handling
+            error = "Не получилось получить интерпретацию. Попробуй ещё раз."
+            if debug_enabled:
+                technical_error = f"{exc.__class__.__name__}: {exc}"
 
     return templates.TemplateResponse(
         request=request,
@@ -72,6 +83,8 @@ def ask(request: Request, question: str = Form(default="")):
             "answer": answer,
             "context_docs": context_docs,
             "error": error,
+            "technical_error": technical_error,
+            "show_debug_context": debug_enabled,
             "from_cache": from_cache,
             "model": model,
             "cached_at": cached_at,

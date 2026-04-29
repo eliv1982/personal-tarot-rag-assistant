@@ -1,74 +1,87 @@
 {% extends "base.html" %}
 
-{% block title %}RAG-ассистент{% endblock %}
+{% block title %}Тихий Аркан{% endblock %}
 
 {% block content %}
 <section class="card">
-  <h1>RAG-ассистент</h1>
-  <p class="hero-subtitle">Универсальное RAG-ядро для ассистентов по документам</p>
-  <div class="badge-row">
-    <span class="badge">RAG Core</span>
-    <span class="badge">Source-aware</span>
-    <span class="badge">Local-ready</span>
-  </div>
+  <h1>Тихий Аркан</h1>
+  <p class="hero-subtitle">Твой личный помощник в понимании себя</p>
 </section>
 
 <section class="card">
   <form method="post" action="/ask">
-    <label for="question">Вопрос</label>
-    <textarea id="question" name="question" placeholder="Задайте вопрос по базе знаний...">{{ question or "" }}</textarea>
-    <button type="submit">Отправить</button>
+    <label for="question">Что хочешь прояснить?</label>
+    <textarea id="question" name="question" placeholder="Например: что мне сейчас важно увидеть в этой ситуации.">{{ question or "" }}</textarea>
+    <label class="checkbox-row" for="show_debug_context">
+      <input
+        id="show_debug_context"
+        name="show_debug_context"
+        type="checkbox"
+        value="1"
+        {% if show_debug_context %}checked{% endif %}
+      >
+      <span>Показать технический контекст</span>
+    </label>
+    <button type="submit">Получить интерпретацию</button>
   </form>
 </section>
 
 {% if error %}
 <section class="card error-card">
   <strong>Ошибка:</strong> {{ error }}
+  {% if show_debug_context and technical_error %}
+    <div class="technical-error">{{ technical_error }}</div>
+  {% endif %}
 </section>
 {% endif %}
 
 {% if answer %}
 <section class="card">
-  <h2>Ответ</h2>
-  <div class="answer-meta">
-    {% if from_cache %}
-      <span class="answer-badge">Ответ из кэша</span>
-    {% else %}
-      <span class="answer-badge">Сгенерировано моделью</span>
-    {% endif %}
-    {% if model %}
-      <span class="answer-subtle">Модель: {{ model }}</span>
-    {% endif %}
-    {% if cached_at %}
-      <span class="answer-subtle">Сохранено: {{ cached_at }}</span>
-    {% endif %}
-  </div>
+  <h2>Интерпретация</h2>
+  {% if show_debug_context %}
+    <div class="answer-meta">
+      {% if from_cache %}
+        <span class="answer-badge">Ответ из кэша</span>
+      {% else %}
+        <span class="answer-badge">Сгенерировано моделью</span>
+      {% endif %}
+      {% if model %}
+        <span class="answer-subtle">Модель: {{ model }}</span>
+      {% endif %}
+      {% if cached_at %}
+        <span class="answer-subtle">Сохранено: {{ cached_at }}</span>
+      {% endif %}
+    </div>
+  {% endif %}
   <p class="answer-text">{{ answer }}</p>
 </section>
 {% endif %}
 
-{% if context_docs %}
+{% if show_debug_context and context_docs %}
 <section class="card">
-  <h3>Использованные источники</h3>
+  <h3>Технический контекст</h3>
   <div class="sources-grid">
     {% for doc in context_docs %}
       {% set meta = doc.get("metadata", {}) %}
-      {% set source_label = meta.get("source_display") or meta.get("source") or "Источник" %}
-      {% set source_kind = meta.get("source_kind") %}
-      {% set doc_type = meta.get("doc_type") %}
-      {% set section_heading = meta.get("section_heading") %}
+      {% set source_path = meta.get("relative_path") or meta.get("source_path") or meta.get("source") or "source not set" %}
+      {% set section_heading = meta.get("section_heading") or meta.get("section") %}
+      {% set card_name = meta.get("card_name") %}
+      {% set distance = doc.get("distance") %}
+      {% set exact_backfill = meta.get("_exact_backfill") %}
       {% set snippet = (doc.get("text", "")[:280] ~ ("..." if doc.get("text", "")|length > 280 else "")) %}
       <article class="source-card">
-        <div class="source-title">{{ source_label }}</div>
-        {% if source_kind or doc_type %}
-          <div class="source-meta">
-            {% if source_kind %}Тип источника: {{ source_kind }}{% endif %}
-            {% if source_kind and doc_type %} | {% endif %}
-            {% if doc_type %}Тип документа: {{ doc_type }}{% endif %}
-          </div>
+        <div class="source-title">{{ source_path }}</div>
+        {% if card_name %}
+          <div class="source-meta">card_name: {{ card_name }}</div>
         {% endif %}
         {% if section_heading %}
-          <div class="source-meta">Раздел: {{ section_heading }}</div>
+          <div class="source-meta">section: {{ section_heading }}</div>
+        {% endif %}
+        {% if distance is not none %}
+          <div class="source-meta">distance: {{ distance }}</div>
+        {% endif %}
+        {% if exact_backfill %}
+          <div class="source-meta">exact_backfill: true</div>
         {% endif %}
         <div class="source-snippet">{{ snippet }}</div>
       </article>
@@ -76,5 +89,11 @@
   </div>
 </section>
 {% endif %}
+
+<section class="card">
+  <p class="footnote">
+    Интерпретации — для личной рефлексии, не для медицинских, юридических или финансовых решений.
+  </p>
+</section>
 {% endblock %}
 
