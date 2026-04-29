@@ -28,6 +28,62 @@ _STATUTE_BOUNDARY = re.compile(
 _TITLE_RE = re.compile(r"^#\s+(.+)$", flags=re.MULTILINE)
 _METADATA_BLOCK_RE = re.compile(r"^##\s+Metadata\s*\n(.*?)(?=\n##\s+|\Z)", flags=re.MULTILINE | re.DOTALL)
 _SECTION_HEADING_RE = re.compile(r"^(#{2,3})\s+(.+?)\s*$")
+_LOOKUP_NON_WORD_RE = re.compile(r"[^0-9a-zа-я\s]+")
+
+
+def _normalize_lookup_text(text: str) -> str:
+    normalized = (text or "").lower().replace("ё", "е")
+    normalized = _LOOKUP_NON_WORD_RE.sub(" ", normalized)
+    return " ".join(normalized.split())
+
+
+def _build_tarot_card_alias_map() -> Dict[str, str]:
+    alias_to_slug: Dict[str, str] = {}
+    suits = {
+        "cups": ["cups", "кубков", "чаш"],
+        "pentacles": ["pentacles", "пентаклей", "монет", "дисков"],
+        "swords": ["swords", "мечей"],
+        "wands": ["wands", "жезлов", "посохов"],
+    }
+    ranks = [
+        ("ace", ["ace", "туз"]),
+        ("two", ["two", "2", "двоика", "двойка"]),
+        ("three", ["three", "3", "троика", "тройка"]),
+        ("four", ["four", "4", "четверка"]),
+        ("five", ["five", "5", "пятерка"]),
+        ("six", ["six", "6", "шестерка"]),
+        ("seven", ["seven", "7", "семерка"]),
+        ("eight", ["eight", "8", "восьмерка"]),
+        ("nine", ["nine", "9", "девятка"]),
+        ("ten", ["ten", "10", "десятка"]),
+        ("page", ["page", "паж"]),
+        ("knight", ["knight", "рыцарь"]),
+        ("queen", ["queen", "королева"]),
+        ("king", ["king", "король"]),
+    ]
+    for rank_en, rank_aliases in ranks:
+        for suit_en, suit_aliases in suits.items():
+            slug = f"{rank_en}_of_{suit_en}"
+            for rank_alias in rank_aliases:
+                for suit_alias in suit_aliases:
+                    alias_to_slug[_normalize_lookup_text(f"{rank_alias} {suit_alias}")] = slug
+                    alias_to_slug[_normalize_lookup_text(f"{rank_alias} of {suit_alias}")] = slug
+
+    major_aliases = {
+        "death": ["death", "смерть"],
+        "the_world": ["the world", "world", "мир", "карта мир"],
+    }
+    for slug, aliases in major_aliases.items():
+        for alias in aliases:
+            alias_to_slug[_normalize_lookup_text(alias)] = slug
+    return alias_to_slug
+
+
+_TAROT_CARD_ALIAS_TO_SLUG = _build_tarot_card_alias_map()
+_MAJOR_SLUG_TO_SOURCE_FILE = {
+    "death": "13_death.md",
+    "the_world": "21_the_world.md",
+}
 
 
 class VectorStore:
@@ -578,9 +634,116 @@ class VectorStore:
         )
         return response.data[0].embedding
 
+    @staticmethod
+    def _detect_tarot_card_slugs(query: str) -> List[str]:
+        """Detect card slugs from RU/EN aliases in user query."""
+        normalized = _normalize_lookup_text(query)
+        if not normalized:
+            return []
+        slugs: List[str] = []
+        seen: set[str] = set()
+        for alias, slug in _TAROT_CARD_ALIAS_TO_SLUG.items():
+            if re.search(rf"(?<!\w){re.escape(alias)}(?!\w)", normalized):
+                if slug not in seen:
+                    seen.add(slug)
+                    slugs.append(slug)
+        return slugs
+
+    @staticmethod
+    def _rerank_with_exact_card_match(
+        documents: List[Dict[str, Any]],
+        detected_slugs: List[str],
+    ) -> List[Dict[str, Any]]:
+        """Boost card docs that match detected slug path/file name."""
+        if not detected_slugs:
+            return documents
+        def _is_exact(doc: Dict[str, Any]) -> bool:
+            return bool(VectorStore._match_exact_slug(doc, detected_slugs))
+
+        ranked = list(enumerate(documents))
+        ranked.sort(key=lambda item: (0 if _is_exact(item[1]) else 1, item[0]))
+        return [doc for _, doc in ranked]
+
+    @staticmethod
+    def _source_file_for_slug(slug: str) -> str:
+        return _MAJOR_SLUG_TO_SOURCE_FILE.get(slug, f"{slug}.md")
+
+    @staticmethod
+    def _match_exact_slug(doc: Dict[str, Any], detected_slugs: List[str]) -> Optional[str]:
+        meta = doc.get("metadata") or {}
+        relative_path = str(meta.get("relative_path") or meta.get("source_path") or "").lower()
+        source_file = str(meta.get("source_file") or "").lower()
+        meta_slug = str(meta.get("slug") or "").lower()
+        for slug in detected_slugs:
+            source_token = VectorStore._source_file_for_slug(slug).lower()
+            if source_token in relative_path or source_token in source_file or meta_slug == slug:
+                return slug
+        return None
+
+    def _fetch_exact_card_backfill_docs(
+        self,
+        missing_slugs: List[str],
+        limit_per_slug: int = 2,
+    ) -> List[Dict[str, Any]]:
+        """Fetch 1-2 chunks by exact source_file when semantic results missed a card."""
+        out: List[Dict[str, Any]] = []
+        for slug in missing_slugs:
+            source_file = self._source_file_for_slug(slug)
+            fetched = self.collection.get(
+                where={"source_file": source_file},
+                include=["documents", "metadatas"],
+                limit=max(1, limit_per_slug),
+            )
+            ids = fetched.get("ids") or []
+            docs = fetched.get("documents") or []
+            metas = fetched.get("metadatas") or []
+            for i, doc_id in enumerate(ids):
+                meta = dict(metas[i] or {}) if i < len(metas) else {}
+                meta["_exact_backfill"] = True
+                out.append(
+                    {
+                        "id": doc_id,
+                        "text": docs[i] if i < len(docs) else "",
+                        "distance": None,
+                        "metadata": meta,
+                    }
+                )
+        return out
+
+    @staticmethod
+    def _apply_diversity_cap(
+        documents: List[Dict[str, Any]],
+        detected_slugs: List[str],
+        top_k: int,
+        max_exact_per_slug: int = 3,
+    ) -> List[Dict[str, Any]]:
+        """Keep exact-card hits high, but avoid filling output with one card only."""
+        selected: List[Dict[str, Any]] = []
+        seen_ids: set[str] = set()
+        exact_counts: Dict[str, int] = {slug: 0 for slug in detected_slugs}
+
+        for doc in documents:
+            if len(selected) >= top_k:
+                break
+            doc_id = str(doc.get("id") or "")
+            if doc_id and doc_id in seen_ids:
+                continue
+            matched_slug = VectorStore._match_exact_slug(doc, detected_slugs)
+            if matched_slug and exact_counts.get(matched_slug, 0) >= max_exact_per_slug:
+                continue
+            selected.append(doc)
+            if doc_id:
+                seen_ids.add(doc_id)
+            if matched_slug:
+                exact_counts[matched_slug] = exact_counts.get(matched_slug, 0) + 1
+        return selected
+
     def search(self, query: str, top_k: int = 5) -> List[Dict[str, Any]]:
         query_embedding = self._create_embedding(query)
+        detected_slugs = self._detect_tarot_card_slugs(query)
         n = min(top_k, max(1, self.collection.count()))
+        if detected_slugs:
+            n = min(max(top_k, 30), max(1, self.collection.count()))
         results = self.collection.query(
             query_embeddings=[query_embedding],
             n_results=n,
@@ -599,7 +762,18 @@ class VectorStore:
                         "metadata": meta,
                     }
                 )
-        return documents
+        if detected_slugs:
+            documents = self._rerank_with_exact_card_match(documents, detected_slugs)
+            found_slugs = {
+                slug for slug in detected_slugs if any(self._match_exact_slug(doc, [slug]) for doc in documents)
+            }
+            missing_slugs = [slug for slug in detected_slugs if slug not in found_slugs]
+            if missing_slugs:
+                backfilled = self._fetch_exact_card_backfill_docs(missing_slugs, limit_per_slug=2)
+                documents = backfilled + documents
+            documents = self._rerank_with_exact_card_match(documents, detected_slugs)
+            return self._apply_diversity_cap(documents, detected_slugs, top_k=top_k, max_exact_per_slug=3)
+        return documents[:top_k]
 
     def get_collection_stats(self) -> Dict[str, Any]:
         return {
