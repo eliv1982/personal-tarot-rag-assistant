@@ -5,7 +5,12 @@ from typing import Any, Literal, Optional, Protocol, Sequence
 from uuid import UUID, uuid4
 
 from app_core.readings.models import ReadingCard, ReadingMessage, ReadingSession
-from app_core.readings.storage import cleanup_expired_readings, create_reading_session
+from app_core.readings.storage import (
+    add_reading_message,
+    cleanup_expired_readings,
+    create_reading_session,
+    get_reading_session,
+)
 from app_core.tarot.deck import CARD_BY_SLUG, TarotCard
 from app_core.tarot.draw import StructuredSpreadDraw, draw_virtual_spread
 from app_core.tarot.spreads import SpreadDefinition, SpreadPosition, get_spread
@@ -49,6 +54,17 @@ class StructuredReadingResult:
     context_docs: list[Any]
     model: str
     from_cache: bool
+    debug: dict[str, Any]
+
+
+@dataclass(frozen=True)
+class FollowUpReadingResult:
+    reading_id: UUID
+    answer: str
+    context_docs: list[Any]
+    model: str
+    from_cache: bool
+    messages_count: int
     debug: dict[str, Any]
 
 
@@ -100,6 +116,65 @@ def build_structured_reading_query(
     return "\n".join(lines)
 
 
+def build_follow_up_query(
+    *,
+    session: ReadingSession,
+    follow_up_question: str,
+) -> str:
+    question = (follow_up_question or "").strip()
+    if not question:
+        raise ValueError("follow_up_question must be a non-empty string.")
+
+    lines = [
+        "Это уточняющий вопрос к уже существующему tarot reading.",
+        "Не делай новый расклад, не вытягивай новые карты и не меняй исходный расклад.",
+        "Отвечай только как уточнение к сохранённым картам и исходной интерпретации.",
+        "Не делай фактических утверждений о событиях, людях или будущем без достаточных оснований.",
+        "Сохраняй agency пользователя: описывай выборы, возможные динамики и точки внимания.",
+        "",
+        "Исходный вопрос пользователя:",
+        session.user_question,
+        "",
+        "Тип расклада:",
+        session.spread_type,
+        "",
+        "Сохранённые карты:",
+    ]
+
+    for card in session.cards:
+        lines.append(
+            (
+                f"{card.position_index + 1}. {card.position_name}: "
+                f"{card.card_name}, slug: {card.card_slug}, orientation: {card.orientation}"
+            )
+        )
+
+    lines.extend(
+        [
+            "",
+            "Исходная интерпретация:",
+            session.initial_answer,
+            "",
+            "Предыдущие сообщения:",
+        ]
+    )
+
+    if session.messages:
+        for message in session.messages:
+            lines.append(f"{message.role}: {message.content}")
+    else:
+        lines.append("(нет предыдущих сообщений)")
+
+    lines.extend(
+        [
+            "",
+            "Новый уточняющий вопрос:",
+            question,
+        ]
+    )
+    return "\n".join(lines)
+
+
 def create_virtual_reading(
     spread_slug: str,
     user_question: str,
@@ -133,6 +208,43 @@ def create_physical_reading(
         cards=cards,
         selection_mode="physical",
         persist=persist,
+    )
+
+
+def answer_follow_up(
+    reading_id: str | UUID,
+    follow_up_question: str,
+) -> FollowUpReadingResult:
+    question = (follow_up_question or "").strip()
+    if not question:
+        raise ValueError("follow_up_question must be a non-empty string.")
+
+    session = get_reading_session(reading_id)
+    if session is None:
+        raise ValueError(f"Reading session not found: {reading_id}")
+
+    add_reading_message(session.reading_id, "user", question)
+    query = build_follow_up_query(session=session, follow_up_question=question)
+
+    rag_result = RAGPipeline().query(query)
+    answer = str(rag_result.get("answer", ""))
+    add_reading_message(session.reading_id, "assistant", answer)
+
+    updated_session = get_reading_session(session.reading_id)
+    messages_count = len(updated_session.messages) if updated_session is not None else 0
+
+    return FollowUpReadingResult(
+        reading_id=session.reading_id,
+        answer=answer,
+        context_docs=list(rag_result.get("context_docs") or []),
+        model=str(rag_result.get("model", "")),
+        from_cache=bool(rag_result.get("from_cache", False)),
+        messages_count=messages_count,
+        debug={
+            "query": query,
+            "cached_at": rag_result.get("cached_at", ""),
+            "cards_count": len(session.cards),
+        },
     )
 
 
@@ -180,7 +292,6 @@ def _create_reading(
             "selection_mode": selection_mode,
             "cached_at": rag_result.get("cached_at", ""),
             "storage_connected": reading_id is not None,
-            # TODO: extend this service with follow-up message handling.
         },
     )
 
