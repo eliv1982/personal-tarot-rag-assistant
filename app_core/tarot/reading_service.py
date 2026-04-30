@@ -5,7 +5,7 @@ from typing import Any, Literal, Optional, Protocol, Sequence
 from uuid import UUID, uuid4
 
 from app_core.readings.models import ReadingCard, ReadingMessage, ReadingSession
-from app_core.readings.storage import create_reading_session
+from app_core.readings.storage import cleanup_expired_readings, create_reading_session
 from app_core.tarot.deck import CARD_BY_SLUG, TarotCard
 from app_core.tarot.draw import StructuredSpreadDraw, draw_virtual_spread
 from app_core.tarot.spreads import SpreadDefinition, SpreadPosition, get_spread
@@ -103,6 +103,8 @@ def build_structured_reading_query(
 def create_virtual_reading(
     spread_slug: str,
     user_question: str,
+    *,
+    persist: bool = True,
 ) -> StructuredReadingResult:
     spread = get_spread(spread_slug)
     draw = draw_virtual_spread(spread_slug)
@@ -112,6 +114,7 @@ def create_virtual_reading(
         user_question=user_question,
         cards=cards,
         selection_mode="virtual",
+        persist=persist,
     )
 
 
@@ -119,6 +122,8 @@ def create_physical_reading(
     spread_slug: str,
     user_question: str,
     selected_cards: list[SelectedPhysicalCard | dict[str, Any]],
+    *,
+    persist: bool = True,
 ) -> StructuredReadingResult:
     spread = get_spread(spread_slug)
     cards = _cards_from_physical_selection(spread, selected_cards)
@@ -127,6 +132,7 @@ def create_physical_reading(
         user_question=user_question,
         cards=cards,
         selection_mode="physical",
+        persist=persist,
     )
 
 
@@ -137,6 +143,7 @@ def _create_reading(
     cards: list[StructuredReadingCard],
     selection_mode: SelectionMode,
     pipeline: Optional[PipelineLike] = None,
+    persist: bool = True,
 ) -> StructuredReadingResult:
     query = build_structured_reading_query(
         spread=spread,
@@ -150,13 +157,15 @@ def _create_reading(
     model = str(rag_result.get("model", ""))
     from_cache = bool(rag_result.get("from_cache", False))
 
-    reading_id = _try_store_reading(
-        spread=spread,
-        user_question=user_question,
-        cards=cards,
-        selection_mode=selection_mode,
-        answer=answer,
-    )
+    reading_id = None
+    if persist:
+        reading_id = _store_reading(
+            spread=spread,
+            user_question=user_question,
+            cards=cards,
+            selection_mode=selection_mode,
+            answer=answer,
+        )
 
     return StructuredReadingResult(
         reading_id=reading_id,
@@ -279,17 +288,16 @@ def _structured_card_from_parts(
     )
 
 
-def _try_store_reading(
+def _store_reading(
     *,
     spread: SpreadDefinition,
     user_question: str,
     cards: Sequence[StructuredReadingCard],
     selection_mode: SelectionMode,
     answer: str,
-) -> Optional[UUID]:
-    candidate_id = uuid4()
+) -> UUID:
     session = ReadingSession(
-        reading_id=candidate_id,
+        reading_id=uuid4(),
         spread_type=spread.slug,
         user_question=user_question,
         selection_mode=selection_mode,
@@ -311,8 +319,10 @@ def _try_store_reading(
     )
 
     try:
-        create_reading_session(session)
-    except NotImplementedError:
-        return None
-
-    return candidate_id
+        cleanup_expired_readings()
+        return create_reading_session(session)
+    except Exception as exc:
+        raise RuntimeError(
+            "Failed to persist tarot reading session. "
+            "Check DATABASE_URL and PostgreSQL availability, or call with persist=False."
+        ) from exc
