@@ -4,19 +4,21 @@ import logging
 
 from aiogram import F, Router
 from aiogram.filters import Command, CommandStart
-from aiogram.types import CallbackQuery, Message
+from aiogram.types import CallbackQuery, FSInputFile, Message
 
 from app_core.tarot.draw import StructuredSpreadDraw, draw_virtual_spread
 from app_core.tarot.selection import create_virtual_deck_draft, select_virtual_cards
 from app_core.tarot.spreads import get_spread
+from telegram_bot.card_assets import get_card_image_path
 from telegram_bot.keyboards import (
     get_spread_by_callback_id,
     main_menu_keyboard,
     menu_button_keyboard,
+    physical_orientation_keyboard,
     spread_selection_keyboard,
     virtual_deck_keyboard,
 )
-from telegram_bot.state import get_flow, reset_flow
+from telegram_bot.state import PhysicalCardEntry, get_flow, reset_flow
 
 router = Router()
 logger = logging.getLogger(__name__)
@@ -24,20 +26,31 @@ logger = logging.getLogger(__name__)
 START_TEXT = (
     "🌙 Arcana Whisper ✨\n\n"
     "Твой мягкий помощник в понимании себя через символы таро.\n\n"
-    "Здесь таро — не про жёсткие предсказания, а про бережное размышление, "
-    "внутренний отклик и более ясный взгляд на ситуацию.\n\n"
-    "Выбери формат, который тебе ближе:"
-)
-
-PHYSICAL_DECK_TEXT = (
-    "Перед раскладом дай себе минуту тишины. Сделай несколько спокойных вдохов "
-    "и выдохов. Сформулируй тему так, чтобы она была про тебя, твой выбор и "
-    "твоё состояние. Перемешай колоду привычным способом, вытяни карты по "
-    "позициям расклада и внеси их ниже.\n\n"
-    "Ручной ввод карт подключим следующим шагом."
+    "Выбери способ работы с картами:\n\n"
+    "🌙 Виртуальная колода — ты выбираешь закрытые карты сама.\n"
+    "🕯 Физическая колода — ты вводишь карты из своей реальной колоды.\n"
+    "✨ Автовыбор карт — бот сам вытягивает карты для выбранного расклада."
 )
 
 INTERPRETATION_PLACEHOLDER = "Интерпретацию подключим следующим шагом."
+
+QUESTION_PROMPT = (
+    "Напиши вопрос или тему для расклада.\n\n"
+    "Лучше формулировать про себя, своё состояние, выбор или следующий бережный шаг.\n\n"
+    "Например:\n"
+    "— Что мне важно понять в этой ситуации?\n"
+    "— На что обратить внимание сегодня?\n"
+    "— Как бережнее пройти через этот период?"
+)
+
+PHYSICAL_PREPARATION_TEXT = (
+    "🕯 Физическая колода\n\n"
+    "Перед раскладом дай себе минуту тишины.\n\n"
+    "Сделай несколько спокойных вдохов и выдохов. Сформулируй вопрос так, "
+    "чтобы он был про тебя, твоё состояние, выбор или следующий бережный шаг.\n\n"
+    "Перемешай колоду привычным способом и вытяни карты по позициям расклада.\n\n"
+    "Я буду просить вводить карты по одной."
+)
 
 
 @router.message(CommandStart())
@@ -109,13 +122,13 @@ async def handle_virtual_mode(callback: CallbackQuery) -> None:
 @router.callback_query(F.data == "m:q")
 async def handle_quick_mode(callback: CallbackQuery) -> None:
     user_id = callback.from_user.id
-    reset_flow(user_id, selected_mode="quick")
-    logger.info("selected mode user_id=%s mode=quick", user_id)
+    reset_flow(user_id, selected_mode="quick_draw")
+    logger.info("selected mode user_id=%s mode=quick_draw", user_id)
     message = await _editable_message_or_answer(callback)
     if message is None:
         return
     await message.edit_text(
-        "Выбери расклад для быстрого вытягивания:",
+        "Выбери расклад для автовыбора карт:",
         reply_markup=spread_selection_keyboard("q"),
     )
     await callback.answer()
@@ -124,12 +137,15 @@ async def handle_quick_mode(callback: CallbackQuery) -> None:
 @router.callback_query(F.data == "m:p")
 async def handle_physical_mode(callback: CallbackQuery) -> None:
     user_id = callback.from_user.id
-    reset_flow(user_id, selected_mode="physical")
-    logger.info("selected mode user_id=%s mode=physical", user_id)
+    reset_flow(user_id, selected_mode="physical_deck")
+    logger.info("selected mode user_id=%s mode=physical_deck", user_id)
     message = await _editable_message_or_answer(callback)
     if message is None:
         return
-    await message.edit_text(PHYSICAL_DECK_TEXT, reply_markup=menu_button_keyboard())
+    await message.edit_text(
+        "Выбери расклад для физической колоды:",
+        reply_markup=spread_selection_keyboard("p"),
+    )
     await callback.answer()
 
 
@@ -167,35 +183,32 @@ async def handle_spread_selection(callback: CallbackQuery) -> None:
     if message is None:
         return
 
+    selected_mode = _mode_from_callback_id(mode_callback_id)
+    if selected_mode is None:
+        await callback.answer("Этот режим пока недоступен.", show_alert=True)
+        return
+
     flow = get_flow(user_id)
+    flow.selected_mode = selected_mode
     flow.selected_spread_slug = spread.slug
+    flow.awaiting_question = True
+    flow.awaiting_virtual_selection = False
+    flow.awaiting_physical_card_name = False
+    flow.awaiting_physical_orientation = False
+    flow.question_received = False
+    flow.virtual_deck_draft = None
+    flow.selected_indices = []
+    flow.last_drawn_cards = None
+    flow.current_card_position_index = 0
+    flow.pending_physical_card_name = None
+    flow.physical_cards = []
     logger.info(
         "selected spread user_id=%s spread_slug=%s mode=%s",
         user_id,
         spread.slug,
-        mode_callback_id,
+        selected_mode,
     )
-
-    if mode_callback_id == "v":
-        flow.selected_mode = "virtual"
-        flow.virtual_deck_draft = create_virtual_deck_draft(spread.slug)
-        flow.selected_indices = []
-        await message.edit_text(
-            _virtual_selection_text(spread.slug, 0),
-            reply_markup=virtual_deck_keyboard(
-                [],
-                card_count=len(flow.virtual_deck_draft.cards),
-                ready_to_open=False,
-            ),
-        )
-    elif mode_callback_id == "q":
-        flow.selected_mode = "quick"
-        draw = draw_virtual_spread(spread.slug)
-        logger.info("quick draw user_id=%s spread_slug=%s", user_id, spread.slug)
-        await message.edit_text(_draw_result_text(draw), reply_markup=menu_button_keyboard())
-    else:
-        await callback.answer("Этот режим пока недоступен.", show_alert=True)
-        return
+    await message.edit_text(QUESTION_PROMPT, reply_markup=menu_button_keyboard())
 
     await callback.answer()
 
@@ -205,7 +218,7 @@ async def handle_card_selection(callback: CallbackQuery) -> None:
     user_id = callback.from_user.id
     flow = get_flow(user_id)
     draft = flow.virtual_deck_draft
-    if flow.selected_mode != "virtual" or draft is None:
+    if flow.selected_mode != "virtual" or not flow.awaiting_virtual_selection or draft is None:
         await callback.answer("Начни выбор заново через /start.", show_alert=True)
         return
     message = await _editable_message_or_answer(callback)
@@ -256,7 +269,8 @@ async def handle_card_selection(callback: CallbackQuery) -> None:
 
 @router.callback_query(F.data == "open")
 async def handle_open_cards(callback: CallbackQuery) -> None:
-    flow = get_flow(callback.from_user.id)
+    user_id = callback.from_user.id
+    flow = get_flow(user_id)
     draft = flow.virtual_deck_draft
     if flow.selected_mode != "virtual" or draft is None:
         await callback.answer("Начни выбор заново через /start.", show_alert=True)
@@ -270,7 +284,77 @@ async def handle_open_cards(callback: CallbackQuery) -> None:
         return
 
     draw = select_virtual_cards(draft, flow.selected_indices)
+    logger.info("reveal virtual cards user_id=%s count=%s", user_id, len(draw.drawn_cards))
     await message.edit_text(_draw_result_text(draw), reply_markup=menu_button_keyboard())
+    await _send_card_images(message, draw, user_id=user_id)
+    reset_flow(user_id)
+    await callback.answer()
+
+
+@router.callback_query(F.data.startswith("phys_orient:"))
+async def handle_physical_orientation(callback: CallbackQuery) -> None:
+    user_id = callback.from_user.id
+    flow = get_flow(user_id)
+    if flow.selected_mode != "physical_deck" or not flow.awaiting_physical_orientation:
+        await callback.answer("Начни выбор заново через /start.", show_alert=True)
+        return
+
+    orientation = (callback.data or "").split(":", maxsplit=1)[-1]
+    if orientation not in ("upright", "reversed"):
+        await callback.answer("Не удалось распознать положение карты.", show_alert=True)
+        return
+
+    message = await _editable_message_or_answer(callback)
+    if message is None:
+        return
+
+    spread_slug = flow.selected_spread_slug
+    card_name = (flow.pending_physical_card_name or "").strip()
+    if not spread_slug or not card_name:
+        reset_flow(user_id)
+        await callback.answer("Не удалось сохранить карту. Начни заново.", show_alert=True)
+        return
+
+    spread = get_spread(spread_slug)
+    position_index = flow.current_card_position_index
+    if position_index >= len(spread.positions):
+        reset_flow(user_id)
+        await callback.answer("Расклад уже заполнен. Открой меню заново.", show_alert=True)
+        return
+
+    position = spread.positions[position_index]
+    entry = PhysicalCardEntry(
+        position_index=position.index,
+        position_name_ru=position.name_ru,
+        card_name=card_name,
+        orientation=orientation,
+    )
+    flow.physical_cards.append(entry)
+    flow.pending_physical_card_name = None
+    flow.awaiting_physical_orientation = False
+
+    logger.info(
+        "physical orientation selected user_id=%s position_index=%s orientation=%s",
+        user_id,
+        position.index,
+        orientation,
+    )
+
+    accepted_text = _physical_card_accepted_text(entry, len(flow.physical_cards), len(spread.positions))
+    if len(flow.physical_cards) >= len(spread.positions):
+        logger.info("physical cards completed user_id=%s count=%s", user_id, len(flow.physical_cards))
+        summary = _physical_cards_summary_text(flow.physical_cards)
+        reset_flow(user_id)
+        await message.edit_text(
+            f"{accepted_text}\n\n{summary}",
+            reply_markup=menu_button_keyboard(),
+        )
+    else:
+        flow.current_card_position_index += 1
+        flow.awaiting_physical_card_name = True
+        await message.edit_text(accepted_text)
+        await message.answer(_physical_card_prompt(spread, flow.current_card_position_index))
+
     await callback.answer()
 
 
@@ -284,29 +368,292 @@ async def handle_unknown_callback(callback: CallbackQuery) -> None:
     await callback.answer("Не удалось распознать действие. Открой меню заново.", show_alert=True)
 
 
+@router.message(F.text)
+async def handle_text_message(message: Message) -> None:
+    user_id = message.from_user.id
+    text = (message.text or "").strip()
+    flow = get_flow(user_id)
+
+    if text.startswith("/"):
+        await message.answer("Открой меню через /start или /menu.")
+        return
+
+    if flow.awaiting_question:
+        await _handle_question_text(message, text)
+        return
+
+    if flow.awaiting_physical_card_name:
+        await _handle_physical_card_name_text(message, text)
+        return
+
+    if flow.awaiting_physical_orientation:
+        await message.answer(
+            "Выбери положение карты кнопкой ниже.",
+            reply_markup=physical_orientation_keyboard(),
+        )
+        return
+
+    if not flow.selected_mode:
+        await message.answer(
+            "Я пока не жду текст для расклада. Открой меню и выбери формат.",
+            reply_markup=main_menu_keyboard(),
+        )
+        return
+
+    await message.answer(
+        "Продолжи текущий расклад через кнопки или вернись в меню.",
+        reply_markup=menu_button_keyboard(),
+    )
+
+
 def _virtual_selection_text(spread_slug: str, selected_count: int) -> str:
     spread = get_spread(spread_slug)
     required_count = len(spread.positions)
     return (
-        f"{spread.title_ru}\n"
-        f"{spread.description_ru}\n\n"
+        "Прислушайся к себе и выбери карты для расклада.\n\n"
         f"Выбрано карт: {selected_count}/{required_count}"
     )
+
+
+async def _handle_question_text(message: Message, text: str) -> None:
+    user_id = message.from_user.id
+    flow = get_flow(user_id)
+    spread_slug = flow.selected_spread_slug
+    mode = flow.selected_mode
+
+    if not text:
+        await message.answer("Напиши вопрос или тему одним сообщением.")
+        return
+
+    if not spread_slug or mode is None:
+        reset_flow(user_id)
+        logger.warning("question received without complete state user_id=%s mode=%s", user_id, mode)
+        await message.answer(
+            "Не смогла найти выбранный расклад. Вернись в меню и выбери расклад заново.",
+            reply_markup=main_menu_keyboard(),
+        )
+        return
+
+    flow.awaiting_question = False
+    flow.question_received = True
+    logger.info("question received user_id=%s mode=%s spread_slug=%s", user_id, mode, spread_slug)
+
+    if mode == "virtual":
+        flow.awaiting_virtual_selection = True
+        flow.virtual_deck_draft = create_virtual_deck_draft(spread_slug)
+        flow.selected_indices = []
+        await message.answer(
+            _virtual_selection_text(spread_slug, 0),
+            reply_markup=virtual_deck_keyboard(
+                [],
+                card_count=len(flow.virtual_deck_draft.cards),
+                ready_to_open=False,
+            ),
+        )
+        return
+
+    if mode == "physical_deck":
+        flow.awaiting_physical_card_name = True
+        flow.awaiting_physical_orientation = False
+        flow.current_card_position_index = 0
+        flow.pending_physical_card_name = None
+        flow.physical_cards = []
+        spread = get_spread(spread_slug)
+        await message.answer(PHYSICAL_PREPARATION_TEXT, reply_markup=menu_button_keyboard())
+        await message.answer(_physical_card_prompt(spread, 0))
+        return
+
+    if mode == "quick_draw":
+        draw = draw_virtual_spread(spread_slug)
+        flow.last_drawn_cards = draw
+        logger.info(
+            "auto draw completed user_id=%s spread_slug=%s count=%s",
+            user_id,
+            spread_slug,
+            len(draw.drawn_cards),
+        )
+        await message.answer(
+            _auto_draw_result_text(draw),
+            reply_markup=menu_button_keyboard(),
+        )
+        return
+
+    await message.answer("Этот режим пока недоступен.", reply_markup=menu_button_keyboard())
+
+
+async def _handle_physical_card_name_text(message: Message, text: str) -> None:
+    user_id = message.from_user.id
+    flow = get_flow(user_id)
+    spread_slug = flow.selected_spread_slug
+    card_name = text.strip()
+
+    if not card_name:
+        await message.answer("Введи название карты одним сообщением.")
+        return
+    if not spread_slug:
+        reset_flow(user_id)
+        await message.answer(
+            "Не смогла найти выбранный расклад. Вернись в меню и выбери расклад заново.",
+            reply_markup=main_menu_keyboard(),
+        )
+        return
+
+    spread = get_spread(spread_slug)
+    if flow.current_card_position_index >= len(spread.positions):
+        reset_flow(user_id)
+        await message.answer("Расклад уже заполнен. Открой меню заново.", reply_markup=main_menu_keyboard())
+        return
+
+    flow.pending_physical_card_name = card_name
+    flow.awaiting_physical_card_name = False
+    flow.awaiting_physical_orientation = True
+    position = spread.positions[flow.current_card_position_index]
+    logger.info(
+        "physical card name received user_id=%s position_index=%s",
+        user_id,
+        position.index,
+    )
+    await message.answer(
+        f"Выбери положение карты:\n\nНазвание карты: {card_name}",
+        reply_markup=physical_orientation_keyboard(),
+    )
+
+
+def _mode_from_callback_id(mode_callback_id: str):
+    return {
+        "v": "virtual",
+        "p": "physical_deck",
+        "q": "quick_draw",
+    }.get(mode_callback_id)
 
 
 def _draw_result_text(draw: StructuredSpreadDraw) -> str:
     lines = [
         draw.spread.title_ru,
-        draw.spread.description_ru,
+        _spread_description_text(draw.spread.slug, draw.spread.description_ru),
         "",
         "Карты:",
     ]
     for drawn in draw.drawn_cards:
         lines.append(
-            f"{drawn.position.name_ru}: {drawn.card.display_name_ru} — {drawn.orientation}"
+            (
+                f"{drawn.position.name_ru}: {drawn.card.display_name_ru} — "
+                f"{_orientation_text(drawn.orientation)}"
+            )
         )
 
     lines.extend(["", INTERPRETATION_PLACEHOLDER])
+    return "\n".join(lines)
+
+
+def _auto_draw_result_text(draw: StructuredSpreadDraw) -> str:
+    lines = [
+        "✨ Бот вытянул карты для расклада",
+        "",
+        f"Расклад: {draw.spread.title_ru}",
+        _spread_description_text(draw.spread.slug, draw.spread.description_ru),
+        "",
+        "Карты:",
+    ]
+
+    for index, drawn in enumerate(draw.drawn_cards, start=1):
+        lines.append(
+            (
+                f"{index}. {drawn.position.name_ru} — {drawn.card.display_name_ru}, "
+                f"{_orientation_text(drawn.orientation)}"
+            )
+        )
+
+    lines.extend(["", INTERPRETATION_PLACEHOLDER])
+    return "\n".join(lines)
+
+
+async def _send_card_images(message: Message, draw: StructuredSpreadDraw, *, user_id: int) -> None:
+    for drawn in draw.drawn_cards:
+        image_path = get_card_image_path(drawn.card.slug)
+        if image_path is None:
+            logger.info("card image asset missing user_id=%s slug=%s", user_id, drawn.card.slug)
+            continue
+
+        caption = (
+            f"{drawn.position.name_ru} — {drawn.card.display_name_ru} — "
+            f"{_orientation_text(drawn.orientation)}"
+        )
+        await message.answer_photo(FSInputFile(image_path), caption=caption)
+        logger.info("card image sent user_id=%s slug=%s", user_id, drawn.card.slug)
+
+
+def _spread_description_text(spread_slug: str, fallback: str) -> str:
+    descriptions = {
+        "one_card": "Один символический фокус для вопроса, состояния или дня.",
+        "three_card_past_present_future": (
+            "Что повлияло раньше, что происходит сейчас и куда ситуация может двигаться."
+        ),
+        "three_card_situation_obstacle_outcome": (
+            "Что происходит, что мешает и какой бережный ориентир можно увидеть."
+        ),
+        "three_card_relationships": (
+            "Твой фокус, фокус другого человека и динамика между вами — "
+            "без утверждений о чужих мыслях как факте."
+        ),
+        "three_card_choice": "Два варианта и то, что важно учесть перед выбором.",
+        "five_card_deep_reading": (
+            "Более подробный разбор ситуации, ресурсов, препятствий и следующего шага."
+        ),
+    }
+    return descriptions.get(spread_slug, fallback)
+
+
+def _orientation_text(orientation: str) -> str:
+    if orientation == "reversed":
+        return "перевёрнутое положение"
+    return "прямое положение"
+
+
+def _physical_card_prompt(spread, position_index: int) -> str:
+    position = spread.positions[position_index]
+    return (
+        f"Карта {position_index + 1}/{len(spread.positions)}\n"
+        f"Позиция: {position.name_ru}\n\n"
+        "Введи название карты.\n"
+        "Например: Девятка Кубков"
+    )
+
+
+def _physical_card_accepted_text(
+    card: PhysicalCardEntry,
+    entered_count: int,
+    required_count: int,
+) -> str:
+    return (
+        "Карта принята.\n\n"
+        f"{entered_count}/{required_count}\n"
+        f"Позиция: {card.position_name_ru}\n"
+        f"Название карты: {card.card_name}\n"
+        f"Положение: {_orientation_text(card.orientation)}"
+    )
+
+
+def _physical_cards_summary_text(cards: list[PhysicalCardEntry]) -> str:
+    lines = ["Карты внесены:"]
+    for index, card in enumerate(cards, start=1):
+        lines.extend(
+            [
+                "",
+                f"{index}. {card.position_name_ru}",
+                f"Название карты: {card.card_name}",
+                f"Положение: {_orientation_text(card.orientation)}",
+            ]
+        )
+
+    lines.extend(
+        [
+            "",
+            "✨ Готовлю интерпретацию...",
+            "",
+            "Интерпретацию для физической колоды подключим следующим шагом.",
+        ]
+    )
     return "\n".join(lines)
 
 

@@ -21,25 +21,34 @@ SPREAD_SLUG_BY_CALLBACK = {
     callback_id: slug for slug, callback_id in SPREAD_CALLBACK_BY_SLUG.items()
 }
 
+TELEGRAM_SPREAD_LABELS = {
+    "one_card": "🎯 Одна карта — фокус момента",
+    "three_card_past_present_future": "🕰 Три карты — прошлое / сейчас / возможный вектор",
+    "three_card_situation_obstacle_outcome": "🧭 Три карты — ситуация / препятствие / ориентир",
+    "three_card_relationships": "🤝 Три карты — я / другой / динамика",
+    "three_card_choice": "⚖️ Три карты — вариант A / вариант B / что учесть",
+    "five_card_deep_reading": "🔎 Пять карт — глубокий разбор",
+}
+
 
 def main_menu_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
         inline_keyboard=[
             [
                 InlineKeyboardButton(
-                    text="🂠 Выбрать из виртуальной колоды",
+                    text="🌙 Виртуальная колода",
                     callback_data="m:v",
                 )
             ],
             [
                 InlineKeyboardButton(
-                    text="🕯 Моя физическая колода",
+                    text="🕯 Физическая колода",
                     callback_data="m:p",
                 )
             ],
             [
                 InlineKeyboardButton(
-                    text="✨ Быстрый расклад",
+                    text="✨ Автовыбор карт",
                     callback_data="m:q",
                 )
             ],
@@ -55,12 +64,32 @@ def menu_button_keyboard() -> InlineKeyboardMarkup:
     )
 
 
+def physical_orientation_keyboard() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(
+                    text="☀️ Прямое положение",
+                    callback_data="phys_orient:upright",
+                )
+            ],
+            [
+                InlineKeyboardButton(
+                    text="🌙 Перевёрнутое положение",
+                    callback_data="phys_orient:reversed",
+                )
+            ],
+            [InlineKeyboardButton(text="🏠 В меню", callback_data="menu")],
+        ]
+    )
+
+
 def spread_selection_keyboard(mode_callback_id: str) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     for spread in _mvp_spreads():
         spread_id = SPREAD_CALLBACK_BY_SLUG[spread.slug]
         builder.button(
-            text=spread.title_ru,
+            text=TELEGRAM_SPREAD_LABELS.get(spread.slug, spread.title_ru),
             callback_data=f"sp:{mode_callback_id}:{spread_id}",
         )
     builder.adjust(1)
@@ -78,13 +107,13 @@ def virtual_deck_keyboard(
 
     for deck_index in range(card_count):
         builder.button(
-            text="✨" if deck_index in selected else "🂠",
+            text="✨" if deck_index in selected else "🌙",
             callback_data=f"c:{deck_index}",
         )
 
     builder.adjust(6)
     if ready_to_open:
-        builder.row(InlineKeyboardButton(text="Открыть карты", callback_data="open"))
+        builder.row(InlineKeyboardButton(text="✨ Открыть карты", callback_data="open"))
     return builder.as_markup()
 
 
