@@ -80,3 +80,10 @@ def select_virtual_cards(
         )
 
     return StructuredSpreadDraw(spread=spread, drawn_cards=drawn_cards)
+
+
+def create_draw_from_virtual_selection(
+    draft: VirtualDeckDraft,
+    selected_indices: List[int],
+) -> StructuredSpreadDraw:
+    return select_virtual_cards(draft, selected_indices)

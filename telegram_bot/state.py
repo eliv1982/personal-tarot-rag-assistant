@@ -21,6 +21,7 @@ class PhysicalCardEntry:
 class PendingFlow:
     selected_mode: Optional[SelectionMode] = None
     selected_spread_slug: Optional[str] = None
+    user_question: Optional[str] = None
     question_received: bool = False
     awaiting_question: bool = False
     question_prompt_message_id: Optional[int] = None

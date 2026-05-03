@@ -14,7 +14,10 @@ from app_core.tarot.reading_service import (
     StructuredReadingResult,
     create_reading_from_drawn_cards,
 )
-from app_core.tarot.selection import create_virtual_deck_draft, select_virtual_cards
+from app_core.tarot.selection import (
+    create_draw_from_virtual_selection,
+    create_virtual_deck_draft,
+)
 from app_core.tarot.spreads import get_spread
 from telegram_bot.card_assets import get_card_image_path
 from telegram_bot.formatting import (
@@ -109,14 +112,19 @@ async def handle_menu_callback(callback: CallbackQuery) -> None:
     user_id = callback.from_user.id
     reset_flow(user_id)
     logger.info("menu callback user_id=%s", user_id)
-    message = await _editable_message_or_answer(callback)
-    if message is None:
-        return
-    await message.edit_text(
-        START_TEXT,
-        reply_markup=main_menu_keyboard(),
-        parse_mode="HTML",
-    )
+    message = callback.message
+    if message is not None:
+        try:
+            await message.edit_reply_markup(reply_markup=None)
+        except TelegramBadRequest:
+            pass
+        await message.answer(
+            START_TEXT,
+            reply_markup=main_menu_keyboard(),
+            parse_mode="HTML",
+        )
+    else:
+        await callback.answer("Меню открыто. Отправь /start, если новое сообщение не появилось.", show_alert=True)
     await callback.answer()
 
 
@@ -305,16 +313,66 @@ async def handle_open_cards(callback: CallbackQuery) -> None:
     if len(flow.selected_indices) != draft.required_count:
         await callback.answer("Сначала выбери все карты расклада.", show_alert=True)
         return
+    question_text = (flow.user_question or "").strip()
+    if not question_text:
+        reset_flow(user_id)
+        await callback.answer("Не удалось найти вопрос расклада. Начни заново.", show_alert=True)
+        return
 
     message = await _editable_message_or_answer(callback)
     if message is None:
         return
 
-    draw = select_virtual_cards(draft, flow.selected_indices)
+    draw = create_draw_from_virtual_selection(draft, flow.selected_indices)
     logger.info("reveal virtual cards user_id=%s count=%s", user_id, len(draw.drawn_cards))
-    await message.edit_text(_draw_result_text(draw), reply_markup=menu_button_keyboard())
+    await message.edit_text(_virtual_revealed_cards_text(draw), reply_markup=menu_button_keyboard())
     await _send_card_images(message, draw, user_id=user_id)
+    loading_message = await message.answer(
+        "✨ Готовлю интерпретацию…",
+        reply_markup=menu_button_keyboard(),
+    )
+    persist = _telegram_persist_readings_enabled()
+    try:
+        reading = await asyncio.to_thread(
+            create_reading_from_drawn_cards,
+            draw=draw,
+            user_question=question_text,
+            persist=persist,
+        )
+    except Exception:
+        try:
+            await loading_message.delete()
+        except TelegramBadRequest:
+            pass
+        logger.exception(
+            "Tarot interpretation failed user_id=%s mode=%s spread_slug=%s",
+            user_id,
+            flow.selected_mode,
+            flow.selected_spread_slug,
+        )
+        reset_flow(user_id)
+        await message.answer(
+            "Не получилось подготовить интерпретацию. Похоже, временно недоступна модель "
+            "или соединение. Можно попробовать ещё раз.",
+            reply_markup=menu_button_keyboard(),
+        )
+        await callback.answer()
+        return
+
+    flow.last_reading_id = str(reading.reading_id) if reading.reading_id is not None else None
+    flow.last_drawn_cards = draw
+    saved_reading_id = flow.last_reading_id
     reset_flow(user_id)
+    if saved_reading_id:
+        get_flow(user_id).last_reading_id = saved_reading_id
+    logger.info(
+        "virtual interpretation completed user_id=%s spread_slug=%s count=%s persist=%s",
+        user_id,
+        draw.spread.slug,
+        len(reading.cards),
+        persist,
+    )
+    await _send_auto_draw_reading(message, reading, loading_message=loading_message)
     await callback.answer()
 
 
@@ -467,6 +525,7 @@ async def _handle_question_text(message: Message, text: str) -> None:
         return
 
     flow.awaiting_question = False
+    flow.user_question = text
     flow.question_received = True
     logger.info("question received user_id=%s mode=%s spread_slug=%s", user_id, mode, spread_slug)
     await _confirm_question_prompt(message, flow, text)
@@ -615,6 +674,10 @@ def _draw_result_text(draw: StructuredSpreadDraw) -> str:
     return "\n".join(lines)
 
 
+def _virtual_revealed_cards_text(draw: StructuredSpreadDraw) -> str:
+    return _cards_preview_text("🎴 Выбранные карты", draw)
+
+
 def _auto_draw_reading_text(reading: StructuredReadingResult) -> str:
     cleaned_answer = clean_telegram_text(reading.answer)
     lines = [
@@ -642,8 +705,12 @@ def _auto_draw_reading_text(reading: StructuredReadingResult) -> str:
 
 
 def _auto_draw_cards_preview_text(draw: StructuredSpreadDraw) -> str:
+    return _cards_preview_text("🎴 Вытянутые карты", draw)
+
+
+def _cards_preview_text(title: str, draw: StructuredSpreadDraw) -> str:
     lines = [
-        "🎴 Вытянутые карты",
+        title,
         "",
     ]
     for index, drawn in enumerate(draw.drawn_cards, start=1):
