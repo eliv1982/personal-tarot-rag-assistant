@@ -12,6 +12,28 @@ from telegram_bot.handlers import router
 logger = logging.getLogger(__name__)
 
 
+def _presence(value: str | None) -> str:
+    return "set" if (value or "").strip() else "missing"
+
+
+def log_env_diagnostics() -> None:
+    load_dotenv()
+    logger.info(
+        "Telegram env diagnostics DATABASE_URL=%s OPENAI_API_KEY=%s OPENAI_BASE_URL=%s "
+        "OPENAI_MODEL=%s RAG_USE_CACHE=%s RAG_CACHE_DB_PATH=%s LLM_API_KEY=%s "
+        "LLM_BASE_URL=%s RAG_CHAT_MODEL=%s",
+        _presence(os.getenv("DATABASE_URL")),
+        _presence(os.getenv("OPENAI_API_KEY")),
+        _presence(os.getenv("OPENAI_BASE_URL")),
+        _presence(os.getenv("OPENAI_MODEL")),
+        _presence(os.getenv("RAG_USE_CACHE")),
+        _presence(os.getenv("RAG_CACHE_DB_PATH")),
+        _presence(os.getenv("LLM_API_KEY")),
+        _presence(os.getenv("LLM_BASE_URL")),
+        _presence(os.getenv("RAG_CHAT_MODEL")),
+    )
+
+
 def get_bot_token() -> str:
     load_dotenv()
     token = (os.getenv("TELEGRAM_BOT_TOKEN") or "").strip()
@@ -33,6 +55,7 @@ def configure_logging() -> None:
 
 
 async def main() -> None:
+    log_env_diagnostics()
     bot = Bot(token=get_bot_token())
     dispatcher = Dispatcher()
     dispatcher.include_router(router)

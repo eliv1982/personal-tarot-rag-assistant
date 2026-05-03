@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import logging
+import os
 from dataclasses import dataclass
 from typing import Any, Literal, Optional, Protocol, Sequence
 from uuid import UUID, uuid4
@@ -18,6 +20,8 @@ from rag_pipeline import RAGPipeline
 
 Orientation = Literal["upright", "reversed"]
 SelectionMode = Literal["virtual", "physical"]
+
+logger = logging.getLogger(__name__)
 
 
 class PipelineLike(Protocol):
@@ -66,6 +70,24 @@ class FollowUpReadingResult:
     from_cache: bool
     messages_count: int
     debug: dict[str, Any]
+
+
+def _presence(value: str | None) -> str:
+    return "set" if (value or "").strip() else "missing"
+
+
+def _safe_env_diagnostics() -> dict[str, str]:
+    return {
+        "DATABASE_URL": _presence(os.getenv("DATABASE_URL")),
+        "OPENAI_API_KEY": _presence(os.getenv("OPENAI_API_KEY")),
+        "OPENAI_BASE_URL": _presence(os.getenv("OPENAI_BASE_URL")),
+        "OPENAI_MODEL": _presence(os.getenv("OPENAI_MODEL")),
+        "RAG_USE_CACHE": _presence(os.getenv("RAG_USE_CACHE")),
+        "RAG_CACHE_DB_PATH": _presence(os.getenv("RAG_CACHE_DB_PATH")),
+        "LLM_API_KEY": _presence(os.getenv("LLM_API_KEY")),
+        "LLM_BASE_URL": _presence(os.getenv("LLM_BASE_URL")),
+        "RAG_CHAT_MODEL": _presence(os.getenv("RAG_CHAT_MODEL")),
+    }
 
 
 def build_structured_reading_query(
@@ -262,38 +284,48 @@ def _create_reading(
         user_question=user_question,
         cards=cards,
     )
-    rag = pipeline or RAGPipeline()
-    rag_result = rag.query(query)
-    answer = str(rag_result.get("answer", ""))
-    context_docs = list(rag_result.get("context_docs") or [])
-    model = str(rag_result.get("model", ""))
-    from_cache = bool(rag_result.get("from_cache", False))
+    try:
+        rag = pipeline or RAGPipeline()
+        rag_result = rag.query(query)
+        answer = str(rag_result.get("answer", ""))
+        context_docs = list(rag_result.get("context_docs") or [])
+        model = str(rag_result.get("model", ""))
+        from_cache = bool(rag_result.get("from_cache", False))
 
-    reading_id = None
-    if persist:
-        reading_id = _store_reading(
+        reading_id = None
+        if persist:
+            reading_id = _store_reading(
+                spread=spread,
+                user_question=user_question,
+                cards=cards,
+                selection_mode=selection_mode,
+                answer=answer,
+            )
+
+        return StructuredReadingResult(
+            reading_id=reading_id,
             spread=spread,
-            user_question=user_question,
             cards=cards,
-            selection_mode=selection_mode,
             answer=answer,
+            context_docs=context_docs,
+            model=model,
+            from_cache=from_cache,
+            debug={
+                "query": query,
+                "selection_mode": selection_mode,
+                "cached_at": rag_result.get("cached_at", ""),
+                "storage_connected": reading_id is not None,
+            },
         )
-
-    return StructuredReadingResult(
-        reading_id=reading_id,
-        spread=spread,
-        cards=cards,
-        answer=answer,
-        context_docs=context_docs,
-        model=model,
-        from_cache=from_cache,
-        debug={
-            "query": query,
-            "selection_mode": selection_mode,
-            "cached_at": rag_result.get("cached_at", ""),
-            "storage_connected": reading_id is not None,
-        },
-    )
+    except Exception:
+        logger.exception(
+            "Tarot reading generation failed selection_mode=%s spread_slug=%s persist=%s env=%s",
+            selection_mode,
+            spread.slug,
+            persist,
+            _safe_env_diagnostics(),
+        )
+        raise
 
 
 def _cards_from_draw(draw: StructuredSpreadDraw) -> list[StructuredReadingCard]:
