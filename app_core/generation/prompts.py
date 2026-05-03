@@ -231,17 +231,19 @@ def _build_tarot_prompt(
     response_mode = (response_mode or "detailed").strip() or "detailed"
 
     if is_ru:
-        output_schema = """1. Общее прочтение
-2. Интерпретация по позициям
-3. Главная тема или динамика
-4. На что стоит обратить внимание
-5. Заключение"""
+        output_schema = """Следуй структуре ответа, если она явно задана во входе reading.
+Если структура не задана, используй компактный формат без повторов:
+- Общий рисунок
+- Ключевые акценты по позициям
+- На что обратить внимание
+- Вопрос к себе"""
     else:
-        output_schema = """1. Overall reading
-2. Position-by-position interpretation
-3. Main theme or dynamic
-4. Practical reflection
-5. Closing note"""
+        output_schema = """Follow the response structure if it is explicitly provided in the reading input.
+If no structure is provided, use a compact non-repetitive format:
+- Overall pattern
+- Key position-based accents
+- What to notice
+- Question for yourself"""
 
     return f"""Reading policy:
 {TAROT_RAG_SYSTEM_PROMPT}
@@ -296,6 +298,15 @@ Task instructions:
 - If the question is highly sensitive, keep the tone stabilizing, avoid escalation and fear, and encourage grounded real-world judgment.
 - Treat reversed cards as nuance, not automatic negativity; consider blocked flow, internalization, delay, excess, inversion, resistance, or reconsideration in relation to position and neighboring cards.
 - Keep the answer grounded, readable, emotionally intelligent, and agency-preserving.
+- Keep the reading dense and non-repetitive: each sentence should add a new layer of meaning.
+- Do not restate the same idea across multiple sections using slightly different wording.
+- If a key meaning is already explained once, use later sections for nuance, practical reflection, tension, or a next gentle step.
+- For one-card readings, do not inflate the answer into five large sections.
+- Avoid long introductions and avoid a closing paragraph that merely repeats the main point.
+- Do not end with invitations like "If you want, I can..." unless the interface explicitly supports that continuation.
+- Do not repeat the full list of cards if the surrounding UI already shows them; mention only the cards or positions needed for interpretation.
+- Use plain text headings; do not use markdown bold markers.
+- When answering in Russian, keep card orientation phrasing in Russian rather than raw English words like upright or reversed.
 - Preferred phrases include: "This card suggests...", "The spread points toward...", "What stands out here is...", "In this position, the card speaks more about...", "This does not look fully settled yet.", "The reading highlights a tension between...", "One possible way to read this is...", "The clearest message here is...", "This may reflect...", "A useful question for you now might be...", "Rather than predicting, this spread seems to illuminate...", "The energy here feels more like... than..."
 - Avoid phrases like: "This will definitely happen.", "Tarot confirms that...", "Your partner is definitely hiding...", "The universe commands...", "Spirit says you must...", "Disaster will follow if...", "This proves that..."
 - Final answer only; do not output chain-of-thought or hidden reasoning.
@@ -369,4 +380,3 @@ Instructions:
 {instructions}
 
 Final answer:"""
-

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 import os
+import re
 from dataclasses import dataclass
 from typing import Any, Literal, Optional, Protocol, Sequence
 from uuid import UUID, uuid4
@@ -99,6 +100,7 @@ def build_structured_reading_query(
     question = (user_question or "").strip()
     if not question:
         raise ValueError("user_question must be a non-empty string.")
+    output_schema = _tarot_output_schema(user_question=user_question, cards=cards)
 
     lines = [
         "Тема пользователя:",
@@ -127,15 +129,141 @@ def build_structured_reading_query(
             ]
         )
 
-    lines.extend(
+        lines.extend(
         [
             "",
             "Дай мягкую символическую интерпретацию этого расклада без фатализма.",
             "Не утверждай будущее как неизбежное; описывай вероятные динамики, выборы и точки внимания.",
             "Не делай фактических утверждений о событиях, людях или будущем без достаточных оснований.",
+            "Не повторяй одну и ту же мысль в разных разделах. Каждое предложение должно добавлять новый смысл.",
+            "Если мысль уже названа в одном разделе, в следующем дай новый слой: контекст, нюанс, практический ориентир или вопрос к себе.",
+            "Не делай длинное заключение, если оно повторяет уже сказанное.",
+            "Не заканчивай ответ приглашением продолжить в стиле 'Если хотите, я могу...'.",
+            "Не переписывай заново полный список карт, если он уже указан отдельно; ссылайся только на те карты и позиции, которые нужны для смысла.",
+            "Используй plain text headings без markdown-маркеров.",
+            "Если отвечаешь по-русски, не используй raw English orientation words вроде upright/reversed.",
+            "",
+            "Структура ответа:",
+            output_schema,
         ]
     )
     return "\n".join(lines)
+
+
+def _tarot_output_schema(
+    *,
+    user_question: str,
+    cards: Sequence[StructuredReadingCard],
+) -> str:
+    is_ru = _has_cyrillic(user_question)
+    card_count = len(cards)
+
+    if is_ru:
+        if card_count <= 1:
+            return "\n".join(
+                [
+                    "Смысл карты:",
+                    "2-4 предложения.",
+                    "",
+                    "Связь с вопросом:",
+                    "2-4 предложения.",
+                    "",
+                    "На что обратить внимание:",
+                    "- 2-4 коротких пункта.",
+                    "",
+                    "Вопрос к себе:",
+                    "1 вопрос.",
+                ]
+            )
+        if card_count <= 3:
+            return "\n".join(
+                [
+                    "Общий рисунок:",
+                    "3-5 предложений.",
+                    "",
+                    "По позициям:",
+                    "1. <позиция> — <карта>",
+                    "2-3 предложения.",
+                    "2. ...",
+                    "3. ...",
+                    "",
+                    "На что обратить внимание:",
+                    "- 2-4 коротких пункта.",
+                    "",
+                    "Вопрос к себе:",
+                    "1 вопрос.",
+                ]
+            )
+        return "\n".join(
+            [
+                "Общий рисунок:",
+                "4-6 предложений.",
+                "",
+                "Ключевые акценты:",
+                "- 3-5 пунктов, каждый связан с конкретной картой или позицией.",
+                "",
+                "Следующий бережный шаг:",
+                "2-4 предложения.",
+                "",
+                "Вопрос к себе:",
+                "1 вопрос.",
+            ]
+        )
+
+    if card_count <= 1:
+        return "\n".join(
+            [
+                "Card meaning:",
+                "2-4 sentences.",
+                "",
+                "Connection to the question:",
+                "2-4 sentences.",
+                "",
+                "What to notice:",
+                "- 2-4 short bullet points.",
+                "",
+                "Question for yourself:",
+                "1 question.",
+            ]
+        )
+    if card_count <= 3:
+        return "\n".join(
+            [
+                "Overall pattern:",
+                "3-5 sentences.",
+                "",
+                "By position:",
+                "1. <position> — <card>",
+                "2-3 sentences.",
+                "2. ...",
+                "3. ...",
+                "",
+                "What to notice:",
+                "- 2-4 short bullet points.",
+                "",
+                "Question for yourself:",
+                "1 question.",
+            ]
+        )
+    return "\n".join(
+        [
+            "Overall pattern:",
+            "4-6 sentences.",
+            "",
+            "Key accents:",
+            "- 3-5 bullet points, each tied to a specific card or position.",
+            "",
+            "Gentle next step:",
+            "2-4 sentences.",
+            "",
+            "Question for yourself:",
+            "1 question.",
+        ]
+    )
+
+
+def _has_cyrillic(text: str) -> bool:
+    return bool(re.search(r"[А-Яа-яЁё]", text or ""))
 
 
 def build_follow_up_query(

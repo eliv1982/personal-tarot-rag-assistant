@@ -7,6 +7,8 @@ import re
 _MARKDOWN_MARKERS_RE = re.compile(r"(\*\*|__|`|~~)")
 _BLANK_LINES_RE = re.compile(r"\n{3,}")
 _SECTION_HEADINGS = (
+    "Расклад:",
+    "Карты:",
     "Смысл карты:",
     "Связь с вопросом:",
     "На что обратить внимание:",
@@ -83,12 +85,19 @@ def format_telegram_section_headings(text: str) -> str:
     for heading in _SECTION_HEADINGS:
         escaped_heading = html.escape(heading)
         escaped = re.sub(
-            rf"(^|\n){re.escape(escaped_heading)}(?=\n|$)",
-            lambda match: f"{match.group(1)}<b>{escaped_heading}</b>",
+            rf"(^|\n)({re.escape(escaped_heading)})(.*?)(?=\n|$)",
+            lambda match: f"{match.group(1)}<b>{match.group(2)}</b>{match.group(3)}",
             escaped,
             flags=re.MULTILINE,
         )
     return escaped
+
+
+def build_question_confirmation(text: str, limit: int = 300) -> str:
+    normalized = " ".join((text or "").strip().split())
+    if len(normalized) > limit:
+        normalized = normalized[:limit].rstrip() + "…"
+    return f"✅ Задан вопрос/тема: {normalized}"
 
 
 def _remove_trailing_invitation(text: str) -> str:

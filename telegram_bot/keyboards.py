@@ -30,6 +30,12 @@ TELEGRAM_SPREAD_LABELS = {
     "five_card_deep_reading": "🔎 Пять карт — глубокий разбор",
 }
 
+MODE_LABELS = {
+    "virtual": "🌙 Виртуальная колода",
+    "physical_deck": "🕯 Физическая колода",
+    "quick_draw": "✨ Автовыбор карт",
+}
+
 
 def main_menu_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
@@ -133,6 +139,15 @@ def get_spread_by_callback_id(callback_id: str) -> SpreadDefinition | None:
         return get_spread(spread_slug)
     except ValueError:
         return None
+
+
+def get_mode_display_label(mode: str) -> str:
+    return MODE_LABELS.get(mode, mode)
+
+
+def get_spread_display_label(spread_slug: str) -> str:
+    spread = get_spread(spread_slug)
+    return TELEGRAM_SPREAD_LABELS.get(spread.slug, spread.title_ru)
 
 
 def _mvp_spreads() -> list[SpreadDefinition]:

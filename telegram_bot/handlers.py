@@ -6,6 +6,7 @@ import os
 
 from aiogram import F, Router
 from aiogram.filters import Command, CommandStart
+from aiogram.exceptions import TelegramBadRequest
 from aiogram.types import CallbackQuery, FSInputFile, Message
 
 from app_core.tarot.draw import StructuredSpreadDraw
@@ -14,12 +15,15 @@ from app_core.tarot.selection import create_virtual_deck_draft, select_virtual_c
 from app_core.tarot.spreads import get_spread
 from telegram_bot.card_assets import get_card_image_path
 from telegram_bot.formatting import (
+    build_question_confirmation,
     clean_telegram_text,
     format_telegram_section_headings,
     split_telegram_message,
 )
 from telegram_bot.keyboards import (
     get_spread_by_callback_id,
+    get_mode_display_label,
+    get_spread_display_label,
     main_menu_keyboard,
     menu_button_keyboard,
     physical_orientation_keyboard,
@@ -118,10 +122,12 @@ async def handle_virtual_mode(callback: CallbackQuery) -> None:
     user_id = callback.from_user.id
     reset_flow(user_id, selected_mode="virtual")
     logger.info("selected mode user_id=%s mode=virtual", user_id)
-    message = await _editable_message_or_answer(callback)
-    if message is None:
-        return
-    await message.edit_text(
+    await _confirm_callback_selection(
+        callback,
+        f"✅ Выбран способ работы: {get_mode_display_label('virtual')}",
+    )
+    await _answer_or_notify(
+        callback,
         "Выбери расклад для виртуальной колоды:",
         reply_markup=spread_selection_keyboard("v"),
     )
@@ -133,10 +139,12 @@ async def handle_quick_mode(callback: CallbackQuery) -> None:
     user_id = callback.from_user.id
     reset_flow(user_id, selected_mode="quick_draw")
     logger.info("selected mode user_id=%s mode=quick_draw", user_id)
-    message = await _editable_message_or_answer(callback)
-    if message is None:
-        return
-    await message.edit_text(
+    await _confirm_callback_selection(
+        callback,
+        f"✅ Выбран способ работы: {get_mode_display_label('quick_draw')}",
+    )
+    await _answer_or_notify(
+        callback,
         "Выбери расклад для автовыбора карт:",
         reply_markup=spread_selection_keyboard("q"),
     )
@@ -148,10 +156,12 @@ async def handle_physical_mode(callback: CallbackQuery) -> None:
     user_id = callback.from_user.id
     reset_flow(user_id, selected_mode="physical_deck")
     logger.info("selected mode user_id=%s mode=physical_deck", user_id)
-    message = await _editable_message_or_answer(callback)
-    if message is None:
-        return
-    await message.edit_text(
+    await _confirm_callback_selection(
+        callback,
+        f"✅ Выбран способ работы: {get_mode_display_label('physical_deck')}",
+    )
+    await _answer_or_notify(
+        callback,
         "Выбери расклад для физической колоды:",
         reply_markup=spread_selection_keyboard("p"),
     )
@@ -188,10 +198,6 @@ async def handle_spread_selection(callback: CallbackQuery) -> None:
             await callback.answer()
         return
 
-    message = await _editable_message_or_answer(callback)
-    if message is None:
-        return
-
     selected_mode = _mode_from_callback_id(mode_callback_id)
     if selected_mode is None:
         await callback.answer("Этот режим пока недоступен.", show_alert=True)
@@ -217,7 +223,16 @@ async def handle_spread_selection(callback: CallbackQuery) -> None:
         spread.slug,
         selected_mode,
     )
-    await message.edit_text(QUESTION_PROMPT, reply_markup=menu_button_keyboard())
+    await _confirm_callback_selection(
+        callback,
+        f"✅ Выбран расклад: {get_spread_display_label(spread.slug)}",
+    )
+    prompt_message = await _answer_or_notify(
+        callback,
+        QUESTION_PROMPT,
+        reply_markup=menu_button_keyboard(),
+    )
+    flow.question_prompt_message_id = prompt_message.message_id if prompt_message is not None else None
 
     await callback.answer()
 
@@ -451,6 +466,7 @@ async def _handle_question_text(message: Message, text: str) -> None:
     flow.awaiting_question = False
     flow.question_received = True
     logger.info("question received user_id=%s mode=%s spread_slug=%s", user_id, mode, spread_slug)
+    await _confirm_question_prompt(message, flow, text)
 
     if mode == "virtual":
         flow.awaiting_virtual_selection = True
@@ -478,7 +494,7 @@ async def _handle_question_text(message: Message, text: str) -> None:
         return
 
     if mode == "quick_draw":
-        await message.answer(
+        loading_message = await message.answer(
             "✨ Готовлю расклад и интерпретацию…",
             reply_markup=menu_button_keyboard(),
         )
@@ -518,7 +534,7 @@ async def _handle_question_text(message: Message, text: str) -> None:
             len(reading.cards),
             persist,
         )
-        await _send_auto_draw_reading(message, reading)
+        await _send_auto_draw_reading(message, reading, loading_message=loading_message)
         return
 
     await message.answer("Этот режим пока недоступен.", reply_markup=menu_button_keyboard())
@@ -651,7 +667,12 @@ def _spread_description_text(spread_slug: str, fallback: str) -> str:
     return descriptions.get(spread_slug, fallback)
 
 
-async def _send_auto_draw_reading(message: Message, reading: StructuredReadingResult) -> None:
+async def _send_auto_draw_reading(
+    message: Message,
+    reading: StructuredReadingResult,
+    *,
+    loading_message: Message | None = None,
+) -> None:
     formatted_text = format_telegram_section_headings(_auto_draw_reading_text(reading))
     chunks = split_telegram_message(formatted_text)
     if not chunks:
@@ -660,6 +681,23 @@ async def _send_auto_draw_reading(message: Message, reading: StructuredReadingRe
             reply_markup=menu_button_keyboard(),
         )
         return
+
+    if loading_message is not None and len(chunks) == 1:
+        try:
+            await loading_message.edit_text(
+                chunks[0],
+                reply_markup=reading_result_keyboard(has_follow_up=reading.reading_id is not None),
+                parse_mode="HTML",
+            )
+            return
+        except TelegramBadRequest:
+            pass
+
+    if loading_message is not None:
+        try:
+            await loading_message.delete()
+        except TelegramBadRequest:
+            pass
 
     for index, chunk in enumerate(chunks):
         reply_markup = None
@@ -746,3 +784,43 @@ async def _editable_message_or_answer(
         await callback.answer(text, show_alert=True)
         return None
     return callback.message
+
+
+async def _confirm_callback_selection(callback: CallbackQuery, confirmation_text: str) -> None:
+    message = callback.message
+    if message is None:
+        return
+    await message.edit_text(confirmation_text)
+
+
+async def _answer_or_notify(
+    callback: CallbackQuery,
+    text: str,
+    *,
+    reply_markup=None,
+) -> None:
+    if callback.message is not None:
+        return await callback.message.answer(text, reply_markup=reply_markup)
+
+    if callback.message is None:
+        await callback.answer("Выбор сохранён. Продолжаем следующим сообщением.", show_alert=True)
+    return None
+
+
+async def _confirm_question_prompt(message: Message, flow, question_text: str) -> None:
+    confirmation = build_question_confirmation(question_text)
+    prompt_message_id = flow.question_prompt_message_id
+    flow.question_prompt_message_id = None
+
+    if prompt_message_id is not None:
+        try:
+            await message.bot.edit_message_text(
+                confirmation,
+                chat_id=message.chat.id,
+                message_id=prompt_message_id,
+            )
+            return
+        except TelegramBadRequest:
+            pass
+
+    await message.answer(confirmation)

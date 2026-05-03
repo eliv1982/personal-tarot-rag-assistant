@@ -23,6 +23,7 @@ class PendingFlow:
     selected_spread_slug: Optional[str] = None
     question_received: bool = False
     awaiting_question: bool = False
+    question_prompt_message_id: Optional[int] = None
     awaiting_virtual_selection: bool = False
     awaiting_physical_card_name: bool = False
     awaiting_physical_orientation: bool = False
