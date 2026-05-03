@@ -13,7 +13,11 @@ from app_core.tarot.reading_service import StructuredReadingResult, create_virtu
 from app_core.tarot.selection import create_virtual_deck_draft, select_virtual_cards
 from app_core.tarot.spreads import get_spread
 from telegram_bot.card_assets import get_card_image_path
-from telegram_bot.formatting import clean_telegram_text, split_telegram_message
+from telegram_bot.formatting import (
+    clean_telegram_text,
+    format_telegram_section_headings,
+    split_telegram_message,
+)
 from telegram_bot.keyboards import (
     get_spread_by_callback_id,
     main_menu_keyboard,
@@ -648,7 +652,8 @@ def _spread_description_text(spread_slug: str, fallback: str) -> str:
 
 
 async def _send_auto_draw_reading(message: Message, reading: StructuredReadingResult) -> None:
-    chunks = split_telegram_message(_auto_draw_reading_text(reading))
+    formatted_text = format_telegram_section_headings(_auto_draw_reading_text(reading))
+    chunks = split_telegram_message(formatted_text)
     if not chunks:
         await message.answer(
             "Не получилось подготовить текст интерпретации.",
@@ -660,7 +665,7 @@ async def _send_auto_draw_reading(message: Message, reading: StructuredReadingRe
         reply_markup = None
         if index == len(chunks) - 1:
             reply_markup = reading_result_keyboard(has_follow_up=reading.reading_id is not None)
-        await message.answer(chunk, reply_markup=reply_markup)
+        await message.answer(chunk, reply_markup=reply_markup, parse_mode="HTML")
 
 
 def _telegram_spread_title(spread_slug: str, fallback: str) -> str:

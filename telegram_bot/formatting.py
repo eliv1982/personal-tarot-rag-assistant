@@ -1,10 +1,22 @@
 from __future__ import annotations
 
+import html
 import re
 
 
 _MARKDOWN_MARKERS_RE = re.compile(r"(\*\*|__|`|~~)")
 _BLANK_LINES_RE = re.compile(r"\n{3,}")
+_SECTION_HEADINGS = (
+    "Смысл карты:",
+    "Связь с вопросом:",
+    "На что обратить внимание:",
+    "Вопрос к себе:",
+    "Общий рисунок:",
+    "По позициям:",
+    "Ключевые акценты:",
+    "Следующий бережный шаг:",
+    "Интерпретация:",
+)
 _TRAILING_INVITATION_STARTS = (
     "если хотите",
     "могу",
@@ -64,6 +76,19 @@ def split_telegram_message(text: str, limit: int = 3500) -> list[str]:
         chunks.append(current)
 
     return chunks
+
+
+def format_telegram_section_headings(text: str) -> str:
+    escaped = html.escape(text or "").replace("\r\n", "\n")
+    for heading in _SECTION_HEADINGS:
+        escaped_heading = html.escape(heading)
+        escaped = re.sub(
+            rf"(^|\n){re.escape(escaped_heading)}(?=\n|$)",
+            lambda match: f"{match.group(1)}<b>{escaped_heading}</b>",
+            escaped,
+            flags=re.MULTILINE,
+        )
+    return escaped
 
 
 def _remove_trailing_invitation(text: str) -> str:
