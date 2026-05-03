@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 from typing import Dict, List, Literal, Optional, Union
 
@@ -183,9 +184,176 @@ def _build_major_cards() -> List[TarotCard]:
 
 ALL_TAROT_CARDS: List[TarotCard] = _build_major_cards() + _build_minor_cards()
 CARD_BY_SLUG: Dict[str, TarotCard] = {c.slug: c for c in ALL_TAROT_CARDS}
+_CARD_NAME_INDEX: Dict[str, TarotCard] = {}
+
+_MAJOR_ARCANA_ALIASES: Dict[str, tuple[str, ...]] = {
+    "the_fool": ("шут", "дурак", "fool", "the fool"),
+    "the_magician": ("маг", "фокусник", "magician", "the magician"),
+    "the_high_priestess": (
+        "жрица",
+        "верховная жрица",
+        "папесса",
+        "high priestess",
+        "the high priestess",
+    ),
+    "the_empress": ("императрица", "empress", "the empress"),
+    "the_emperor": ("император", "emperor", "the emperor"),
+    "the_hierophant": (
+        "иерофант",
+        "верховный жрец",
+        "жрец",
+        "папа",
+        "hierophant",
+        "the hierophant",
+    ),
+    "the_lovers": ("влюбленные", "влюблённые", "любовники", "lovers", "the lovers"),
+    "the_chariot": ("колесница", "chariot", "the chariot"),
+    "strength": ("сила", "strength"),
+    "the_hermit": ("отшельник", "hermit", "the hermit"),
+    "wheel_of_fortune": (
+        "колесо фортуны",
+        "фортуна",
+        "wheel of fortune",
+        "the wheel of fortune",
+    ),
+    "justice": ("справедливость", "правосудие", "justice"),
+    "the_hanged_man": (
+        "повешенный",
+        "повешенный человек",
+        "hanged man",
+        "the hanged man",
+    ),
+    "death": ("смерть", "death"),
+    "temperance": ("умеренность", "temperance"),
+    "the_devil": ("дьявол", "devil", "the devil"),
+    "the_tower": ("башня", "tower", "the tower"),
+    "the_star": ("звезда", "star", "the star"),
+    "the_moon": ("луна", "moon", "the moon"),
+    "the_sun": ("солнце", "sun", "the sun"),
+    "judgement": ("суд", "страшный суд", "judgement", "judgment", "rebirth"),
+    "the_world": ("мир", "вселенная", "world", "the world"),
+}
+
+_MINOR_RANK_ALIASES: Dict[str, tuple[str, ...]] = {
+    "ace": ("туз", "ace"),
+    "two": ("двойка", "два", "2", "two"),
+    "three": ("тройка", "три", "3", "three"),
+    "four": ("четверка", "четвёрка", "четыре", "4", "four"),
+    "five": ("пятерка", "пятёрка", "пять", "5", "five"),
+    "six": ("шестерка", "шестёрка", "шесть", "6", "six"),
+    "seven": ("семерка", "семёрка", "семь", "7", "seven"),
+    "eight": ("восьмерка", "восьмёрка", "восемь", "8", "eight"),
+    "nine": ("девятка", "девять", "9", "nine"),
+    "ten": ("десятка", "десять", "10", "ten"),
+    "page": ("паж", "валет", "принцесса", "page"),
+    "knight": ("рыцарь", "всадник", "knight"),
+    "queen": ("королева", "дама", "queen"),
+    "king": ("король", "king"),
+}
+
+_MINOR_SUIT_ALIASES: Dict[Suit, tuple[str, ...]] = {
+    "wands": (
+        "жезлов",
+        "жезлы",
+        "посохов",
+        "посохи",
+        "скипетров",
+        "скипетры",
+        "палок",
+        "палки",
+        "wands",
+        "of wands",
+    ),
+    "cups": ("кубков", "кубки", "чаш", "чаши", "cups", "of cups"),
+    "swords": ("мечей", "мечи", "swords", "of swords"),
+    "pentacles": (
+        "пентаклей",
+        "пентакли",
+        "монет",
+        "монеты",
+        "дисков",
+        "диски",
+        "денариев",
+        "денарии",
+        "pentacles",
+        "of pentacles",
+        "coins",
+        "of coins",
+        "disks",
+        "of disks",
+    ),
+}
+
+
+def _normalize_card_lookup_name(value: str) -> str:
+    normalized = (value or "").strip().lower().replace("ё", "е")
+    normalized = normalized.replace("_", " ")
+    normalized = re.sub(r"[-–—/\\]+", " ", normalized)
+    normalized = re.sub(r"[\"'`“”‘’.,:;!?(){}\[\]]+", " ", normalized)
+    normalized = re.sub(r"\s+", " ", normalized)
+    return normalized.strip()
+
+
+def _build_card_name_index() -> Dict[str, TarotCard]:
+    candidates: Dict[str, set[str]] = {}
+
+    def register(card: TarotCard, variant: str) -> None:
+        key = _normalize_card_lookup_name(variant)
+        if not key:
+            return
+        candidates.setdefault(key, set()).add(card.slug)
+
+    for card in ALL_TAROT_CARDS:
+        for variant in _card_lookup_variants(card):
+            register(card, variant)
+
+    index: Dict[str, TarotCard] = {}
+    for key, slugs in candidates.items():
+        if len(slugs) == 1:
+            slug = next(iter(slugs))
+            card = CARD_BY_SLUG.get(slug)
+            if card is not None:
+                index[key] = card
+    return index
+
+
+def _card_lookup_variants(card: TarotCard) -> set[str]:
+    variants = {
+        card.slug,
+        card.slug.replace("_", " "),
+        card.display_name_en,
+        card.display_name_ru,
+    }
+
+    if card.arcana == "major":
+        variants.update(_MAJOR_ARCANA_ALIASES.get(card.slug, ()))
+        return variants
+
+    rank = str(card.rank)
+    suit = card.suit
+    if suit is None:
+        return variants
+
+    rank_aliases = _MINOR_RANK_ALIASES.get(rank, (rank,))
+    suit_aliases = _MINOR_SUIT_ALIASES.get(suit, (suit,))
+    for rank_alias in rank_aliases:
+        for suit_alias in suit_aliases:
+            variants.add(f"{rank_alias} {suit_alias}")
+
+    return variants
+
+
+_CARD_NAME_INDEX = _build_card_name_index()
 
 
 def list_cards() -> List[TarotCard]:
     """Return all 78 cards."""
     return list(ALL_TAROT_CARDS)
+
+
+def resolve_card_by_name(name: str) -> Optional[TarotCard]:
+    normalized = _normalize_card_lookup_name(name)
+    if not normalized:
+        return None
+    return _CARD_NAME_INDEX.get(normalized) or CARD_BY_SLUG.get(normalized)
 

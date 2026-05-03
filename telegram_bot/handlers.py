@@ -9,7 +9,13 @@ from aiogram.filters import Command, CommandStart
 from aiogram.exceptions import TelegramBadRequest
 from aiogram.types import CallbackQuery, FSInputFile, Message
 
-from app_core.tarot.draw import StructuredSpreadDraw, draw_virtual_spread
+from app_core.tarot.deck import CARD_BY_SLUG, resolve_card_by_name
+from app_core.tarot.draw import (
+    PhysicalDrawCard,
+    StructuredSpreadDraw,
+    create_draw_from_physical_cards,
+    draw_virtual_spread,
+)
 from app_core.tarot.reading_service import (
     StructuredReadingResult,
     create_reading_from_drawn_cards,
@@ -217,6 +223,7 @@ async def handle_spread_selection(callback: CallbackQuery) -> None:
     flow = get_flow(user_id)
     flow.selected_mode = selected_mode
     flow.selected_spread_slug = spread.slug
+    flow.user_question = None
     flow.awaiting_question = True
     flow.awaiting_virtual_selection = False
     flow.awaiting_physical_card_name = False
@@ -227,6 +234,7 @@ async def handle_spread_selection(callback: CallbackQuery) -> None:
     flow.last_drawn_cards = None
     flow.current_card_position_index = 0
     flow.pending_physical_card_name = None
+    flow.pending_physical_card_slug = None
     flow.physical_cards = []
     logger.info(
         "selected spread user_id=%s spread_slug=%s mode=%s",
@@ -395,7 +403,8 @@ async def handle_physical_orientation(callback: CallbackQuery) -> None:
 
     spread_slug = flow.selected_spread_slug
     card_name = (flow.pending_physical_card_name or "").strip()
-    if not spread_slug or not card_name:
+    card_slug = (flow.pending_physical_card_slug or "").strip()
+    if not spread_slug or not card_name or not card_slug:
         reset_flow(user_id)
         await callback.answer("Не удалось сохранить карту. Начни заново.", show_alert=True)
         return
@@ -412,10 +421,12 @@ async def handle_physical_orientation(callback: CallbackQuery) -> None:
         position_index=position.index,
         position_name_ru=position.name_ru,
         card_name=card_name,
+        card_slug=card_slug,
         orientation=orientation,
     )
     flow.physical_cards.append(entry)
     flow.pending_physical_card_name = None
+    flow.pending_physical_card_slug = None
     flow.awaiting_physical_orientation = False
 
     logger.info(
@@ -429,11 +440,78 @@ async def handle_physical_orientation(callback: CallbackQuery) -> None:
     if len(flow.physical_cards) >= len(spread.positions):
         logger.info("physical cards completed user_id=%s count=%s", user_id, len(flow.physical_cards))
         summary = _physical_cards_summary_text(flow.physical_cards)
-        reset_flow(user_id)
         await message.edit_text(
             f"{accepted_text}\n\n{summary}",
+        )
+        loading_message = await message.answer(
+            "✨ Готовлю интерпретацию…",
             reply_markup=menu_button_keyboard(),
         )
+        persist = _telegram_persist_readings_enabled()
+        question_text = (flow.user_question or "").strip()
+        if not question_text:
+            try:
+                await loading_message.delete()
+            except TelegramBadRequest:
+                pass
+            reset_flow(user_id)
+            await message.answer(
+                "Не удалось найти вопрос расклада. Начни заново через меню.",
+                reply_markup=main_menu_keyboard(),
+            )
+            await callback.answer()
+            return
+        try:
+            draw = create_draw_from_physical_cards(
+                spread_slug,
+                [
+                    PhysicalDrawCard(
+                        card=CARD_BY_SLUG[card.card_slug],
+                        orientation=card.orientation,
+                    )
+                    for card in flow.physical_cards
+                ],
+            )
+            reading = await asyncio.to_thread(
+                create_reading_from_drawn_cards,
+                draw=draw,
+                user_question=question_text,
+                persist=persist,
+            )
+        except Exception:
+            try:
+                await loading_message.delete()
+            except TelegramBadRequest:
+                pass
+            logger.exception(
+                "Tarot interpretation failed user_id=%s mode=%s spread_slug=%s",
+                user_id,
+                flow.selected_mode,
+                spread_slug,
+            )
+            reset_flow(user_id)
+            await message.answer(
+                "Не получилось подготовить интерпретацию. Похоже, временно недоступна модель "
+                "или соединение. Можно попробовать ещё раз.",
+                reply_markup=menu_button_keyboard(),
+            )
+            await callback.answer()
+            return
+
+        flow.last_reading_id = str(reading.reading_id) if reading.reading_id is not None else None
+        flow.last_drawn_cards = draw
+        saved_reading_id = flow.last_reading_id
+        reset_flow(user_id)
+        if saved_reading_id:
+            get_flow(user_id).last_reading_id = saved_reading_id
+        logger.info(
+            "physical interpretation completed user_id=%s spread_slug=%s count=%s persist=%s",
+            user_id,
+            spread_slug,
+            len(reading.cards),
+            persist,
+        )
+        await _send_auto_draw_reading(message, reading, loading_message=loading_message)
     else:
         flow.current_card_position_index += 1
         flow.awaiting_physical_card_name = True
@@ -549,6 +627,7 @@ async def _handle_question_text(message: Message, text: str) -> None:
         flow.awaiting_physical_orientation = False
         flow.current_card_position_index = 0
         flow.pending_physical_card_name = None
+        flow.pending_physical_card_slug = None
         flow.physical_cards = []
         spread = get_spread(spread_slug)
         await message.answer(PHYSICAL_PREPARATION_TEXT, reply_markup=menu_button_keyboard())
@@ -632,7 +711,16 @@ async def _handle_physical_card_name_text(message: Message, text: str) -> None:
         await message.answer("Расклад уже заполнен. Открой меню заново.", reply_markup=main_menu_keyboard())
         return
 
-    flow.pending_physical_card_name = card_name
+    resolved_card = resolve_card_by_name(card_name)
+    if resolved_card is None:
+        await message.answer(
+            "Не смогла найти такую карту. Попробуй ввести название ещё раз, например: "
+            "Девятка Кубков или The World."
+        )
+        return
+
+    flow.pending_physical_card_name = resolved_card.display_name_ru
+    flow.pending_physical_card_slug = resolved_card.slug
     flow.awaiting_physical_card_name = False
     flow.awaiting_physical_orientation = True
     position = spread.positions[flow.current_card_position_index]
@@ -642,7 +730,7 @@ async def _handle_physical_card_name_text(message: Message, text: str) -> None:
         position.index,
     )
     await message.answer(
-        f"Выбери положение карты:\n\nНазвание карты: {card_name}",
+        f"Выбери положение карты:\n\nНазвание карты: {resolved_card.display_name_ru}",
         reply_markup=physical_orientation_keyboard(),
     )
 
@@ -871,15 +959,6 @@ def _physical_cards_summary_text(cards: list[PhysicalCardEntry]) -> str:
                 f"Положение: {_orientation_text(card.orientation)}",
             ]
         )
-
-    lines.extend(
-        [
-            "",
-            "✨ Готовлю интерпретацию...",
-            "",
-            "Интерпретацию для физической колоды подключим следующим шагом.",
-        ]
-    )
     return "\n".join(lines)
 
 
