@@ -9,8 +9,11 @@ from aiogram.filters import Command, CommandStart
 from aiogram.exceptions import TelegramBadRequest
 from aiogram.types import CallbackQuery, FSInputFile, Message
 
-from app_core.tarot.draw import StructuredSpreadDraw
-from app_core.tarot.reading_service import StructuredReadingResult, create_virtual_reading
+from app_core.tarot.draw import StructuredSpreadDraw, draw_virtual_spread
+from app_core.tarot.reading_service import (
+    StructuredReadingResult,
+    create_reading_from_drawn_cards,
+)
 from app_core.tarot.selection import create_virtual_deck_draft, select_virtual_cards
 from app_core.tarot.spreads import get_spread
 from telegram_bot.card_assets import get_card_image_path
@@ -494,19 +497,26 @@ async def _handle_question_text(message: Message, text: str) -> None:
         return
 
     if mode == "quick_draw":
+        draw = draw_virtual_spread(spread_slug)
+        flow.last_drawn_cards = draw
+        await message.answer(_auto_draw_cards_preview_text(draw))
         loading_message = await message.answer(
-            "✨ Готовлю расклад и интерпретацию…",
+            "✨ Готовлю интерпретацию…",
             reply_markup=menu_button_keyboard(),
         )
         persist = _telegram_persist_readings_enabled()
         try:
             reading = await asyncio.to_thread(
-                create_virtual_reading,
-                spread_slug,
-                text,
+                create_reading_from_drawn_cards,
+                draw=draw,
+                user_question=text,
                 persist=persist,
             )
         except Exception:
+            try:
+                await loading_message.delete()
+            except TelegramBadRequest:
+                pass
             logger.exception(
                 "Tarot interpretation failed user_id=%s mode=%s spread_slug=%s",
                 user_id,
@@ -629,6 +639,23 @@ def _auto_draw_reading_text(reading: StructuredReadingResult) -> str:
     if reading.reading_id is not None:
         lines.extend(["", f"ID расклада: {reading.reading_id}"])
     return "\n".join(lines)
+
+
+def _auto_draw_cards_preview_text(draw: StructuredSpreadDraw) -> str:
+    lines = [
+        "🎴 Вытянутые карты",
+        "",
+    ]
+    for index, drawn in enumerate(draw.drawn_cards, start=1):
+        lines.extend(
+            [
+                f"{index}. {drawn.position.name_ru}",
+                f"Название карты: {drawn.card.display_name_ru}",
+                f"Положение: {_orientation_text(drawn.orientation)}",
+                "",
+            ]
+        )
+    return "\n".join(lines).strip()
 
 
 async def _send_card_images(message: Message, draw: StructuredSpreadDraw, *, user_id: int) -> None:

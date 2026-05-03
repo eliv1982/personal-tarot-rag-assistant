@@ -129,7 +129,7 @@ def build_structured_reading_query(
             ]
         )
 
-        lines.extend(
+    lines.extend(
         [
             "",
             "Дай мягкую символическую интерпретацию этого расклада без фатализма.",
@@ -331,11 +331,23 @@ def create_virtual_reading(
     *,
     persist: bool = True,
 ) -> StructuredReadingResult:
-    spread = get_spread(spread_slug)
     draw = draw_virtual_spread(spread_slug)
+    return create_reading_from_drawn_cards(
+        draw=draw,
+        user_question=user_question,
+        persist=persist,
+    )
+
+
+def create_reading_from_drawn_cards(
+    *,
+    draw: StructuredSpreadDraw,
+    user_question: str,
+    persist: bool = True,
+) -> StructuredReadingResult:
     cards = _cards_from_draw(draw)
     return _create_reading(
-        spread=spread,
+        spread=draw.spread,
         user_question=user_question,
         cards=cards,
         selection_mode="virtual",
