@@ -1,20 +1,25 @@
 from __future__ import annotations
 
+import asyncio
 import logging
+import os
 
 from aiogram import F, Router
 from aiogram.filters import Command, CommandStart
 from aiogram.types import CallbackQuery, FSInputFile, Message
 
-from app_core.tarot.draw import StructuredSpreadDraw, draw_virtual_spread
+from app_core.tarot.draw import StructuredSpreadDraw
+from app_core.tarot.reading_service import StructuredReadingResult, create_virtual_reading
 from app_core.tarot.selection import create_virtual_deck_draft, select_virtual_cards
 from app_core.tarot.spreads import get_spread
 from telegram_bot.card_assets import get_card_image_path
+from telegram_bot.formatting import clean_telegram_text, split_telegram_message
 from telegram_bot.keyboards import (
     get_spread_by_callback_id,
     main_menu_keyboard,
     menu_button_keyboard,
     physical_orientation_keyboard,
+    reading_result_keyboard,
     spread_selection_keyboard,
     virtual_deck_keyboard,
 )
@@ -358,6 +363,11 @@ async def handle_physical_orientation(callback: CallbackQuery) -> None:
     await callback.answer()
 
 
+@router.callback_query(F.data == "reading_follow_up")
+async def handle_reading_follow_up_placeholder(callback: CallbackQuery) -> None:
+    await callback.answer("Уточняющие вопросы подключим следующим шагом.", show_alert=True)
+
+
 @router.callback_query()
 async def handle_unknown_callback(callback: CallbackQuery) -> None:
     logger.warning(
@@ -464,18 +474,47 @@ async def _handle_question_text(message: Message, text: str) -> None:
         return
 
     if mode == "quick_draw":
-        draw = draw_virtual_spread(spread_slug)
-        flow.last_drawn_cards = draw
-        logger.info(
-            "auto draw completed user_id=%s spread_slug=%s count=%s",
-            user_id,
-            spread_slug,
-            len(draw.drawn_cards),
-        )
         await message.answer(
-            _auto_draw_result_text(draw),
+            "✨ Готовлю расклад и интерпретацию…",
             reply_markup=menu_button_keyboard(),
         )
+        persist = _database_url_is_configured()
+        try:
+            reading = await asyncio.to_thread(
+                create_virtual_reading,
+                spread_slug,
+                text,
+                persist=persist,
+            )
+        except Exception:
+            logger.exception(
+                "Tarot interpretation failed user_id=%s mode=%s spread_slug=%s",
+                user_id,
+                mode,
+                spread_slug,
+            )
+            reset_flow(user_id)
+            await message.answer(
+                "Не получилось подготовить интерпретацию. Похоже, временно недоступна модель "
+                "или соединение. Можно попробовать ещё раз.",
+                reply_markup=menu_button_keyboard(),
+            )
+            return
+
+        flow.last_reading_id = str(reading.reading_id) if reading.reading_id is not None else None
+        flow.last_drawn_cards = None
+        saved_reading_id = flow.last_reading_id
+        reset_flow(user_id)
+        if saved_reading_id:
+            get_flow(user_id).last_reading_id = saved_reading_id
+        logger.info(
+            "auto draw interpretation completed user_id=%s spread_slug=%s count=%s persist=%s",
+            user_id,
+            spread_slug,
+            len(reading.cards),
+            persist,
+        )
+        await _send_auto_draw_reading(message, reading)
         return
 
     await message.answer("Этот режим пока недоступен.", reply_markup=menu_button_keyboard())
@@ -546,25 +585,29 @@ def _draw_result_text(draw: StructuredSpreadDraw) -> str:
     return "\n".join(lines)
 
 
-def _auto_draw_result_text(draw: StructuredSpreadDraw) -> str:
+def _auto_draw_reading_text(reading: StructuredReadingResult) -> str:
+    cleaned_answer = clean_telegram_text(reading.answer)
     lines = [
-        "✨ Бот вытянул карты для расклада",
+        "✨ Расклад готов",
         "",
-        f"Расклад: {draw.spread.title_ru}",
-        _spread_description_text(draw.spread.slug, draw.spread.description_ru),
+        f"Расклад: {_telegram_spread_title(reading.spread.slug, reading.spread.title_ru)}",
         "",
         "Карты:",
     ]
 
-    for index, drawn in enumerate(draw.drawn_cards, start=1):
-        lines.append(
-            (
-                f"{index}. {drawn.position.name_ru} — {drawn.card.display_name_ru}, "
-                f"{_orientation_text(drawn.orientation)}"
-            )
+    for index, card in enumerate(reading.cards, start=1):
+        lines.extend(
+            [
+                f"{index}. {card.position_name_ru}",
+                f"Название карты: {card.card_name_ru}",
+                f"Положение: {_orientation_text(card.orientation)}",
+                "",
+            ]
         )
 
-    lines.extend(["", INTERPRETATION_PLACEHOLDER])
+    lines.extend(["Интерпретация:", cleaned_answer])
+    if reading.reading_id is not None:
+        lines.extend(["", f"ID расклада: {reading.reading_id}"])
     return "\n".join(lines)
 
 
@@ -602,6 +645,38 @@ def _spread_description_text(spread_slug: str, fallback: str) -> str:
         ),
     }
     return descriptions.get(spread_slug, fallback)
+
+
+async def _send_auto_draw_reading(message: Message, reading: StructuredReadingResult) -> None:
+    chunks = split_telegram_message(_auto_draw_reading_text(reading))
+    if not chunks:
+        await message.answer(
+            "Не получилось подготовить текст интерпретации.",
+            reply_markup=menu_button_keyboard(),
+        )
+        return
+
+    for index, chunk in enumerate(chunks):
+        reply_markup = None
+        if index == len(chunks) - 1:
+            reply_markup = reading_result_keyboard(has_follow_up=reading.reading_id is not None)
+        await message.answer(chunk, reply_markup=reply_markup)
+
+
+def _telegram_spread_title(spread_slug: str, fallback: str) -> str:
+    labels = {
+        "one_card": "🎯 Одна карта — фокус момента",
+        "three_card_past_present_future": "🕰 Три карты — прошлое / сейчас / возможный вектор",
+        "three_card_situation_obstacle_outcome": "🧭 Три карты — ситуация / препятствие / ориентир",
+        "three_card_relationships": "🤝 Три карты — я / другой / динамика",
+        "three_card_choice": "⚖️ Три карты — вариант A / вариант B / что учесть",
+        "five_card_deep_reading": "🔎 Пять карт — глубокий разбор",
+    }
+    return labels.get(spread_slug, fallback)
+
+
+def _database_url_is_configured() -> bool:
+    return bool((os.getenv("DATABASE_URL") or "").strip())
 
 
 def _orientation_text(orientation: str) -> str:

@@ -64,6 +64,14 @@ def menu_button_keyboard() -> InlineKeyboardMarkup:
     )
 
 
+def reading_result_keyboard(*, has_follow_up: bool) -> InlineKeyboardMarkup:
+    rows: list[list[InlineKeyboardButton]] = []
+    if has_follow_up:
+        rows.append([InlineKeyboardButton(text="💬 Уточнить по раскладу", callback_data="reading_follow_up")])
+    rows.append([InlineKeyboardButton(text="🏠 В меню", callback_data="menu")])
+    return InlineKeyboardMarkup(inline_keyboard=rows)
+
+
 def physical_orientation_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
         inline_keyboard=[
