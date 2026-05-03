@@ -16,12 +16,20 @@ def _presence(value: str | None) -> str:
     return "set" if (value or "").strip() else "missing"
 
 
+def _flag_state(value: str | None) -> str:
+    if value is None or not value.strip():
+        return "missing"
+    if value.strip().lower() in {"1", "true", "yes", "on"}:
+        return "enabled"
+    return "disabled"
+
+
 def log_env_diagnostics() -> None:
     load_dotenv()
     logger.info(
         "Telegram env diagnostics DATABASE_URL=%s OPENAI_API_KEY=%s OPENAI_BASE_URL=%s "
         "OPENAI_MODEL=%s RAG_USE_CACHE=%s RAG_CACHE_DB_PATH=%s LLM_API_KEY=%s "
-        "LLM_BASE_URL=%s RAG_CHAT_MODEL=%s",
+        "LLM_BASE_URL=%s RAG_CHAT_MODEL=%s TELEGRAM_PERSIST_READINGS=%s",
         _presence(os.getenv("DATABASE_URL")),
         _presence(os.getenv("OPENAI_API_KEY")),
         _presence(os.getenv("OPENAI_BASE_URL")),
@@ -31,6 +39,7 @@ def log_env_diagnostics() -> None:
         _presence(os.getenv("LLM_API_KEY")),
         _presence(os.getenv("LLM_BASE_URL")),
         _presence(os.getenv("RAG_CHAT_MODEL")),
+        _flag_state(os.getenv("TELEGRAM_PERSIST_READINGS")),
     )
 
 

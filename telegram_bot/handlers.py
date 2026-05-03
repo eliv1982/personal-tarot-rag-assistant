@@ -498,7 +498,7 @@ async def _handle_question_text(message: Message, text: str) -> None:
             "✨ Готовлю расклад и интерпретацию…",
             reply_markup=menu_button_keyboard(),
         )
-        persist = _database_url_is_configured()
+        persist = _telegram_persist_readings_enabled()
         try:
             reading = await asyncio.to_thread(
                 create_virtual_reading,
@@ -720,6 +720,20 @@ def _telegram_spread_title(spread_slug: str, fallback: str) -> str:
 
 def _database_url_is_configured() -> bool:
     return bool((os.getenv("DATABASE_URL") or "").strip())
+
+
+def _telegram_persist_readings_enabled() -> bool:
+    value = (os.getenv("TELEGRAM_PERSIST_READINGS") or "").strip().lower()
+    if value not in {"1", "true", "yes", "on"}:
+        return False
+
+    if _database_url_is_configured():
+        return True
+
+    logger.warning(
+        "TELEGRAM_PERSIST_READINGS=true but DATABASE_URL is missing; using persist=False"
+    )
+    return False
 
 
 def _orientation_text(orientation: str) -> str:
