@@ -14,6 +14,7 @@ class PhysicalCardEntry:
     position_index: int
     position_name_ru: str
     card_name: str
+    card_slug: str
     orientation: str
 
 
@@ -30,6 +31,7 @@ class PendingFlow:
     awaiting_physical_orientation: bool = False
     current_card_position_index: int = 0
     pending_physical_card_name: Optional[str] = None
+    pending_physical_card_slug: Optional[str] = None
     physical_cards: list[PhysicalCardEntry] = field(default_factory=list)
     virtual_deck_draft: Optional[VirtualDeckDraft] = None
     selected_indices: list[int] = field(default_factory=list)

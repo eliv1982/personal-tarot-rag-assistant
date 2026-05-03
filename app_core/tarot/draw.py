@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import random
 from dataclasses import dataclass
-from typing import List, Literal, Optional
+from typing import List, Literal, Optional, Sequence
 
 from app_core.tarot.deck import TarotCard
 from app_core.tarot.spreads import SpreadDefinition, SpreadPosition
@@ -21,6 +21,12 @@ class DrawnCard:
 class StructuredSpreadDraw:
     spread: SpreadDefinition
     drawn_cards: List[DrawnCard]
+
+
+@dataclass(frozen=True)
+class PhysicalDrawCard:
+    card: TarotCard
+    orientation: Orientation
 
 
 def draw_virtual_spread(spread_slug: str) -> StructuredSpreadDraw:
@@ -49,4 +55,27 @@ def draw_virtual_spread(spread_slug: str) -> StructuredSpreadDraw:
         drawn.append(DrawnCard(position=pos, card=card, orientation=orientation))
 
     return StructuredSpreadDraw(spread=spread, drawn_cards=drawn)
+
+
+def create_draw_from_physical_cards(
+    spread_slug: str,
+    cards: Sequence[PhysicalDrawCard],
+) -> StructuredSpreadDraw:
+    from app_core.tarot.spreads import get_spread
+
+    spread = get_spread(spread_slug)
+    if len(cards) != len(spread.positions):
+        raise ValueError(
+            f"Spread {spread.slug!r} requires {len(spread.positions)} cards, got {len(cards)}."
+        )
+
+    drawn_cards = [
+        DrawnCard(
+            position=position,
+            card=item.card,
+            orientation=item.orientation,
+        )
+        for position, item in zip(spread.positions, cards)
+    ]
+    return StructuredSpreadDraw(spread=spread, drawn_cards=drawn_cards)
 
