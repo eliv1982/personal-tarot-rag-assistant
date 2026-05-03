@@ -259,6 +259,7 @@ async def handle_spread_selection(callback: CallbackQuery) -> None:
     flow.pending_physical_card_name = None
     flow.pending_physical_card_slug = None
     flow.physical_cards = []
+    flow.physical_service_message_ids = []
     logger.info(
         "selected spread user_id=%s spread_slug=%s mode=%s",
         user_id,
@@ -463,8 +464,12 @@ async def handle_physical_orientation(callback: CallbackQuery) -> None:
     if len(flow.physical_cards) >= len(spread.positions):
         logger.info("physical cards completed user_id=%s count=%s", user_id, len(flow.physical_cards))
         summary = _physical_cards_summary_text(flow.physical_cards)
-        await message.edit_text(
-            f"{accepted_text}\n\n{summary}",
+        await message.edit_text(summary)
+        await _cleanup_physical_service_messages(
+            message,
+            flow=flow,
+            keep_message_ids={message.message_id},
+            user_id=user_id,
         )
         loading_message = await message.answer(
             "✨ Готовлю интерпретацию…",
@@ -539,7 +544,8 @@ async def handle_physical_orientation(callback: CallbackQuery) -> None:
         flow.current_card_position_index += 1
         flow.awaiting_physical_card_name = True
         await message.edit_text(accepted_text)
-        await message.answer(_physical_card_prompt(spread, flow.current_card_position_index))
+        next_prompt_message = await message.answer(_physical_card_prompt(spread, flow.current_card_position_index))
+        _track_physical_service_message(flow, next_prompt_message)
 
     await callback.answer()
 
@@ -708,9 +714,15 @@ async def _handle_question_text(message: Message, text: str) -> None:
         flow.pending_physical_card_name = None
         flow.pending_physical_card_slug = None
         flow.physical_cards = []
+        flow.physical_service_message_ids = []
         spread = get_spread(spread_slug)
-        await message.answer(PHYSICAL_PREPARATION_TEXT, reply_markup=menu_button_keyboard())
-        await message.answer(_physical_card_prompt(spread, 0))
+        preparation_message = await message.answer(
+            PHYSICAL_PREPARATION_TEXT,
+            reply_markup=menu_button_keyboard(),
+        )
+        _track_physical_service_message(flow, preparation_message)
+        prompt_message = await message.answer(_physical_card_prompt(spread, 0))
+        _track_physical_service_message(flow, prompt_message)
         return
 
     if mode == "quick_draw":
@@ -808,10 +820,11 @@ async def _handle_physical_card_name_text(message: Message, text: str) -> None:
         user_id,
         position.index,
     )
-    await message.answer(
+    orientation_message = await message.answer(
         f"Выбери положение карты:\n\nНазвание карты: {resolved_card.display_name_ru}",
         reply_markup=physical_orientation_keyboard(),
     )
+    _track_physical_service_message(flow, orientation_message)
 
 
 def _mode_from_callback_id(mode_callback_id: str):
@@ -865,8 +878,6 @@ def _auto_draw_reading_text(reading: StructuredReadingResult) -> str:
         )
 
     lines.extend(["Интерпретация:", cleaned_answer])
-    if reading.reading_id is not None:
-        lines.extend(["", f"ID расклада: {reading.reading_id}"])
     return "\n".join(lines)
 
 
@@ -1031,7 +1042,7 @@ def _physical_card_accepted_text(
 
 
 def _physical_cards_summary_text(cards: list[PhysicalCardEntry]) -> str:
-    lines = ["Карты внесены:"]
+    lines = ["✅ Карты внесены"]
     for index, card in enumerate(cards, start=1):
         lines.extend(
             [
@@ -1042,6 +1053,37 @@ def _physical_cards_summary_text(cards: list[PhysicalCardEntry]) -> str:
             ]
         )
     return "\n".join(lines)
+
+
+def _track_physical_service_message(flow, message: Message | None) -> None:
+    if message is None:
+        return
+    if message.message_id not in flow.physical_service_message_ids:
+        flow.physical_service_message_ids.append(message.message_id)
+
+
+async def _cleanup_physical_service_messages(
+    message: Message,
+    *,
+    flow,
+    keep_message_ids: set[int],
+    user_id: int,
+) -> None:
+    message_ids = list(flow.physical_service_message_ids)
+    flow.physical_service_message_ids = [
+        message_id for message_id in message_ids if message_id in keep_message_ids
+    ]
+    for message_id in message_ids:
+        if message_id in keep_message_ids:
+            continue
+        try:
+            await message.bot.delete_message(chat_id=message.chat.id, message_id=message_id)
+        except TelegramBadRequest:
+            logger.info(
+                "physical service message cleanup skipped user_id=%s message_id=%s",
+                user_id,
+                message_id,
+            )
 
 
 async def _editable_message_or_answer(

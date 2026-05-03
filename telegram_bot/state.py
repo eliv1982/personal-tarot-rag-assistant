@@ -36,6 +36,7 @@ class PendingFlow:
     pending_physical_card_name: Optional[str] = None
     pending_physical_card_slug: Optional[str] = None
     physical_cards: list[PhysicalCardEntry] = field(default_factory=list)
+    physical_service_message_ids: list[int] = field(default_factory=list)
     virtual_deck_draft: Optional[VirtualDeckDraft] = None
     selected_indices: list[int] = field(default_factory=list)
     last_drawn_cards: Optional[StructuredSpreadDraw] = None
