@@ -17,7 +17,9 @@ from app_core.tarot.draw import (
     draw_virtual_spread,
 )
 from app_core.tarot.reading_service import (
+    FollowUpReadingResult,
     StructuredReadingResult,
+    answer_follow_up,
     create_reading_from_drawn_cards,
 )
 from app_core.tarot.selection import (
@@ -27,12 +29,15 @@ from app_core.tarot.selection import (
 from app_core.tarot.spreads import get_spread
 from telegram_bot.card_assets import get_card_image_path
 from telegram_bot.formatting import (
+    build_follow_up_question_confirmation,
     build_question_confirmation,
     clean_telegram_text,
     format_telegram_section_headings,
     split_telegram_message,
 )
 from telegram_bot.keyboards import (
+    follow_up_result_keyboard,
+    follow_up_retry_keyboard,
     get_spread_by_callback_id,
     get_mode_display_label,
     get_spread_display_label,
@@ -57,8 +62,6 @@ START_TEXT = (
     "✨ Автовыбор карт — бот сам вытягивает карты для выбранного расклада."
 )
 
-INTERPRETATION_PLACEHOLDER = "Интерпретацию подключим следующим шагом."
-
 QUESTION_PROMPT = (
     "Напиши вопрос или тему для расклада.\n\n"
     "Лучше формулировать про себя, своё состояние, выбор или следующий бережный шаг.\n\n"
@@ -75,6 +78,23 @@ PHYSICAL_PREPARATION_TEXT = (
     "чтобы он был про тебя, твоё состояние, выбор или следующий бережный шаг.\n\n"
     "Перемешай колоду привычным способом и вытяни карты по позициям расклада.\n\n"
     "Я буду просить вводить карты по одной."
+)
+
+FOLLOW_UP_PROMPT = (
+    "💬 Напиши уточняющий вопрос по этому раскладу.\n\n"
+    "Например:\n"
+    "— Что здесь главное для моего следующего шага?\n"
+    "— На что мне стоит обратить внимание в этой карте?\n"
+    "— Как мягче пройти через эту ситуацию?"
+)
+
+FOLLOW_UP_QUESTION_GENTLE_STEP = (
+    "Какой следующий бережный шаг можно увидеть в этом раскладе? "
+    "Ответь кратко, практично и без фатализма."
+)
+
+FOLLOW_UP_QUESTION_MAIN = (
+    "Что самое главное в этом раскладе? Сформулируй кратко, без повторения всей интерпретации."
 )
 
 
@@ -225,6 +245,9 @@ async def handle_spread_selection(callback: CallbackQuery) -> None:
     flow.selected_spread_slug = spread.slug
     flow.user_question = None
     flow.awaiting_question = True
+    flow.awaiting_follow_up_question = False
+    flow.follow_up_reading_id = None
+    flow.follow_up_prompt_message_id = None
     flow.awaiting_virtual_selection = False
     flow.awaiting_physical_card_name = False
     flow.awaiting_physical_orientation = False
@@ -521,9 +544,61 @@ async def handle_physical_orientation(callback: CallbackQuery) -> None:
     await callback.answer()
 
 
-@router.callback_query(F.data == "reading_follow_up")
-async def handle_reading_follow_up_placeholder(callback: CallbackQuery) -> None:
-    await callback.answer("Уточняющие вопросы подключим следующим шагом.", show_alert=True)
+@router.callback_query(F.data.startswith("fup:"))
+async def handle_reading_follow_up(callback: CallbackQuery) -> None:
+    user_id = callback.from_user.id
+    message = await _editable_message_or_answer(callback, text="Не смогла найти это сообщение.")
+    if message is None:
+        return
+
+    parts = (callback.data or "").split(":", maxsplit=2)
+    if len(parts) != 3:
+        await callback.answer("Не удалось распознать уточнение.", show_alert=True)
+        return
+
+    _, action, reading_id = parts
+    if not reading_id.strip():
+        await callback.answer("Не смогла найти этот расклад.", show_alert=True)
+        return
+
+    flow = get_flow(user_id)
+    flow.last_reading_id = reading_id
+
+    if action == "ask":
+        _clear_follow_up_state(flow)
+        flow.awaiting_follow_up_question = True
+        flow.follow_up_reading_id = reading_id
+        try:
+            await message.edit_reply_markup(reply_markup=None)
+        except TelegramBadRequest:
+            pass
+        prompt_message = await message.answer(
+            FOLLOW_UP_PROMPT,
+            reply_markup=menu_button_keyboard(),
+        )
+        flow.follow_up_prompt_message_id = prompt_message.message_id
+        await callback.answer()
+        return
+
+    if action == "step":
+        await _start_preset_follow_up(
+            callback,
+            message=message,
+            reading_id=reading_id,
+            question=FOLLOW_UP_QUESTION_GENTLE_STEP,
+        )
+        return
+
+    if action == "main":
+        await _start_preset_follow_up(
+            callback,
+            message=message,
+            reading_id=reading_id,
+            question=FOLLOW_UP_QUESTION_MAIN,
+        )
+        return
+
+    await callback.answer("Не удалось распознать уточнение.", show_alert=True)
 
 
 @router.callback_query()
@@ -548,6 +623,10 @@ async def handle_text_message(message: Message) -> None:
 
     if flow.awaiting_question:
         await _handle_question_text(message, text)
+        return
+
+    if flow.awaiting_follow_up_question:
+        await _handle_follow_up_question_text(message, text)
         return
 
     if flow.awaiting_physical_card_name:
@@ -758,7 +837,6 @@ def _draw_result_text(draw: StructuredSpreadDraw) -> str:
             )
         )
 
-    lines.extend(["", INTERPRETATION_PLACEHOLDER])
     return "\n".join(lines)
 
 
@@ -868,7 +946,9 @@ async def _send_auto_draw_reading(
         try:
             await loading_message.edit_text(
                 chunks[0],
-                reply_markup=reading_result_keyboard(has_follow_up=reading.reading_id is not None),
+                reply_markup=reading_result_keyboard(
+                    reading_id=str(reading.reading_id) if reading.reading_id is not None else None
+                ),
                 parse_mode="HTML",
             )
             return
@@ -884,7 +964,9 @@ async def _send_auto_draw_reading(
     for index, chunk in enumerate(chunks):
         reply_markup = None
         if index == len(chunks) - 1:
-            reply_markup = reading_result_keyboard(has_follow_up=reading.reading_id is not None)
+            reply_markup = reading_result_keyboard(
+                reading_id=str(reading.reading_id) if reading.reading_id is not None else None
+            )
         await message.answer(chunk, reply_markup=reply_markup, parse_mode="HTML")
 
 
@@ -1011,3 +1093,188 @@ async def _confirm_question_prompt(message: Message, flow, question_text: str) -
             pass
 
     await message.answer(confirmation)
+
+
+async def _handle_follow_up_question_text(message: Message, text: str) -> None:
+    user_id = message.from_user.id
+    flow = get_flow(user_id)
+    reading_id = (flow.follow_up_reading_id or "").strip()
+    if not text:
+        await message.answer("Напиши уточняющий вопрос одним сообщением.")
+        return
+    if not reading_id:
+        _clear_follow_up_state(flow)
+        await message.answer(
+            "Не смогла найти этот расклад. Вернись в меню и сделай новый расклад.",
+            reply_markup=menu_button_keyboard(),
+        )
+        return
+
+    flow.awaiting_follow_up_question = False
+    await _confirm_follow_up_prompt(message, flow, text)
+    loading_message = await message.answer(
+        "✨ Готовлю уточнение...",
+        reply_markup=menu_button_keyboard(),
+    )
+    try:
+        result = await asyncio.to_thread(answer_follow_up, reading_id, text)
+    except Exception as exc:
+        await _handle_follow_up_error(
+            message,
+            flow=flow,
+            loading_message=loading_message,
+            reading_id=reading_id,
+            user_id=user_id,
+            exc=exc,
+        )
+        return
+
+    flow.last_reading_id = reading_id
+    flow.follow_up_reading_id = reading_id
+    logger.info("follow-up completed user_id=%s reading_id=%s", user_id, reading_id)
+    await _send_follow_up_result(message, result, loading_message=loading_message)
+
+
+async def _start_preset_follow_up(
+    callback: CallbackQuery,
+    *,
+    message: Message,
+    reading_id: str,
+    question: str,
+) -> None:
+    user_id = callback.from_user.id
+    flow = get_flow(user_id)
+    _clear_follow_up_state(flow)
+    flow.last_reading_id = reading_id
+    flow.follow_up_reading_id = reading_id
+    try:
+        await message.edit_reply_markup(reply_markup=None)
+    except TelegramBadRequest:
+        pass
+    loading_message = await message.answer(
+        "✨ Готовлю уточнение...",
+        reply_markup=menu_button_keyboard(),
+    )
+    try:
+        result = await asyncio.to_thread(answer_follow_up, reading_id, question)
+    except Exception as exc:
+        await _handle_follow_up_error(
+            message,
+            flow=flow,
+            loading_message=loading_message,
+            reading_id=reading_id,
+            user_id=user_id,
+            exc=exc,
+        )
+        await callback.answer()
+        return
+
+    logger.info("preset follow-up completed user_id=%s reading_id=%s", user_id, reading_id)
+    await _send_follow_up_result(message, result, loading_message=loading_message)
+    await callback.answer()
+
+
+async def _handle_follow_up_error(
+    message: Message,
+    *,
+    flow,
+    loading_message: Message,
+    reading_id: str,
+    user_id: int,
+    exc: Exception,
+) -> None:
+    try:
+        await loading_message.delete()
+    except TelegramBadRequest:
+        pass
+
+    flow.awaiting_follow_up_question = False
+    flow.follow_up_prompt_message_id = None
+
+    if isinstance(exc, ValueError) and "Reading session not found" in str(exc):
+        _clear_follow_up_state(flow)
+        await message.answer(
+            "Не смогла найти этот расклад. Вернись в меню и сделай новый расклад.",
+            reply_markup=menu_button_keyboard(),
+        )
+        return
+
+    logger.exception(
+        "Tarot follow-up failed user_id=%s reading_id=%s",
+        user_id,
+        reading_id,
+    )
+    flow.follow_up_reading_id = reading_id
+    await message.answer(
+        "Не получилось подготовить уточнение. Можно попробовать ещё раз.",
+        reply_markup=follow_up_retry_keyboard(reading_id),
+    )
+
+
+async def _send_follow_up_result(
+    message: Message,
+    result: FollowUpReadingResult,
+    *,
+    loading_message: Message | None = None,
+) -> None:
+    formatted_text = format_telegram_section_headings(_follow_up_result_text(result))
+    chunks = split_telegram_message(formatted_text)
+    if not chunks:
+        await message.answer(
+            "Не получилось подготовить текст уточнения.",
+            reply_markup=menu_button_keyboard(),
+        )
+        return
+
+    if loading_message is not None and len(chunks) == 1:
+        try:
+            await loading_message.edit_text(
+                chunks[0],
+                reply_markup=follow_up_result_keyboard(str(result.reading_id)),
+                parse_mode="HTML",
+            )
+            return
+        except TelegramBadRequest:
+            pass
+
+    if loading_message is not None:
+        try:
+            await loading_message.delete()
+        except TelegramBadRequest:
+            pass
+
+    for index, chunk in enumerate(chunks):
+        reply_markup = None
+        if index == len(chunks) - 1:
+            reply_markup = follow_up_result_keyboard(str(result.reading_id))
+        await message.answer(chunk, reply_markup=reply_markup, parse_mode="HTML")
+
+
+def _follow_up_result_text(result: FollowUpReadingResult) -> str:
+    cleaned_answer = clean_telegram_text(result.answer)
+    return "\n".join(["💬 Уточнение по раскладу", "", cleaned_answer])
+
+
+async def _confirm_follow_up_prompt(message: Message, flow, question_text: str) -> None:
+    confirmation = build_follow_up_question_confirmation(question_text)
+    prompt_message_id = flow.follow_up_prompt_message_id
+    flow.follow_up_prompt_message_id = None
+
+    if prompt_message_id is not None:
+        try:
+            await message.bot.edit_message_text(
+                confirmation,
+                chat_id=message.chat.id,
+                message_id=prompt_message_id,
+            )
+            return
+        except TelegramBadRequest:
+            pass
+
+    await message.answer(confirmation)
+
+
+def _clear_follow_up_state(flow) -> None:
+    flow.awaiting_follow_up_question = False
+    flow.follow_up_reading_id = None
+    flow.follow_up_prompt_message_id = None

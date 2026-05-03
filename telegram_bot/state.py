@@ -26,6 +26,9 @@ class PendingFlow:
     question_received: bool = False
     awaiting_question: bool = False
     question_prompt_message_id: Optional[int] = None
+    awaiting_follow_up_question: bool = False
+    follow_up_reading_id: Optional[str] = None
+    follow_up_prompt_message_id: Optional[int] = None
     awaiting_virtual_selection: bool = False
     awaiting_physical_card_name: bool = False
     awaiting_physical_orientation: bool = False

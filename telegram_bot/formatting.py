@@ -94,10 +94,18 @@ def format_telegram_section_headings(text: str) -> str:
 
 
 def build_question_confirmation(text: str, limit: int = 300) -> str:
+    return build_prefixed_confirmation("✅ Задан вопрос/тема", text, limit=limit)
+
+
+def build_follow_up_question_confirmation(text: str, limit: int = 300) -> str:
+    return build_prefixed_confirmation("✅ Задан уточняющий вопрос", text, limit=limit)
+
+
+def build_prefixed_confirmation(prefix: str, text: str, limit: int = 300) -> str:
     normalized = " ".join((text or "").strip().split())
     if len(normalized) > limit:
         normalized = normalized[:limit].rstrip() + "…"
-    return f"✅ Задан вопрос/тема: {normalized}"
+    return f"{prefix}: {normalized}"
 
 
 def _remove_trailing_invitation(text: str) -> str:

@@ -70,12 +70,27 @@ def menu_button_keyboard() -> InlineKeyboardMarkup:
     )
 
 
-def reading_result_keyboard(*, has_follow_up: bool) -> InlineKeyboardMarkup:
-    rows: list[list[InlineKeyboardButton]] = []
-    if has_follow_up:
-        rows.append([InlineKeyboardButton(text="💬 Уточнить по раскладу", callback_data="reading_follow_up")])
-    rows.append([InlineKeyboardButton(text="🏠 В меню", callback_data="menu")])
-    return InlineKeyboardMarkup(inline_keyboard=rows)
+def reading_result_keyboard(*, reading_id: str | None) -> InlineKeyboardMarkup:
+    if not reading_id:
+        return menu_button_keyboard()
+    return reading_result_follow_up_keyboard(reading_id)
+
+
+def reading_result_follow_up_keyboard(reading_id: str) -> InlineKeyboardMarkup:
+    return _follow_up_keyboard(reading_id, ask_label="💬 Задать свой вопрос")
+
+
+def follow_up_result_keyboard(reading_id: str) -> InlineKeyboardMarkup:
+    return _follow_up_keyboard(reading_id, ask_label="💬 Задать ещё вопрос")
+
+
+def follow_up_retry_keyboard(reading_id: str) -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text="💬 Задать свой вопрос", callback_data=f"fup:ask:{reading_id}")],
+            [InlineKeyboardButton(text="🏠 В меню", callback_data="menu")],
+        ]
+    )
 
 
 def physical_orientation_keyboard() -> InlineKeyboardMarkup:
@@ -148,6 +163,17 @@ def get_mode_display_label(mode: str) -> str:
 def get_spread_display_label(spread_slug: str) -> str:
     spread = get_spread(spread_slug)
     return TELEGRAM_SPREAD_LABELS.get(spread.slug, spread.title_ru)
+
+
+def _follow_up_keyboard(reading_id: str, *, ask_label: str) -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text=ask_label, callback_data=f"fup:ask:{reading_id}")],
+            [InlineKeyboardButton(text="🧭 Следующий бережный шаг", callback_data=f"fup:step:{reading_id}")],
+            [InlineKeyboardButton(text="🔎 Что здесь главное?", callback_data=f"fup:main:{reading_id}")],
+            [InlineKeyboardButton(text="🏠 В меню", callback_data="menu")],
+        ]
+    )
 
 
 def _mvp_spreads() -> list[SpreadDefinition]:
