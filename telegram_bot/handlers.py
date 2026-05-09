@@ -11,6 +11,7 @@ from aiogram.types import CallbackQuery, FSInputFile, Message
 
 from app_core.tarot.deck import CARD_BY_SLUG, resolve_card_by_name
 from app_core.tarot.draw import (
+    DrawnCard,
     PhysicalDrawCard,
     StructuredSpreadDraw,
     create_draw_from_physical_cards,
@@ -27,7 +28,7 @@ from app_core.tarot.selection import (
     create_virtual_deck_draft,
 )
 from app_core.tarot.spreads import get_spread
-from telegram_bot.card_assets import get_card_image_path
+from telegram_bot.card_assets import get_oriented_card_image_path
 from telegram_bot.formatting import (
     build_follow_up_question_confirmation,
     build_question_confirmation,
@@ -471,17 +472,9 @@ async def handle_physical_orientation(callback: CallbackQuery) -> None:
             keep_message_ids={message.message_id},
             user_id=user_id,
         )
-        loading_message = await message.answer(
-            "✨ Готовлю интерпретацию…",
-            reply_markup=menu_button_keyboard(),
-        )
         persist = _telegram_persist_readings_enabled()
         question_text = (flow.user_question or "").strip()
         if not question_text:
-            try:
-                await loading_message.delete()
-            except TelegramBadRequest:
-                pass
             reset_flow(user_id)
             await message.answer(
                 "Не удалось найти вопрос расклада. Начни заново через меню.",
@@ -489,6 +482,7 @@ async def handle_physical_orientation(callback: CallbackQuery) -> None:
             )
             await callback.answer()
             return
+        loading_message = None
         try:
             draw = create_draw_from_physical_cards(
                 spread_slug,
@@ -500,6 +494,11 @@ async def handle_physical_orientation(callback: CallbackQuery) -> None:
                     for card in flow.physical_cards
                 ],
             )
+            await _send_card_images(message, draw, user_id=user_id)
+            loading_message = await message.answer(
+                "✨ Готовлю интерпретацию…",
+                reply_markup=menu_button_keyboard(),
+            )
             reading = await asyncio.to_thread(
                 create_reading_from_drawn_cards,
                 draw=draw,
@@ -507,10 +506,11 @@ async def handle_physical_orientation(callback: CallbackQuery) -> None:
                 persist=persist,
             )
         except Exception:
-            try:
-                await loading_message.delete()
-            except TelegramBadRequest:
-                pass
+            if loading_message is not None:
+                try:
+                    await loading_message.delete()
+                except TelegramBadRequest:
+                    pass
             logger.exception(
                 "Tarot interpretation failed user_id=%s mode=%s spread_slug=%s",
                 user_id,
@@ -729,6 +729,7 @@ async def _handle_question_text(message: Message, text: str) -> None:
         draw = draw_virtual_spread(spread_slug)
         flow.last_drawn_cards = draw
         await message.answer(_auto_draw_cards_preview_text(draw))
+        await _send_card_images(message, draw, user_id=user_id)
         loading_message = await message.answer(
             "✨ Готовлю интерпретацию…",
             reply_markup=menu_button_keyboard(),
@@ -904,17 +905,24 @@ def _cards_preview_text(title: str, draw: StructuredSpreadDraw) -> str:
 
 async def _send_card_images(message: Message, draw: StructuredSpreadDraw, *, user_id: int) -> None:
     for drawn in draw.drawn_cards:
-        image_path = get_card_image_path(drawn.card.slug)
+        image_path = get_oriented_card_image_path(drawn.card.slug, drawn.orientation)
         if image_path is None:
             logger.info("card image asset missing user_id=%s slug=%s", user_id, drawn.card.slug)
             continue
 
-        caption = (
-            f"{drawn.position.name_ru} — {drawn.card.display_name_ru} — "
-            f"{_orientation_text(drawn.orientation)}"
-        )
+        caption = _card_image_caption(drawn)
         await message.answer_photo(FSInputFile(image_path), caption=caption)
         logger.info("card image sent user_id=%s slug=%s", user_id, drawn.card.slug)
+
+
+def _card_image_caption(drawn: DrawnCard) -> str:
+    return "\n".join(
+        [
+            drawn.position.name_ru,
+            f"Название карты: {drawn.card.display_name_ru}",
+            f"Положение: {_orientation_text(drawn.orientation)}",
+        ]
+    )
 
 
 def _spread_description_text(spread_slug: str, fallback: str) -> str:
