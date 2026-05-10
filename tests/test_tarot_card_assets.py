@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from app_core.tarot.deck import list_cards
-from telegram_bot.card_assets import CARD_IMAGE_EXTENSIONS, CARD_IMAGE_PATHS
+from telegram_bot.card_assets import CARD_IMAGE_EXTENSIONS, CARD_IMAGE_PATHS, get_card_back_image_path
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -29,3 +29,7 @@ def test_card_assets_directory_is_primary_lookup_path() -> None:
 
 def test_virtual_deck_card_back_asset_exists() -> None:
     assert CARD_BACK_PATH.is_file()
+
+
+def test_card_back_asset_resolver_returns_expected_path() -> None:
+    assert get_card_back_image_path() == CARD_BACK_PATH

@@ -19,6 +19,8 @@ CARD_IMAGE_PATHS = (
 )
 
 CARD_IMAGE_EXTENSIONS = (".png", ".jpg", ".jpeg", ".webp")
+CARD_BACKS_DIR = PROJECT_ROOT / "assets" / "tarot" / "card_backs"
+DEFAULT_CARD_BACK_ASSET_NAME = "solar_arcana_seal.png"
 REVERSED_CARD_IMAGE_CACHE_DIR = (
     PROJECT_ROOT / "runtime" / "tarot_card_images" / "reversed"
 )
@@ -44,6 +46,13 @@ def get_oriented_card_image_path(card_slug: str, orientation: str) -> Optional[P
     if (orientation or "").strip() != "reversed":
         return source_path
     return _get_reversed_card_image_path(source_path)
+
+
+def get_card_back_image_path(asset_name: str = DEFAULT_CARD_BACK_ASSET_NAME) -> Optional[Path]:
+    candidate = CARD_BACKS_DIR / (asset_name or "").strip()
+    if candidate.is_file():
+        return candidate
+    return None
 
 
 def _get_reversed_card_image_path(source_path: Path) -> Path:

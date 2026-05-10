@@ -28,7 +28,7 @@ from app_core.tarot.selection import (
     create_virtual_deck_draft,
 )
 from app_core.tarot.spreads import get_spread
-from telegram_bot.card_assets import get_oriented_card_image_path
+from telegram_bot.card_assets import get_card_back_image_path, get_oriented_card_image_path
 from telegram_bot.formatting import (
     build_follow_up_question_confirmation,
     build_question_confirmation,
@@ -697,8 +697,14 @@ async def _handle_question_text(message: Message, text: str) -> None:
         flow.awaiting_virtual_selection = True
         flow.virtual_deck_draft = create_virtual_deck_draft(spread_slug)
         flow.selected_indices = []
+        card_back_path = get_card_back_image_path()
+        if card_back_path is not None:
+            await message.answer_photo(
+                FSInputFile(card_back_path),
+            )
         await message.answer(
-            _virtual_selection_text(spread_slug, 0),
+            "▥ Виртуальная колода готова. Выбери карты интуитивно и не спеша.\n\n"
+            f"{_virtual_selection_text(spread_slug, 0)}",
             reply_markup=virtual_deck_keyboard(
                 [],
                 card_count=len(flow.virtual_deck_draft.cards),
