@@ -12,7 +12,19 @@
 ## Spreads
 - benebell_spread_practice.pdf
   - source: Benebell Wen
-  - role: spread reference
+  - role: spread reference (background reading only)
+  - status: not used by ingestion/runtime; PDF removed from the tracked tree
+    (third-party copyrighted content) on 2026-09-28. Bibliographic reference
+    kept here only; the file itself is not distributed with this repository.
+
+- taro_bolshaya_kniga_raskladov.pdf
+  - source: Russian-language tarot spreads reference (title translates to
+    "Tarot: The Big Book of Spreads"); exact author/publisher not verified
+  - role: spread reference (background reading only)
+  - status: not used by ingestion/runtime; PDF removed from the tracked tree
+    (third-party copyrighted content, unverified license) on 2026-09-28.
+    Bibliographic reference kept here only; the file itself is not
+    distributed with this repository.
 
 ## Architecture references
 - tarot-api-notes.md

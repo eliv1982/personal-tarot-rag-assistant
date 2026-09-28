@@ -1,3 +1,5 @@
+import logging
+import threading
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -7,15 +9,20 @@ from fastapi.templating import Jinja2Templates
 
 from rag_pipeline import RAGPipeline
 
+logger = logging.getLogger(__name__)
+
 router = APIRouter()
 templates = Jinja2Templates(directory=str(Path(__file__).resolve().parent / "templates"))
 _pipeline: Optional[RAGPipeline] = None
+_pipeline_lock = threading.Lock()
 
 
 def _get_pipeline() -> RAGPipeline:
     global _pipeline
     if _pipeline is None:
-        _pipeline = RAGPipeline()
+        with _pipeline_lock:
+            if _pipeline is None:
+                _pipeline = RAGPipeline()
     return _pipeline
 
 
@@ -71,6 +78,7 @@ def ask(
             model = result.get("model", "")
             cached_at = result.get("cached_at", "")
         except Exception as exc:  # noqa: BLE001 - route-level safe message handling
+            logger.exception("RAG query failed for question=%r", normalized_question)
             error = "Не получилось получить интерпретацию. Попробуй ещё раз."
             if debug_enabled:
                 technical_error = f"{exc.__class__.__name__}: {exc}"

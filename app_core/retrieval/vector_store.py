@@ -85,6 +85,13 @@ _MAJOR_SLUG_TO_SOURCE_FILE = {
     "the_world": "21_the_world.md",
 }
 
+# Hard safety cap for a single "card" chunk (source_kind == "card"). Card
+# documents are indexed as one semantic chunk each so Light/Shadow meanings
+# stay together; this bounds how large that single chunk may grow (current
+# card files top out around ~2000 chars). Independent from RAG_CHUNK_SIZE,
+# which governs generic (non-card) chunking.
+CARD_CHUNK_HARD_LIMIT = 6000
+
 
 class VectorStore:
     """Векторное хранилище на основе ChromaDB."""
@@ -117,6 +124,9 @@ class VectorStore:
         self.chunk_size = int(os.getenv("RAG_CHUNK_SIZE", "800"))
         self.chunk_overlap = int(os.getenv("RAG_CHUNK_OVERLAP", "200"))
         self.min_chunk_len = int(os.getenv("RAG_MIN_CHUNK_LEN", "80"))
+
+        max_distance_raw = (os.getenv("RAG_MAX_DISTANCE") or "").strip()
+        self.max_distance: Optional[float] = float(max_distance_raw) if max_distance_raw else None
 
     def _split_sentences(self, text: str) -> List[str]:
         try:
@@ -249,15 +259,18 @@ class VectorStore:
 
         return chunks
 
-    def _enforce_hard_chunk_limit(
-        self, rows: List[Tuple[str, Dict[str, str]]], max_len: int, overlap: int
-    ) -> List[Tuple[str, Dict[str, str]]]:
-        if max_len <= 0:
-            return rows
+    def _max_len_for_row(self, meta: Dict[str, str]) -> int:
+        if meta.get("source_kind") == "card":
+            return max(self.chunk_size, CARD_CHUNK_HARD_LIMIT)
+        return self.chunk_size
 
+    def _enforce_hard_chunk_limit(
+        self, rows: List[Tuple[str, Dict[str, str]]], overlap: int
+    ) -> List[Tuple[str, Dict[str, str]]]:
         out: List[Tuple[str, Dict[str, str]]] = []
         for doc_text, meta in rows:
-            if len(doc_text) <= max_len:
+            max_len = self._max_len_for_row(meta)
+            if max_len <= 0 or len(doc_text) <= max_len:
                 out.append((doc_text, meta))
                 continue
 
@@ -413,6 +426,22 @@ class VectorStore:
                 (self._section_heading(section), section)
                 for section in self._split_statute_sections(text)
             ]
+        elif source_kind == "card":
+            # A card document is indexed as a single semantic chunk so that
+            # Light/Shadow and other sections of the same card stay together.
+            # The hard safety cap below (not RAG_CHUNK_SIZE) still applies to
+            # oversized files via _enforce_hard_chunk_limit in load_corpus().
+            stripped_text = text.strip()
+            heading = self._extract_markdown_title(text) or "Document"
+            if stripped_text and len(stripped_text) >= self.min_chunk_len:
+                meta = {
+                    **base_meta,
+                    "section_heading": heading,
+                    "section": heading,
+                    "subchunk_index": "",
+                }
+                return [(stripped_text, meta)]
+            return []
         elif is_tarot:
             sections_with_titles = self._split_markdown_sections(text)
         else:
@@ -522,9 +551,7 @@ class VectorStore:
             f"total={before_total} max_len={before_max_len}"
         )
 
-        all_rows = self._enforce_hard_chunk_limit(
-            all_rows, max_len=self.chunk_size, overlap=self.chunk_overlap
-        )
+        all_rows = self._enforce_hard_chunk_limit(all_rows, overlap=self.chunk_overlap)
 
         if not all_rows:
             raise ValueError("Корпус пуст после hard-limit pass")
@@ -738,6 +765,25 @@ class VectorStore:
                 exact_counts[matched_slug] = exact_counts.get(matched_slug, 0) + 1
         return selected
 
+    @staticmethod
+    def _filter_by_max_distance(
+        documents: List[Dict[str, Any]], max_distance: Optional[float]
+    ) -> List[Dict[str, Any]]:
+        """
+        Drop candidates whose cosine distance exceeds max_distance.
+
+        Documents with distance=None (e.g. exact-slug backfill hits fetched
+        by metadata rather than similarity) are not evaluated against the
+        threshold and always pass through.
+        """
+        if max_distance is None:
+            return documents
+        return [
+            doc
+            for doc in documents
+            if doc.get("distance") is None or doc["distance"] <= max_distance
+        ]
+
     def search(self, query: str, top_k: int = 5) -> List[Dict[str, Any]]:
         query_embedding = self._create_embedding(query)
         detected_slugs = self._detect_tarot_card_slugs(query)
@@ -762,6 +808,7 @@ class VectorStore:
                         "metadata": meta,
                     }
                 )
+        documents = self._filter_by_max_distance(documents, self.max_distance)
         if detected_slugs:
             documents = self._rerank_with_exact_card_match(documents, detected_slugs)
             found_slugs = {

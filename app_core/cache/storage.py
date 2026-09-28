@@ -9,9 +9,10 @@ import os
 import re
 import sqlite3
 import unicodedata
+from contextlib import contextmanager
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Iterator, Optional
 
 from dotenv import load_dotenv
 
@@ -58,23 +59,31 @@ class RAGCache:
             db_parent.mkdir(parents=True, exist_ok=True)
         self._init_db()
 
+    @contextmanager
+    def _connection(self) -> Iterator[sqlite3.Connection]:
+        """Yield a SQLite connection that is always closed, even on error."""
+        conn = sqlite3.connect(self.db_path)
+        try:
+            yield conn
+        finally:
+            conn.close()
+
     def _init_db(self):
         """Создание таблицы кеша, если она не существует."""
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
+        with self._connection() as conn:
+            cursor = conn.cursor()
 
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS cache (
-                query_hash TEXT PRIMARY KEY,
-                query TEXT NOT NULL,
-                answer TEXT NOT NULL,
-                context TEXT,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )
-        """)
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS cache (
+                    query_hash TEXT PRIMARY KEY,
+                    query TEXT NOT NULL,
+                    answer TEXT NOT NULL,
+                    context TEXT,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
 
-        conn.commit()
-        conn.close()
+            conn.commit()
 
     def _get_query_hash(self, query: str) -> str:
         """
@@ -99,17 +108,16 @@ class RAGCache:
         """
         query_hash = self._get_query_hash(query)
 
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
+        with self._connection() as conn:
+            cursor = conn.cursor()
 
-        cursor.execute("""
-            SELECT query, answer, context, created_at
-            FROM cache
-            WHERE query_hash = ?
-        """, (query_hash,))
+            cursor.execute("""
+                SELECT query, answer, context, created_at
+                FROM cache
+                WHERE query_hash = ?
+            """, (query_hash,))
 
-        result = cursor.fetchone()
-        conn.close()
+            result = cursor.fetchone()
 
         if result:
             return {
@@ -134,27 +142,25 @@ class RAGCache:
         query_hash = self._get_query_hash(query)
         context_json = json.dumps(context) if context else None
 
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
+        with self._connection() as conn:
+            cursor = conn.cursor()
 
-        # Используем INSERT OR REPLACE для обновления существующих записей
-        cursor.execute("""
-            INSERT OR REPLACE INTO cache (query_hash, query, answer, context, created_at)
-            VALUES (?, ?, ?, ?, ?)
-        """, (query_hash, query, answer, context_json, datetime.now().isoformat()))
+            # Используем INSERT OR REPLACE для обновления существующих записей
+            cursor.execute("""
+                INSERT OR REPLACE INTO cache (query_hash, query, answer, context, created_at)
+                VALUES (?, ?, ?, ?, ?)
+            """, (query_hash, query, answer, context_json, datetime.now().isoformat()))
 
-        conn.commit()
-        conn.close()
+            conn.commit()
 
     def clear(self):
         """Очистка всего кеша."""
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
+        with self._connection() as conn:
+            cursor = conn.cursor()
 
-        cursor.execute("DELETE FROM cache")
+            cursor.execute("DELETE FROM cache")
 
-        conn.commit()
-        conn.close()
+            conn.commit()
 
     def get_stats(self) -> Dict[str, Any]:
         """
@@ -163,16 +169,14 @@ class RAGCache:
         Returns:
             Словарь со статистикой
         """
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
+        with self._connection() as conn:
+            cursor = conn.cursor()
 
-        cursor.execute("SELECT COUNT(*) FROM cache")
-        count = cursor.fetchone()[0]
+            cursor.execute("SELECT COUNT(*) FROM cache")
+            count = cursor.fetchone()[0]
 
-        cursor.execute("SELECT MIN(created_at), MAX(created_at) FROM cache")
-        dates = cursor.fetchone()
-
-        conn.close()
+            cursor.execute("SELECT MIN(created_at), MAX(created_at) FROM cache")
+            dates = cursor.fetchone()
 
         return {
             "total_entries": count,
