@@ -364,7 +364,7 @@ async def handle_open_cards(callback: CallbackQuery) -> None:
         "✨ Готовлю интерпретацию…",
         reply_markup=menu_button_keyboard(),
     )
-    persist = _telegram_persist_readings_enabled()
+    persist = telegram_persist_readings_enabled()
     try:
         reading = await asyncio.to_thread(
             create_reading_from_drawn_cards,
@@ -472,7 +472,7 @@ async def handle_physical_orientation(callback: CallbackQuery) -> None:
             keep_message_ids={message.message_id},
             user_id=user_id,
         )
-        persist = _telegram_persist_readings_enabled()
+        persist = telegram_persist_readings_enabled()
         question_text = (flow.user_question or "").strip()
         if not question_text:
             reset_flow(user_id)
@@ -740,7 +740,7 @@ async def _handle_question_text(message: Message, text: str) -> None:
             "✨ Готовлю интерпретацию…",
             reply_markup=menu_button_keyboard(),
         )
-        persist = _telegram_persist_readings_enabled()
+        persist = telegram_persist_readings_enabled()
         try:
             reading = await asyncio.to_thread(
                 create_reading_from_drawn_cards,
@@ -1011,7 +1011,7 @@ def _database_url_is_configured() -> bool:
     return bool((os.getenv("DATABASE_URL") or "").strip())
 
 
-def _telegram_persist_readings_enabled() -> bool:
+def telegram_persist_readings_enabled() -> bool:
     value = (os.getenv("TELEGRAM_PERSIST_READINGS") or "").strip().lower()
     if value not in {"1", "true", "yes", "on"}:
         return False

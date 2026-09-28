@@ -30,7 +30,7 @@ def test_ask_shows_generic_message_and_logs_server_side(monkeypatch, caplog):
     assert any("RAG query failed" in record.message for record in caplog.records)
 
 
-def test_ask_debug_checkbox_still_reveals_technical_detail(monkeypatch):
+def test_ask_debug_checkbox_reveals_only_safe_diagnostic_info(monkeypatch):
     monkeypatch.setattr(routes_module, "_pipeline", _RaisingPipeline())
     client = TestClient(app)
 
@@ -41,3 +41,17 @@ def test_ask_debug_checkbox_still_reveals_technical_detail(monkeypatch):
 
     assert response.status_code == 200
     assert "RuntimeError" in response.text
+    assert "boom: sensitive internal detail" not in response.text
+    assert "sensitive internal detail" not in response.text
+
+
+def test_ask_does_not_log_raw_question_text(monkeypatch, caplog):
+    monkeypatch.setattr(routes_module, "_pipeline", _RaisingPipeline())
+    client = TestClient(app)
+    secret_question = "My deeply personal secret question about XYZ"
+
+    with caplog.at_level(logging.ERROR, logger="web.routes"):
+        client.post("/ask", data={"question": secret_question})
+
+    assert not any(secret_question in record.message for record in caplog.records)
+    assert any("question_length=" in record.message for record in caplog.records)

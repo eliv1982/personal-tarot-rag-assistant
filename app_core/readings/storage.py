@@ -26,7 +26,8 @@ else:
     load_dotenv()
 
 
-# Minimal PostgreSQL schema (intentionally not applied automatically yet).
+# Minimal PostgreSQL schema, applied via init_db() at Telegram bot startup
+# when persistence is enabled (see telegram_bot/bot.py).
 # Note: Extensions for UUID generation are not assumed; app can supply reading_id.
 READINGS_TABLE_SQL = """
 CREATE TABLE IF NOT EXISTS readings (

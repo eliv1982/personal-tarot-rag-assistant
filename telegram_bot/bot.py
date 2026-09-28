@@ -7,7 +7,8 @@ import os
 from aiogram import Bot, Dispatcher
 from dotenv import load_dotenv
 
-from telegram_bot.handlers import router
+from app_core.readings.storage import init_db
+from telegram_bot.handlers import router, telegram_persist_readings_enabled
 
 logger = logging.getLogger(__name__)
 
@@ -43,6 +44,28 @@ def log_env_diagnostics() -> None:
     )
 
 
+def ensure_reading_storage_ready() -> None:
+    """Initialize the PostgreSQL reading schema if persistence is enabled.
+
+    No-op (and no PostgreSQL dependency) when persistence is disabled.
+    Schema initialization failures are re-raised so startup fails fast
+    instead of surfacing on the first reading a user tries to save.
+    """
+    if not telegram_persist_readings_enabled():
+        return
+
+    try:
+        init_db()
+    except Exception:
+        logger.critical(
+            "Failed to initialize PostgreSQL reading storage schema while "
+            "TELEGRAM_PERSIST_READINGS is enabled. Check DATABASE_URL and "
+            "PostgreSQL availability.",
+            exc_info=True,
+        )
+        raise
+
+
 def get_bot_token() -> str:
     load_dotenv()
     token = (os.getenv("TELEGRAM_BOT_TOKEN") or "").strip()
@@ -65,6 +88,7 @@ def configure_logging() -> None:
 
 async def main() -> None:
     log_env_diagnostics()
+    ensure_reading_storage_ready()
     bot = Bot(token=get_bot_token())
     dispatcher = Dispatcher()
     dispatcher.include_router(router)

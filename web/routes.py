@@ -1,5 +1,6 @@
 import logging
 import threading
+import uuid
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -78,10 +79,15 @@ def ask(
             model = result.get("model", "")
             cached_at = result.get("cached_at", "")
         except Exception as exc:  # noqa: BLE001 - route-level safe message handling
-            logger.exception("RAG query failed for question=%r", normalized_question)
+            correlation_id = uuid.uuid4().hex[:8]
+            logger.exception(
+                "RAG query failed correlation_id=%s question_length=%s",
+                correlation_id,
+                len(normalized_question),
+            )
             error = "Не получилось получить интерпретацию. Попробуй ещё раз."
             if debug_enabled:
-                technical_error = f"{exc.__class__.__name__}: {exc}"
+                technical_error = f"{exc.__class__.__name__} (ref: {correlation_id})"
 
     return templates.TemplateResponse(
         request=request,
